@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/app_delegate.dart';
 import 'package:flutter_github_connect/locator.dart';
 import 'package:flutter_github_connect/ui/page/auth/auth_page.dart';
 
+
 void main() {
   BlocSupervisor.delegate = AppBlocDelegate();
   setUpDependency();
@@ -43,10 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: RaisedButton(
           onPressed: () async {
-            Navigator.push(
-              context,
-              AuthPage.route()
-            );
+            await Navigator.push(context, AuthPage.route());
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => AuthPage()));
+            // if(status ?? false){
+            //     Navigator.pushReplacement(context, UserPage.route());
+            // }
           },
           child: Text("Login"),
         ),

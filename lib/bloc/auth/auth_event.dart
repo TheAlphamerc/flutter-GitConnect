@@ -14,11 +14,17 @@ abstract class AuthEvent extends Equatable {
   @override
   List<Object> get props => [];
   Stream<AuthState> getAcessToken({AuthState currentState, AuthBloc bloc});
+
   final AuthRepository _authRepository = AuthRepository(
       authService: GetIt.instance<AuthService>(),
       sessionService: GetIt.instance<SessionService>());
 }
-
+class LoadingWebView extends AuthEvent {
+  @override
+  Stream<AuthState> getAcessToken({AuthState currentState, AuthBloc bloc}) {
+    throw UnimplementedError();
+  }
+}
 class LoadAuthEvent extends AuthEvent {
   final String code;
   @override
@@ -30,6 +36,7 @@ class LoadAuthEvent extends AuthEvent {
   Stream<AuthState> getAcessToken(
       {AuthState currentState, AuthBloc bloc}) async* {
     try {
+     
       yield LoadingAuthState();
       await Future.delayed(Duration(seconds: 1));
       final isSuscess = await _authRepository.getAcessToken(code);

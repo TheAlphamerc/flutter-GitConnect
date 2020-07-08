@@ -1,77 +1,32 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_github_connect/bloc/User/User_model.dart';
 
 abstract class UserState extends Equatable {
-  /// notify change state without deep clone state
-  final int version;
-  
-  final List propss;
-  UserState(this.version,[this.propss]);
-
-  /// Copy object for use in action
-  /// if need use deep clone
-  UserState getStateCopy();
-
-  UserState getNewVersion();
+  UserState();
 
   @override
-  List<Object> get props => ([version, ...propss ?? []]);
+  List<Object> get props => ([]);
 }
 
-/// UnInitialized
-class UnUserState extends UserState {
 
-  UnUserState(int version) : super(version);
 
-  @override
-  String toString() => 'UnUserState';
-
-  @override
-  UnUserState getStateCopy() {
-    return UnUserState(0);
-  }
-
-  @override
-  UnUserState getNewVersion() {
-    return UnUserState(version+1);
-  }
-}
+class LoadingUserState extends UserState {}
 
 /// Initialized
-class InUserState extends UserState {
-  final String hello;
+class LoadedUserState extends UserState {
+  final UserModel user;
 
-  InUserState(int version, this.hello) : super(version, [hello]);
-
-  @override
-  String toString() => 'InUserState $hello';
+  LoadedUserState(this.user);
 
   @override
-  InUserState getStateCopy() {
-    return InUserState(version, hello);
-  }
-
-  @override
-  InUserState getNewVersion() {
-    return InUserState(version+1, hello);
-  }
+  String toString() => 'InUserState $user';
 }
 
 class ErrorUserState extends UserState {
   final String errorMessage;
 
-  ErrorUserState(int version, this.errorMessage): super(version, [errorMessage]);
-  
+  ErrorUserState(this.errorMessage);
+
   @override
   String toString() => 'ErrorUserState';
-
-  @override
-  ErrorUserState getStateCopy() {
-    return ErrorUserState(version, errorMessage);
-  }
-
-  @override
-  ErrorUserState getNewVersion() {
-    return ErrorUserState(version+1, 
-    errorMessage);
-  }
 }

@@ -39,7 +39,7 @@ class DioClient {
       }
       return await _dio.get(
         completeUrl != null ? completeUrl : '$baseEndpoint$endpoint',
-        // options: _createOptions(options, session),
+        options: options,
         queryParameters: queryParameters,
       );
     } on DioError catch (e) {
@@ -55,7 +55,7 @@ class DioClient {
   }) async {
     try {
       return await _dio.post(
-        completeUrl != null ? completeUrl :'$baseEndpoint$endpoint',
+        completeUrl != null ? completeUrl : '$baseEndpoint$endpoint',
         data: data,
       );
     } on DioError catch (e) {

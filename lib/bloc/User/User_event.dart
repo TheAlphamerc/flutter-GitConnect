@@ -10,40 +10,25 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class UserEvent extends Equatable {
-   @override
+  @override
   List<Object> get props => [];
-  Stream<UserState> applyAsync(
-      {UserState currentState, UserBloc bloc});
-  final UserRepository _userRepository = UserRepository(apiGatway: GetIt.instance<ApiGateway>());
-  
+  Stream<UserState> getUser({UserState currentState, UserBloc bloc});
+  final UserRepository _userRepository =
+      UserRepository(apiGatway: GetIt.instance<ApiGateway>());
 }
 
-class UnUserEvent extends UserEvent {
+class OnLoad extends UserEvent {
   @override
-  Stream<UserState> applyAsync({UserState currentState, UserBloc bloc}) async* {
-    yield UnUserState(0);
-  }
-}
-
-class LoadUserEvent extends UserEvent {
-   
-  final bool isError;
-  @override
-  String toString() => 'LoadUserEvent';
-
-  LoadUserEvent(this.isError);
-
-  @override
-  Stream<UserState> applyAsync(
-      {UserState currentState, UserBloc bloc}) async* {
+  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
     try {
-      yield UnUserState(0);
+      yield LoadingUserState();
       await Future.delayed(Duration(seconds: 1));
-      _userRepository.fetchUserProfile();
-      yield InUserState(0, 'Hello world');
+      final userModel = await _userRepository.fetchUserProfile();
+      yield LoadedUserState(userModel);
     } catch (_, stackTrace) {
-      developer.log('$_', name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
-      yield ErrorUserState(0, _?.toString());
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      yield ErrorUserState(_?.toString());
     }
   }
 }

@@ -9,8 +9,10 @@ class AuthRepository {
   AuthRepository({this.sessionService, @required this.authService}) : assert(authService != null, sessionService != null);
 
   Future<bool> getAcessToken(String code) async{
-    final token  = await authService.getAcessToken(code);
+    String token  = await authService.getAcessToken(code);
+    // String token = await sessionService.loadSession();
     if(token != null){
+       token = token.split("&scope")[0].split("=")[1];
        await sessionService.saveSession(token);
       return true;
     }

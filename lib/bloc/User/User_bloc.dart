@@ -11,22 +11,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return _userBlocSingleton;
   }
   UserBloc._internal();
-  
+
   @override
-  Future<void> close() async{
+  Future<void> close() async {
     // dispose objects
     await super.close();
   }
 
   @override
-  UserState get initialState => UnUserState(0);
+  UserState get initialState => LoadingUserState();
 
   @override
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
     try {
-      yield* event.applyAsync(currentState: state, bloc: this);
+      if(event is OnLoad)
+      yield* event.getUser(currentState: state, bloc: this);
     } catch (_, stackTrace) {
       developer.log('$_', name: 'UserBloc', error: _, stackTrace: stackTrace);
       yield state;

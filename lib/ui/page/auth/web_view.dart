@@ -4,49 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/auth/index.dart';
 import 'package:flutter_github_connect/helper/config.dart';
-import 'package:flutter_github_connect/ui/page/user/profile_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
- AuthBloc _authBloc(BuildContext context) {
-    return BlocProvider.of<AuthBloc>(context);
-  }
-
-class WebViewPage extends StatefulWidget {
-  final String link;
-  // final AuthBloc authBloc;
-  const WebViewPage({Key key, this.link, }) : super(key: key);
- 
-
-  @override
-  _WebViewExampleState createState() => _WebViewExampleState();
-}
-
-class _WebViewExampleState extends State<WebViewPage> {
+class WebViewPage extends StatelessWidget {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
-  ValueNotifier<bool> showLoader = ValueNotifier(false);
+  final ValueNotifier<bool> showLoader = ValueNotifier(false);
 
-  @override
-  void initState() {
-    _authBloc(context).listen((state) {
-      if (state is SucessState) {
-        if (state.isSuccess) {
-          print("Navigate to Profile page");
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => ProfilePage()));
-        }
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  bool loading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +35,7 @@ class _WebViewExampleState extends State<WebViewPage> {
                     log(code);
                     print('blocking navigation to $request}');
 
-                    _load(code);
+                    _load(context, code);
 
                     return NavigationDecision.prevent;
                   }
@@ -94,7 +59,9 @@ class _WebViewExampleState extends State<WebViewPage> {
                 },
                 child: Align(
                   alignment: Alignment.center,
-                  child: loading ? CircularProgressIndicator() : Container(),
+                  child: showLoader.value
+                      ? CircularProgressIndicator()
+                      : Container(),
                 ),
               ),
             ],
@@ -115,8 +82,8 @@ class _WebViewExampleState extends State<WebViewPage> {
     );
   }
 
-  void _load(String code) {
-    // widget.authBloc.add(LoadAuthEvent(code));
+  void _load(context, String code) {
+    print("Get Acess TOken");
     BlocProvider.of<AuthBloc>(context).add(LoadAuthEvent(code));
   }
 }
