@@ -12,10 +12,11 @@ class AuthPage extends StatefulWidget {
   static const String routeName = '/auth';
 
   static route() => MaterialPageRoute(
-      builder: (context) => BlocProvider(
-            create: (BuildContext context) => AuthBloc()..add(LoadingWebView()),
-            child: AuthPage(),
-          ));
+        builder: (context) => BlocProvider(
+          create: (BuildContext context) => AuthBloc()..add(LoadingWebView()),
+          child: AuthPage(),
+        ),
+      );
 
   @override
   _AuthPageState createState() => _AuthPageState();
@@ -33,16 +34,16 @@ class _AuthPageState extends State<AuthPage> {
         if (state.isSuccess) {
           print("Navigate to Profile page");
           // Navigator.of(context).pushReplacement(UserPage.route());
-           Navigator.of(context).pushReplacement(
-              MaterialPageRoute<UserPage>(
-                builder: (context) {
-                  return BlocProvider.value(
-                    value: UserBloc()..add(OnLoad()),
-                    child: UserPage(),
-                  );
-                },
-              ),
-            );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<UserPage>(
+              builder: (context) {
+                return BlocProvider.value(
+                  value: UserBloc()..add(OnLoad()),
+                  child: UserPage(),
+                );
+              },
+            ),
+          );
         }
       }
     });
@@ -57,8 +58,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<AuthBloc, AuthState>(
-          builder: (
+      body: BlocBuilder<AuthBloc, AuthState>(builder: (
         BuildContext context,
         AuthState currentState,
       ) {

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/provider/api_gatway.dart';
 import 'package:flutter_github_connect/resources/provider/api_gatway_impl.dart';
@@ -26,4 +27,6 @@ void setUpDependency() {
       GetIt.instance<SessionService>(),
     ),
   );
+  serviceLocator
+      .registerSingleton<SharedPrefrenceHelper>(SharedPrefrenceHelper());
 }

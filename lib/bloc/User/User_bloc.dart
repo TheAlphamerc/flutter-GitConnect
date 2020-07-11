@@ -6,11 +6,11 @@ import 'package:flutter_github_connect/bloc/User/index.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   // todo: check singleton for logic in project
-  static final UserBloc _userBlocSingleton = UserBloc._internal();
-  factory UserBloc() {
-    return _userBlocSingleton;
-  }
-  UserBloc._internal();
+  // static final UserBloc _userBlocSingleton = UserBloc._internal();
+  // factory UserBloc() {
+  //   return _userBlocSingleton;
+  // }
+  // UserBloc._internal();
 
   @override
   Future<void> close() async {

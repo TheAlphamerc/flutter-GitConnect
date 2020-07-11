@@ -1,22 +1,25 @@
 import 'dart:developer';
 
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/resources/service/session_servoce.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionServiceImpl implements SessionService {
   @override
   Future<void> saveSession(String acessToken) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('acessToken', acessToken);
+    final getIt = GetIt.instance;
+    final prefs = getIt<SharedPrefrenceHelper>();
+    prefs.setAccessToken(acessToken);
     log("Session Saved !!", name:"Session Service");
   }
 
   @override
   Future<String> loadSession()async {
-    final prefs = await SharedPreferences.getInstance();
-    log("Load Session!!", name:"Session Service");
-    return  prefs.getString('acessToken');
+    final getIt = GetIt.instance;
+    final prefs = getIt<SharedPrefrenceHelper>();
+    return prefs.getAccessToken();
   }
 
   @override
@@ -44,7 +47,8 @@ class SessionServiceImpl implements SessionService {
 
   @override
   Future<void> clearSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    final getIt = GetIt.instance;
+    final prefs = getIt<SharedPrefrenceHelper>();
+    prefs.cleaPrefrenceValues();
   }
 }

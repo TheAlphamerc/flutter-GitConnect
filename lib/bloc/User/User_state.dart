@@ -19,7 +19,7 @@ class LoadedUserState extends UserState {
   LoadedUserState(this.user);
 
   @override
-  String toString() => 'InUserState $user';
+  String toString() => 'LoadedUserState $user';
 }
 
 class ErrorUserState extends UserState {
