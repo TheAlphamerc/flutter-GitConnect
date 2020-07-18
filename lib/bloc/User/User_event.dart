@@ -22,6 +22,7 @@ class OnLoad extends UserEvent {
   Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
     try {
       if(currentState is LoadedUserState){
+        yield LoadedUserState(currentState.user);
         return;
       }
       // yield LoadingUserState();

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
-import 'package:flutter_github_connect/exceptions/exceptions.dart';
+import 'package:flutter_github_connect/bloc/repo/repo_model.dart';
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/provider/api_gatway.dart';
@@ -21,35 +21,29 @@ class ApiGatwayImpl implements ApiGateway {
           headers: {'Authorization': 'token $accesstoken'},
         ),
       );
-      bool isSuccess = _isSuccessOrThrow(response);
-      if (isSuccess) {
-        return UserModel.fromJson(_dioClient.getJsonBody(response));
-      } else {
-        return null;
-      }
+      final  user = UserModel.fromJson(_dioClient.getJsonBody(response));
+      print(user.name);
+      return user;
     } catch (error) {
       throw error;
     }
   }
 
-  bool _isSuccessOrThrow(Response response) {
-    print("ApiGateway isSuccess");
-    switch (response.statusCode) {
-      case 200:
-        return true;
-      case 201:
-        return true;
-      case 400:
-        throw BadRequestException("Bad request");
-      case 401:
-      case 403:
-        throw UnauthorisedException("Session expired");
-      case 404:
-        throw ResourceNotFoundException(response.statusMessage.toString());
-      case 500:
-      default:
-        throw FetchDataException(
-            'Error occurred while communicating with server : ${response.statusCode}');
+  @override
+  Future<List<RepositoryModel>> fetchRepositories()async {
+    
+    try {
+      var accesstoken = await _sessionService.loadSession();
+      var response = await _dioClient.get(
+        Config.repos,
+        options: Options(
+          headers: {'Authorization': 'token $accesstoken'},
+        ),
+      );
+      final  list = _dioClient.getJsonBodyList(response).map((e) => RepositoryModel.fromJson(e)).toList();
+      return list;
+    } catch (error) {
+      throw error;
     }
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_page.dart';
+import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
+import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
@@ -21,22 +24,26 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  Widget _keyValueTile(context, String key, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: <Widget>[
-          KText(key),
-          Spacer(),
-          KText(
-            value,
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-          ),
-          Icon(
-            Icons.keyboard_arrow_right,
-            color: Theme.of(context).colorScheme.onSurface,
-          )
-        ],
+  Widget _keyValueTile(context, String key, String value,
+      {Function onPressed}) {
+    return InkWell(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: <Widget>[
+            KText(key),
+            Spacer(),
+            KText(
+              value,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            Icon(
+              Icons.keyboard_arrow_right,
+              color: Theme.of(context).colorScheme.onSurface,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -103,10 +110,11 @@ class UserScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _keyValueTile(
-                  context,
-                  "Repository",
-                  model.publicRepos.toString(),
-                ),
+                    context, "Repository", model.publicRepos.toString(),
+                    onPressed: () {
+                  print("Get user Repository");
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
+                }),
                 // SizedBox(height: 24),
                 _keyValueTile(
                   context,

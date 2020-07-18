@@ -63,14 +63,16 @@ class _UserPageState extends State<UserPage> {
               ),
             );
           }
-          if (currentState is LoadedUserState) {
+         else if (currentState is LoadedUserState) {
             return UserScreen(
               model: currentState.user,
             );
           }
-          return Center(
+          else{
+            return Center(
             child: CircularProgressIndicator(),
           );
+          }
         },
       ),
     );
