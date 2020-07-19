@@ -1,44 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
+import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_page.dart';
+import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
+import 'package:flutter_github_connect/ui/widgets/g_card.dart';
+import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
 
   const UserScreen({Key key, this.model}) : super(key: key);
-  Widget userAvatarRow() {
-    return Container(
-      height: 64,
-      child: Row(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: customNetworkImage(model.avatarUrl),
-          ),
-          SizedBox(width: 20),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              KText(
-                model.name,
-                variant: TypographyVariant.header,
-              ),
-              SizedBox(height: 10),
-              KText(
-                model.login,
-                variant: TypographyVariant.h4,
-                style: TextStyle(color: Colors.white70, letterSpacing: 1),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _iconWithText(context, IconData icon, String text) {
     return Padding(
@@ -48,6 +22,55 @@ class UserScreen extends StatelessWidget {
           Icon(icon, color: Theme.of(context).colorScheme.onSurface),
           SizedBox(width: 10),
           KText(text ?? "N/A")
+        ],
+      ),
+    );
+  }
+
+  Widget topRepoCard(context, TopRepositoriesNode repo) {
+    return GCard(
+      width: MediaQuery.of(context).size.width * .7,
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          UserAvatar(
+            name: repo.owner.login,
+            imagePath: repo.owner.avatarUrl,
+          ),
+          SizedBox(height: 16),
+          KText(
+            repo.name,
+            variant: TypographyVariant.h3,
+          ),
+          SizedBox(height: 8),
+          Spacer(),
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom:5),
+                child: Icon(Icons.star, size: 20, color: Colors.yellowAccent[700]),
+              ),
+              SizedBox(width: 10),
+              KText(
+                "${repo.stargazers.totalCount}",
+                variant: TypographyVariant.h4,
+              ),
+              SizedBox(width: 20),
+              Icon(
+                Icons.blur_circular,
+                color: repo.languages.nodes.first.color,
+                size: 15,
+              ),
+              SizedBox(width: 5),
+              KText(
+                "${repo.languages.nodes.first.name}",
+                variant: TypographyVariant.h4,
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -90,15 +113,20 @@ class UserScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                userAvatarRow(),
+                UserAvatar(
+                  name: model.name,
+                  subtitle: model.login,
+                  imagePath: model.avatarUrl,
+                  height: 64,
+                  variant: TypographyVariant.header,
+                  subVarient: TypographyVariant.h4,
+                ),
                 SizedBox(height: 8),
-                Container(
+
+                GCard(
                   width: double.infinity,
                   margin: EdgeInsets.symmetric(vertical: 12),
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      borderRadius: BorderRadius.circular(5)),
                   child: KText(
                     model?.status?.message ?? "N/A",
                     variant: TypographyVariant.h3,
@@ -142,59 +170,7 @@ class UserScreen extends StatelessWidget {
                           itemCount: model.topRepositories.nodes.length,
                           itemBuilder: (context, index) {
                             final repo = model.topRepositories.nodes[index];
-                            return Container(
-                              width: MediaQuery.of(context).size.width * .7,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: theme.cardColor,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(children: <Widget>[
-                                    Container(
-                                      height: 30,
-                                      child: Row(
-                                        children: <Widget>[
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            child: customNetworkImage(
-                                                repo.owner.avatarUrl),
-                                          ),
-                                          SizedBox(width: 10),
-                                          KText(
-                                            repo.owner.name,
-                                            variant: TypographyVariant.h3,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ]),
-                                  SizedBox(height: 8),
-                                  KText(
-                                    repo.name,
-                                    variant: TypographyVariant.h3,
-                                  ),
-                                  SizedBox(height: 8),
-                                  KText(
-                                    repo.languages.nodes.first.name,
-                                    variant: TypographyVariant.h4,
-                                  ),
-                                  Spacer(),
-                                  KText(
-                                    "Forks ${repo.forkCount}",
-                                    variant: TypographyVariant.h4,
-                                  ),
-                                ],
-                              ),
-                            );
+                            return topRepoCard(context, repo);
                           },
                         ),
                       )
@@ -205,16 +181,40 @@ class UserScreen extends StatelessWidget {
                   model.repositories.totalCount.toString(),
                   onPressed: () {
                     print("Get user Repository");
-                    // Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RepositoryListScreen(
+                          list1: model.repositories.nodes,
+                        ),
+                      ),
+                    );
                   },
                 ).hP16,
-                SizedBox(height: 24),
                 _keyValueTile(
                   context,
                   "Public Gist",
                   model?.gists?.totalCount != null
                       ? model.gists.totalCount.toString()
                       : "N/A",
+                ).hP16,
+                _keyValueTile(
+                  context,
+                  "Pull Request",
+                  model.pullRequests.totalCount.toString(),
+                  onPressed: () {
+                    print("Get user Repository");
+                    // Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
+                  },
+                ).hP16,
+                _keyValueTile(
+                  context,
+                  "Issues",
+                  model.issues.totalCount.toString(),
+                  onPressed: () {
+                    print("Get user Repository");
+                    // Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
+                  },
                 ).hP16,
               ],
             ),

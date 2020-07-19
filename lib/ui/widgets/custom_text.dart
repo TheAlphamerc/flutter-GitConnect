@@ -9,6 +9,7 @@ class KText extends StatelessWidget {
   final TextOverflow overflow;
   final String semanticsLabel;
   final bool softWrap;
+  final bool isSubtitle;
   final StrutStyle strutStyle;
   final TextStyle style;
   final TextAlign textAlign;
@@ -30,6 +31,7 @@ class KText extends StatelessWidget {
     this.textDirection,
     this.textScaleFactor,
     this.textWidthBasis,
+    this.isSubtitle = false,
     this.variant = TypographyVariant.body,
   }) : super(key: key);
 
@@ -147,7 +149,7 @@ class KText extends StatelessWidget {
         );
         break;
     }
-
+   
     return style?.merge(overrides);
   }
 
@@ -160,7 +162,7 @@ class KText extends StatelessWidget {
       overflow: this.overflow,
       semanticsLabel: this.semanticsLabel,
       softWrap: this.softWrap,
-      style: style,
+      style: style.copyWith(color:isSubtitle ? Colors.white60 : Colors.white),
       textAlign: this.textAlign,
       textScaleFactor: this.textScaleFactor,
       textWidthBasis: this.textWidthBasis,

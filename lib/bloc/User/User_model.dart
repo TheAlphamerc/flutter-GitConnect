@@ -345,14 +345,16 @@ class Repositories {
 class RepositoriesNode {
   RepositoriesNode({
     this.name,
+    this.description,
     this.owner,
-    this.forks,
+    this.languages,
     this.stargazers,
   });
 
   final String name;
-  final PurpleOwner owner;
-  final Followers forks;
+  final String description;
+  final Owner owner;
+  final Languages languages;
   final Followers stargazers;
 
   factory RepositoriesNode.fromRawJson(String str) =>
@@ -363,9 +365,9 @@ class RepositoriesNode {
   factory RepositoriesNode.fromJson(Map<String, dynamic> json) =>
       RepositoriesNode(
         name: json["name"] == null ? null : json["name"],
-        owner:
-            json["owner"] == null ? null : PurpleOwner.fromJson(json["owner"]),
-        forks: json["forks"] == null ? null : Followers.fromJson(json["forks"]),
+        description: json["description"] == null ? null : json["description"],
+        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        languages: json["languages"] == null ? null : Languages.fromJson(json["languages"]),
         stargazers: json["stargazers"] == null
             ? null
             : Followers.fromJson(json["stargazers"]),
@@ -374,29 +376,7 @@ class RepositoriesNode {
   Map<String, dynamic> toJson() => {
         "name": name == null ? null : name,
         "owner": owner == null ? null : owner.toJson(),
-        "forks": forks == null ? null : forks.toJson(),
         "stargazers": stargazers == null ? null : stargazers.toJson(),
-      };
-}
-
-class PurpleOwner {
-  PurpleOwner({
-    this.avatarUrl,
-  });
-
-  final String avatarUrl;
-
-  factory PurpleOwner.fromRawJson(String str) =>
-      PurpleOwner.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory PurpleOwner.fromJson(Map<String, dynamic> json) => PurpleOwner(
-        avatarUrl: json["avatarUrl"] == null ? null : json["avatarUrl"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "avatarUrl": avatarUrl == null ? null : avatarUrl,
       };
 }
 
@@ -461,16 +441,16 @@ class TopRepositories {
 }
 
 class TopRepositoriesNode {
-  TopRepositoriesNode({
-    this.id,
-    this.name,
-    this.isFork,
-    this.isPrivate,
-    this.url,
-    this.forkCount,
-    this.owner,
-    this.languages,
-  });
+  TopRepositoriesNode(
+      {this.id,
+      this.name,
+      this.isFork,
+      this.isPrivate,
+      this.url,
+      this.forkCount,
+      this.owner,
+      this.languages,
+      this.stargazers});
 
   final String id;
   final String name;
@@ -479,6 +459,7 @@ class TopRepositoriesNode {
   final String url;
   final int forkCount;
   final Owner owner;
+  final Followers stargazers;
   final Languages languages;
 
   factory TopRepositoriesNode.fromRawJson(String str) =>
@@ -488,17 +469,19 @@ class TopRepositoriesNode {
 
   factory TopRepositoriesNode.fromJson(Map<String, dynamic> json) =>
       TopRepositoriesNode(
-        id: json["id"] == null ? null : json["id"],
-        name: json["name"] == null ? null : json["name"],
-        isFork: json["isFork"] == null ? null : json["isFork"],
-        isPrivate: json["isPrivate"] == null ? null : json["isPrivate"],
-        url: json["url"] == null ? null : json["url"],
-        forkCount: json["forkCount"] == null ? null : json["forkCount"],
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-        languages: json["languages"] == null
-            ? null
-            : Languages.fromJson(json["languages"]),
-      );
+          id: json["id"] == null ? null : json["id"],
+          name: json["name"] == null ? null : json["name"],
+          isFork: json["isFork"] == null ? null : json["isFork"],
+          isPrivate: json["isPrivate"] == null ? null : json["isPrivate"],
+          url: json["url"] == null ? null : json["url"],
+          forkCount: json["forkCount"] == null ? null : json["forkCount"],
+          owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+          languages: json["languages"] == null
+              ? null
+              : Languages.fromJson(json["languages"]),
+          stargazers: json["stargazers"] == null
+              ? null
+              : Followers.fromJson(json["stargazers"]));
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
@@ -509,6 +492,7 @@ class TopRepositoriesNode {
         "forkCount": forkCount == null ? null : forkCount,
         "owner": owner == null ? null : owner.toJson(),
         "languages": languages == null ? null : languages.toJson(),
+        "stargazers": stargazers == null ? null : stargazers.toJson(),
       };
 }
 
