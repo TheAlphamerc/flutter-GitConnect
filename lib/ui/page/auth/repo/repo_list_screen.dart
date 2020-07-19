@@ -11,24 +11,34 @@ class RepositoryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: list.length,
-      separatorBuilder: (BuildContext context, int index) => Divider(),
+      separatorBuilder: (BuildContext context, int index) => Divider(height: 0),
       itemBuilder: (BuildContext context, int index) {
+        final model = list[index];
         return ListTile(
           leading: SizedBox(
-              height: 40,
-              width: 40,
+              height: 30,
+              width: 30,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(5),
                 child: customNetworkImage(list[index].owner.avatarUrl),
               )),
           title: KText(
             list[index].name,
-            variant: TypographyVariant.header,
+            variant: TypographyVariant.h3,
           ),
-          subtitle:list[index].description  == null ? null : KText(
-            list[index].description ?? "",
-            variant: TypographyVariant.subHeader,
-            style: TextStyle(fontSize: 14),
+          trailing: Container(
+            constraints: BoxConstraints(minWidth: 40, maxWidth: 60),
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: <Widget>[
+                Icon(Icons.star,
+                    color: Theme.of(context).colorScheme.secondary, size: 17),
+                KText(
+                  model.stargazersCount.toString(),
+                  variant: TypographyVariant.body,
+                )
+              ],
+            ),
           ),
         );
       },

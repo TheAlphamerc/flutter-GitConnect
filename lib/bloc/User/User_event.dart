@@ -22,12 +22,11 @@ class OnLoad extends UserEvent {
   Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
     try {
       if(currentState is LoadedUserState){
-        yield LoadedUserState(currentState.user);
         return;
       }
-      // yield LoadingUserState();
-      // final userModel = await _userRepository.fetchUserProfile();
-      // yield LoadedUserState(userModel);
+      yield LoadingUserState();
+      final userModel = await _userRepository.fetchUserProfile();
+      yield LoadedUserState(userModel);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);

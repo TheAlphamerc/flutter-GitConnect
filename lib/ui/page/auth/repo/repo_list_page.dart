@@ -29,7 +29,7 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text("Repositories"),
       ),
       body: BlocBuilder<RepoBloc, RepoState>(
         bloc: _repoBloc,
