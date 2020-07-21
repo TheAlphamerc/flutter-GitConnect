@@ -43,8 +43,8 @@ class KText extends StatelessWidget {
       case TypographyVariant.title:
         style = TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 23,
+          fontWeight: FontWeight.w800,
+          fontSize: 26,
           height: 1.0,
           fontFamily: 'Raleway',
         );
@@ -52,7 +52,7 @@ class KText extends StatelessWidget {
       case TypographyVariant.header:
         style = TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w400,
           fontSize: 24,
           height: 1,
           fontFamily: 'Raleway',
@@ -61,7 +61,7 @@ class KText extends StatelessWidget {
       case TypographyVariant.subHeader:
         style = TextStyle(
           color: Colors.white54,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w400,
           fontSize: 22,
           height: 0.88,
           fontFamily: 'Raleway',

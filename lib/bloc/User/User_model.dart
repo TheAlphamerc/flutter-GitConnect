@@ -49,50 +49,50 @@ class Data {
 }
 
 class UserModel {
-  UserModel({
-    this.name,
-    this.avatarUrl,
-    this.company,
-    this.location,
-    this.bioHtml,
-    this.companyHtml,
-    this.createdAt,
-    this.databaseId,
-    this.email,
-    this.id,
-    this.isEmployee,
-    this.isViewer,
-    this.isBountyHunter,
-    this.isCampusExpert,
-    this.isDeveloperProgramMember,
-    this.isHireable,
-    this.isSiteAdmin,
-    this.login,
-    this.organizationVerifiedDomainEmails,
-    this.pinnedItemsRemaining,
-    this.projectsResourcePath,
-    this.projectsUrl,
-    this.resourcePath,
-    this.twitterUsername,
-    this.updatedAt,
-    this.url,
-    this.viewerCanChangePinnedItems,
-    this.viewerCanCreateProjects,
-    this.viewerCanFollow,
-    this.viewerIsFollowing,
-    this.websiteUrl,
-    this.anyPinnableItems,
-    this.bio,
-    this.gists,
-    this.followers,
-    this.following,
-    this.status,
-    this.topRepositories,
-    this.repositoriesContributedTo,
-    this.pullRequests,
-    this.issues,
-    this.repositories,
-  });
+  UserModel(
+      {this.name,
+      this.avatarUrl,
+      this.company,
+      this.location,
+      this.bioHtml,
+      this.companyHtml,
+      this.createdAt,
+      this.databaseId,
+      this.email,
+      this.id,
+      this.isEmployee,
+      this.isViewer,
+      this.isBountyHunter,
+      this.isCampusExpert,
+      this.isDeveloperProgramMember,
+      this.isHireable,
+      this.isSiteAdmin,
+      this.login,
+      this.organizationVerifiedDomainEmails,
+      this.pinnedItemsRemaining,
+      this.projectsResourcePath,
+      this.projectsUrl,
+      this.resourcePath,
+      this.twitterUsername,
+      this.updatedAt,
+      this.url,
+      this.viewerCanChangePinnedItems,
+      this.viewerCanCreateProjects,
+      this.viewerCanFollow,
+      this.viewerIsFollowing,
+      this.websiteUrl,
+      this.anyPinnableItems,
+      this.bio,
+      this.gists,
+      this.followers,
+      this.following,
+      this.status,
+      this.topRepositories,
+      this.repositoriesContributedTo,
+      this.pullRequests,
+      this.issues,
+      this.repositories,
+      this.itemShowcase});
 
   final String name;
   final String avatarUrl;
@@ -136,6 +136,7 @@ class UserModel {
   final Followers pullRequests;
   final Followers issues;
   final Repositories repositories;
+  final ItemShowcaseClass itemShowcase;
 
   factory UserModel.fromRawJson(String str) =>
       UserModel.fromJson(json.decode(str));
@@ -224,6 +225,9 @@ class UserModel {
         repositories: json["repositories"] == null
             ? null
             : Repositories.fromJson(json["repositories"]),
+        itemShowcase: json["itemShowcase"] == null
+            ? null
+            : ItemShowcaseClass.fromJson(json["itemShowcase"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -283,6 +287,7 @@ class UserModel {
         "pullRequests": pullRequests == null ? null : pullRequests.toJson(),
         "issues": issues == null ? null : issues.toJson(),
         "repositories": repositories == null ? null : repositories.toJson(),
+        "itemShowcase": itemShowcase == null ? null : itemShowcase.toJson(),
       };
 }
 
@@ -367,7 +372,9 @@ class RepositoriesNode {
         name: json["name"] == null ? null : json["name"],
         description: json["description"] == null ? null : json["description"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-        languages: json["languages"] == null ? null : Languages.fromJson(json["languages"]),
+        languages: json["languages"] == null
+            ? null
+            : Languages.fromJson(json["languages"]),
         stargazers: json["stargazers"] == null
             ? null
             : Followers.fromJson(json["stargazers"]),
@@ -563,6 +570,89 @@ class LanguagesNode {
   Color hexToColor(String code) {
     return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
   }
+}
+
+class ItemShowcaseClass {
+  ItemShowcaseClass({
+    this.items,
+    this.hasPinnedItems,
+  });
+
+  final Items items;
+  final bool hasPinnedItems;
+
+  factory ItemShowcaseClass.fromRawJson(String str) =>
+      ItemShowcaseClass.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory ItemShowcaseClass.fromJson(Map<String, dynamic> json) =>
+      ItemShowcaseClass(
+        items: json["items"] == null ? null : Items.fromJson(json["items"]),
+        hasPinnedItems:
+            json["hasPinnedItems"] == null ? null : json["hasPinnedItems"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "items": items == null ? null : items.toJson(),
+        "hasPinnedItems": hasPinnedItems == null ? null : hasPinnedItems,
+      };
+}
+
+class Items {
+  Items({
+    this.nodes,
+  });
+
+  final List<Node> nodes;
+
+  factory Items.fromRawJson(String str) => Items.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Items.fromJson(Map<String, dynamic> json) => Items(
+        nodes: json["nodes"] == null
+            ? null
+            : List<Node>.from(json["nodes"].map((x) => Node.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "nodes": nodes == null
+            ? null
+            : List<dynamic>.from(nodes.map((x) => x.toJson())),
+      };
+}
+
+class Node {
+  Node({
+    this.id,
+    this.name,
+    this.url,
+    this.owner,
+  });
+
+  final String id;
+  final String name;
+  final String url;
+  final Owner owner;
+
+  factory Node.fromRawJson(String str) => Node.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Node.fromJson(Map<String, dynamic> json) => Node(
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        url: json["url"] == null ? null : json["url"],
+        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
+        "url": url == null ? null : url,
+        "owner": owner == null ? null : owner.toJson(),
+      };
 }
 
 class Owner {

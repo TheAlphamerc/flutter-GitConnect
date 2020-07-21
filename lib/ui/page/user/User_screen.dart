@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
-import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_page.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
@@ -50,13 +48,15 @@ class UserScreen extends StatelessWidget {
           Row(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(bottom:5),
-                child: Icon(Icons.star, size: 20, color: Colors.yellowAccent[700]),
+                padding: const EdgeInsets.only(bottom: 5),
+                child:
+                    Icon(Icons.star, size: 20, color: Colors.yellowAccent[700]),
               ),
               SizedBox(width: 10),
               KText(
                 "${repo.stargazers.totalCount}",
                 variant: TypographyVariant.h4,
+                isSubtitle: true,
               ),
               SizedBox(width: 20),
               Icon(
@@ -67,6 +67,7 @@ class UserScreen extends StatelessWidget {
               SizedBox(width: 5),
               KText(
                 "${repo.languages.nodes.first.name}",
+                isSubtitle: true,
                 variant: TypographyVariant.h4,
               ),
             ],
@@ -88,6 +89,7 @@ class UserScreen extends StatelessWidget {
             Spacer(),
             KText(
               value,
+              isSubtitle: true,
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
             Icon(
@@ -167,6 +169,7 @@ class UserScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
                           itemCount: model.topRepositories.nodes.length,
                           itemBuilder: (context, index) {
                             final repo = model.topRepositories.nodes[index];

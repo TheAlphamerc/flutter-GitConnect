@@ -1,6 +1,6 @@
 class Apis {
   static const String user = r'''
-    query userInfo($login: String!) {
+   query userInfo($login: String!) {
       user(login: $login) {
         name
         avatarUrl
@@ -113,6 +113,22 @@ class Apis {
               totalCount
             }
           }
+        }
+        itemShowcase {
+          items(first: 10) {
+            nodes {
+              ... on Repository {
+                id
+                name
+                url
+                owner {
+                  avatarUrl
+                  login
+                }
+              }
+            }
+          }
+          hasPinnedItems
         }
       }
     }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/navigation/index.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
+import 'package:flutter_github_connect/ui/page/home/dashboard_page.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/page/welcome_page.dart';
 import 'package:get_it/get_it.dart';
@@ -29,9 +31,16 @@ class _SplashPageState extends State<SplashPage> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<UserPage>(
           builder: (context) {
-            return BlocProvider.value(
-              value: UserBloc()..add(OnLoad()),
-              child: UserPage(),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<NavigationBloc>(
+                  create: (BuildContext context) => NavigationBloc(),
+                ),
+                BlocProvider<UserBloc>(
+                  create: (BuildContext context) => UserBloc()..add(OnLoad()),
+                ),
+              ],
+              child: DashBoardPage(),
             );
           },
         ),

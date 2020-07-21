@@ -3,22 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 
-// class UserPageProvider extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider<UserBloc>(
-//       create: (context) {
-//         return UserBloc()..add(OnLoad());
-//       },
-//       child: UserPage(),
-//     );
-//   }
-// }
 
 class UserPage extends StatefulWidget {
-  // static route() => MaterialPageRoute(
-  //       builder: (context) => UserPageProvider(),
-  //     );
 
   @override
   _UserPageState createState() => _UserPageState();
