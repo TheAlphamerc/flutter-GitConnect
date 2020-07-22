@@ -7,4 +7,5 @@ class Config{
   static const String apiBaseUrl = "https://api.github.com/";
   static const String user = "user";
   static const String repos = "user/repos";
+  static const String notificationsList = "notifications?all=true";
 }

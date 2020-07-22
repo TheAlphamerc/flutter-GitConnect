@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/repo/repo_model.dart';
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
@@ -16,30 +17,16 @@ class ApiGatwayImpl implements ApiGateway {
   Future<UserModel> fetchUserProfile() async {
     try {
       var accesstoken = await _sessionService.loadSession();
-      // var response = await _dioClient.get(
-      //   Config.user,
-      //   options: Options(
-      //     headers: {
-      //       'Authorization': 'token $accesstoken',
-      //       'Accept': 'application/vnd.github.v3+json',
-      //     },
-      //   ),
-      // );
-      // final json = _dioClient.getJsonBody(response);
-      // final  user = UserModel.fromJson(_dioClient.getJsonBody(response));
-      // print(user.name);
       initClient(accesstoken);
-      final result =
-          await getUser("TheAlphamerc");
+      final result = await getUser("TheAlphamerc");
       if (result.hasException) {
         print(result.exception.toString());
         return null;
       }
 
-      final  userMap =
-          result.data['user'] as Map<String, dynamic>;
-          final user = UserModel.fromJson(userMap);
-          
+      final userMap = result.data['user'] as Map<String, dynamic>;
+      final user = UserModel.fromJson(userMap);
+
       return user;
     } catch (error) {
       throw error;
@@ -63,6 +50,34 @@ class ApiGatwayImpl implements ApiGateway {
           .getJsonBodyList(response)
           .map((e) => RepositoryModel.fromJson(e))
           .toList();
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<NotificationModel>> fetchNotificationList() async {
+    try {
+      var accesstoken = await _sessionService.loadSession();
+      var response = await _dioClient.get(
+        Config.notificationsList,
+        options: Options(
+          headers: {
+            'Authorization': 'token $accesstoken'
+          },
+        ),
+      );
+      List<NotificationModel> list = [];
+    //  await _dioClient
+    //       .getJsonBodyList(response)
+    //       .map((model){
+    //          list.add(NotificationModel.fromJson(_dioClient.getJsonBody(model)));
+    //       });
+        list = _dioClient.getJsonBodyList(response).map((value) {
+          return NotificationModel.fromJson(value);
+        }).toList();
+      print(list.length);
       return list;
     } catch (error) {
       throw error;

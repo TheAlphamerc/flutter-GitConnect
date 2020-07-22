@@ -19,6 +19,7 @@ class GBottomNavigationBar extends StatelessWidget {
         }
         return BottomNavigationBar(
           elevation: 10,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           unselectedIconTheme: IconThemeData(
             color: theme.colorScheme.onPrimary,
           ),

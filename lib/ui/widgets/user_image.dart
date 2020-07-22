@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 
@@ -22,9 +23,10 @@ class UserAvatar extends StatelessWidget {
       height: height,
       child: Row(
         children: <Widget>[
-          ClipRRect(
+          imagePath == null ? Icon(GIcons.github)
+          : ClipRRect(
             borderRadius: BorderRadius.circular(height / 4),
-            child: customNetworkImage(imagePath),
+            child: customNetworkImage(imagePath, placeholder: Icon(GIcons.github)),
           ),
           SizedBox(width: height/4),
           Column(
