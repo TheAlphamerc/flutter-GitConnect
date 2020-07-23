@@ -52,7 +52,7 @@ class _UserPageState extends State<DashBoardPage> {
         return Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           bottomNavigationBar: GBottomNavigationBar(),
-          appBar: AppBar(
+          appBar: index == 2 ? null : AppBar(
             elevation: 0,
             backgroundColor: Theme.of(context).colorScheme.surface,
             leading: BlocBuilder<UserBloc, UserState>(builder: (

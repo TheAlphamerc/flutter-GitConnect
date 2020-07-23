@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/ui/theme/color/dark_color.dart';
+import 'package:flutter_github_connect/ui/theme/colors.dart';
 
 enum ThemeType { LIGHT, DARK }
 
@@ -13,7 +14,8 @@ class AppTheme {
           surface: DarkColor.surfaceColor,
           onSurface: DarkColor.onSurfaceDarkColor,
           onBackground: DarkColor.onSurfaceLightColor
-        )
+        ),
+        textTheme:ThemeData.dark().textTheme.copyWith(bodyText1: TextStyle(color:GColors.white) )
       );
 
   // Return a scaling factor between 0.0 and 1.0 for screens heights ranging

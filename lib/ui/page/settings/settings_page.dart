@@ -77,7 +77,7 @@ class SettingsPage extends StatelessWidget {
             context,
             "Share Feedback",
             color: GColors.green,
-            icon: GIcons.megaphone_24,
+            icon: GIcons.pencil_24,
           ),
         ],
       ),

@@ -78,7 +78,7 @@ class NotificationScreen extends StatelessWidget {
       case "manual":
         return GIcons.tools_24;
       case "mention":
-        return GIcons.megaphone_24;
+        return GIcons.mention_24;
       case "PullRequest":
         return GIcons.git_pull_request_24;
       case "security_alert":
