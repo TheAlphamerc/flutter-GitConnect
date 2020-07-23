@@ -10,17 +10,26 @@ class NotificationScreen extends StatelessWidget {
 
   const NotificationScreen({Key key, this.list}) : super(key: key);
   Widget _notificationTile(context, NotificationModel model) {
-    final type = model.subject.type;
     return Container(
         child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(
             width: 50,
-            child: Icon(
-              getIcon(model.reason),
-              color: getColor(model.reason),
-              size: 20,
+            child: Column(
+              children: <Widget>[
+                Icon(
+                  getIcon(model.reason),
+                  color: getColor(model.reason),
+                  size: 20,
+                ),
+                SizedBox(height:3),
+                 Icon(
+                  GIcons.dot_24,
+                  color:model.unread ? GColors.blue : Colors.transparent,
+                  size: 20,
+                ),
+              ],
             )),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +53,7 @@ class NotificationScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
-                  color:  getColor(model.reason).withAlpha(200),
+                  color: getColor(model.reason).withAlpha(200),
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   border: Border.all(color: getColor(model.reason))),
               child: KText(
@@ -61,35 +70,55 @@ class NotificationScreen extends StatelessWidget {
       ],
     ).vP16);
   }
-  IconData getIcon(String type){
+
+  IconData getIcon(String type) {
     switch (type) {
-      case "author":      return GIcons.person_24;
-      case "manual":      return GIcons.tools_24;
-      case "mention":     return GIcons.megaphone_24;
-      case "PullRequest": return GIcons.git_pull_request_24;
-      case "security_alert": return GIcons.alert_16;
-      case "subscribed": return GIcons.eye_24;
-      case "comment": return GIcons.comment_24;
-        
+      case "author":
+        return GIcons.person_24;
+      case "manual":
+        return GIcons.tools_24;
+      case "mention":
+        return GIcons.megaphone_24;
+      case "PullRequest":
+        return GIcons.git_pull_request_24;
+      case "security_alert":
+        return GIcons.alert_16;
+      case "subscribed":
+        return GIcons.eye_24;
+      case "comment":
+        return GIcons.comment_24;
+
         break;
 
-      default: print(type); return GIcons.arrow_both_16;
+      default:
+        print(type);
+        return GIcons.arrow_both_16;
     }
   }
-  Color getColor(String type){
+
+  Color getColor(String type) {
     switch (type) {
-      case "author": return GColors.green;
-      case "manual": return GColors.gray;
-      case "mention": return GColors.yellow;
-      case "PullRequest": return GColors.purple;
-      case "security_alert": return GColors.red;
-      case "subscribed": return GColors.orange;
-      case "comment": return GColors.blue;
-        
+      case "author":
+        return GColors.green;
+      case "manual":
+        return GColors.gray;
+      case "mention":
+        return GColors.yellow;
+      case "PullRequest":
+        return GColors.purple;
+      case "security_alert":
+        return GColors.red;
+      case "subscribed":
+        return GColors.orange;
+      case "comment":
+        return GColors.blue;
+
         break;
-      default: return GColors.blue;
+      default:
+        return GColors.blue;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(

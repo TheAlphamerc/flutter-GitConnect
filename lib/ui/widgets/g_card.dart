@@ -5,6 +5,7 @@ class GCard extends StatelessWidget {
     Key key,
     this.child,
     this.width,
+    this.color,
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(0),
     this.radius = 5,
@@ -12,6 +13,7 @@ class GCard extends StatelessWidget {
   final Widget child;
   final double width;
   final double radius;
+  final Color color;
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
   @override
@@ -22,7 +24,7 @@ class GCard extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: color ?? theme.cardColor,
         borderRadius: BorderRadius.circular(radius),
       ),
       child: child,

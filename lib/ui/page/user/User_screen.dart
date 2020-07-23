@@ -3,6 +3,7 @@ import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
@@ -50,8 +51,8 @@ class UserScreen extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
-                child:
-                    Icon(GIcons.star_fill_24, size: 16, color: Colors.yellowAccent[700]),
+                child: Icon(GIcons.star_fill_24,
+                    size: 16, color: Colors.yellowAccent[700]),
               ),
               SizedBox(width: 10),
               KText(
@@ -111,6 +112,23 @@ class UserScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(GIcons.share_android_24, color: GColors.blue),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(GIcons.settings_24, color: GColors.blue),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SettingsPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
@@ -131,7 +149,6 @@ class UserScreen extends StatelessWidget {
                     subVarient: TypographyVariant.h4,
                   ),
                   SizedBox(height: 8),
-
                   GCard(
                     width: double.infinity,
                     margin: EdgeInsets.symmetric(vertical: 12),
@@ -148,7 +165,7 @@ class UserScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   _iconWithText(context, GIcons.people_24, model.login),
-                  _iconWithText(context, GIcons.link_24,model.websiteUrl),
+                  _iconWithText(context, GIcons.link_24, model.websiteUrl),
                   _iconWithText(context, GIcons.gift_24,
                       Utility.toDMYformate(model.createdAt)),
                   _iconWithText(context, Icons.location_city, model.location),

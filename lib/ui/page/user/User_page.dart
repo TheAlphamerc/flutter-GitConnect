@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
+import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 
 class UserPage extends StatefulWidget {
@@ -24,6 +26,9 @@ class _UserPageState extends State<UserPage> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text("Profile"),
+        actions: <Widget>[
+          IconButton(icon: Icon(GIcons.settings_24, color: GColors.blue), onPressed: null)
+        ],
       ),
       body: BlocBuilder<UserBloc, UserState>(
         // bloc: widget._userBloc,

@@ -31,7 +31,7 @@ class KText extends StatelessWidget {
     this.textDirection,
     this.textScaleFactor,
     this.textWidthBasis,
-    this.isSubtitle = false,
+    this.isSubtitle ,
     this.variant = TypographyVariant.body,
   }) : super(key: key);
 
@@ -162,12 +162,12 @@ class KText extends StatelessWidget {
       overflow: this.overflow,
       semanticsLabel: this.semanticsLabel,
       softWrap: this.softWrap,
-      style: style.copyWith(color:isSubtitle ? Colors.white60 : Colors.white),
+      style: style.copyWith(color:isSubtitle != null ? Colors.white60 : style.color),
       textAlign: this.textAlign,
       textScaleFactor: this.textScaleFactor,
       textWidthBasis: this.textWidthBasis,
       // locale: this.locale,
-      // maxLines: this.maxLines,
+      maxLines: this.maxLines,
       // strutStyle: this.strutStyle,
       // textDirection: this.textDirection,
     );
