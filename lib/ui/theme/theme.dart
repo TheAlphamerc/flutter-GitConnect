@@ -7,7 +7,7 @@ enum ThemeType { LIGHT, DARK }
 class AppTheme {
   static ThemeData get darkTheme => ThemeData.dark().copyWith(
         brightness: Brightness.dark,
-        buttonColor: Colors.black,
+        buttonColor: DarkColor.cardColor,
         backgroundColor:DarkColor.background,
         cardColor: DarkColor.cardColor,
         colorScheme: ThemeData.dark().colorScheme.copyWith(
