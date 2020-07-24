@@ -1,163 +1,165 @@
 import 'dart:convert';
 
 class RepositoryModel {
-    RepositoryModel({
-        this.id,
-        this.nodeId,
-        this.name,
-        this.fullName,
-        this.private,
-        this.owner,
-        this.htmlUrl,
-        this.description,
-        this.fork,
-        this.url,
-        this.forksUrl,
-        this.keysUrl,
-        this.collaboratorsUrl,
-        this.teamsUrl,
-        this.hooksUrl,
-        this.issueEventsUrl,
-        this.eventsUrl,
-        this.assigneesUrl,
-        this.branchesUrl,
-        this.tagsUrl,
-        this.blobsUrl,
-        this.gitTagsUrl,
-        this.gitRefsUrl,
-        this.treesUrl,
-        this.statusesUrl,
-        this.languagesUrl,
-        this.stargazersUrl,
-        this.contributorsUrl,
-        this.subscribersUrl,
-        this.subscriptionUrl,
-        this.commitsUrl,
-        this.gitCommitsUrl,
-        this.commentsUrl,
-        this.issueCommentUrl,
-        this.contentsUrl,
-        this.compareUrl,
-        this.mergesUrl,
-        this.archiveUrl,
-        this.downloadsUrl,
-        this.issuesUrl,
-        this.pullsUrl,
-        this.milestonesUrl,
-        this.notificationsUrl,
-        this.labelsUrl,
-        this.releasesUrl,
-        this.deploymentsUrl,
-        this.createdAt,
-        this.updatedAt,
-        this.pushedAt,
-        this.gitUrl,
-        this.sshUrl,
-        this.cloneUrl,
-        this.svnUrl,
-        this.homepage,
-        this.size,
-        this.stargazersCount,
-        this.watchersCount,
-        this.language,
-        this.hasIssues,
-        this.hasProjects,
-        this.hasDownloads,
-        this.hasWiki,
-        this.hasPages,
-        this.forksCount,
-        this.mirrorUrl,
-        this.archived,
-        this.disabled,
-        this.openIssuesCount,
-        this.license,
-        this.forks,
-        this.openIssues,
-        this.watchers,
-        this.defaultBranch,
-        this.permissions,
-    });
+  RepositoryModel({
+    this.id,
+    this.nodeId,
+    this.name,
+    this.fullName,
+    this.private,
+    this.owner,
+    this.htmlUrl,
+    this.description,
+    this.fork,
+    this.url,
+    this.forksUrl,
+    this.keysUrl,
+    this.collaboratorsUrl,
+    this.teamsUrl,
+    this.hooksUrl,
+    this.issueEventsUrl,
+    this.eventsUrl,
+    this.assigneesUrl,
+    this.branchesUrl,
+    this.tagsUrl,
+    this.blobsUrl,
+    this.gitTagsUrl,
+    this.gitRefsUrl,
+    this.treesUrl,
+    this.statusesUrl,
+    this.languagesUrl,
+    this.stargazersUrl,
+    this.contributorsUrl,
+    this.subscribersUrl,
+    this.subscriptionUrl,
+    this.commitsUrl,
+    this.gitCommitsUrl,
+    this.commentsUrl,
+    this.issueCommentUrl,
+    this.contentsUrl,
+    this.compareUrl,
+    this.mergesUrl,
+    this.archiveUrl,
+    this.downloadsUrl,
+    this.issuesUrl,
+    this.pullsUrl,
+    this.milestonesUrl,
+    this.notificationsUrl,
+    this.labelsUrl,
+    this.releasesUrl,
+    this.deploymentsUrl,
+    this.createdAt,
+    this.updatedAt,
+    this.pushedAt,
+    this.gitUrl,
+    this.sshUrl,
+    this.cloneUrl,
+    this.svnUrl,
+    this.homepage,
+    this.size,
+    this.stargazersCount,
+    this.watchersCount,
+    this.language,
+    this.hasIssues,
+    this.hasProjects,
+    this.hasDownloads,
+    this.hasWiki,
+    this.hasPages,
+    this.forksCount,
+    this.mirrorUrl,
+    this.archived,
+    this.disabled,
+    this.openIssuesCount,
+    this.license,
+    this.forks,
+    this.openIssues,
+    this.watchers,
+    this.defaultBranch,
+    this.permissions,
+  });
 
-    final int id;
-    final String nodeId;
-    final String name;
-    final String fullName;
-    final bool private;
-    final Owner owner;
-    final String htmlUrl;
-    final String description;
-    final bool fork;
-    final String url;
-    final String forksUrl;
-    final String keysUrl;
-    final String collaboratorsUrl;
-    final String teamsUrl;
-    final String hooksUrl;
-    final String issueEventsUrl;
-    final String eventsUrl;
-    final String assigneesUrl;
-    final String branchesUrl;
-    final String tagsUrl;
-    final String blobsUrl;
-    final String gitTagsUrl;
-    final String gitRefsUrl;
-    final String treesUrl;
-    final String statusesUrl;
-    final String languagesUrl;
-    final String stargazersUrl;
-    final String contributorsUrl;
-    final String subscribersUrl;
-    final String subscriptionUrl;
-    final String commitsUrl;
-    final String gitCommitsUrl;
-    final String commentsUrl;
-    final String issueCommentUrl;
-    final String contentsUrl;
-    final String compareUrl;
-    final String mergesUrl;
-    final String archiveUrl;
-    final String downloadsUrl;
-    final String issuesUrl;
-    final String pullsUrl;
-    final String milestonesUrl;
-    final String notificationsUrl;
-    final String labelsUrl;
-    final String releasesUrl;
-    final String deploymentsUrl;
-    final DateTime createdAt;
-    final DateTime updatedAt;
-    final DateTime pushedAt;
-    final String gitUrl;
-    final String sshUrl;
-    final String cloneUrl;
-    final String svnUrl;
-    final dynamic homepage;
-    final int size;
-    final int stargazersCount;
-    final int watchersCount;
-    final dynamic language;
-    final bool hasIssues;
-    final bool hasProjects;
-    final bool hasDownloads;
-    final bool hasWiki;
-    final bool hasPages;
-    final int forksCount;
-    final dynamic mirrorUrl;
-    final bool archived;
-    final bool disabled;
-    final int openIssuesCount;
-    final dynamic license;
-    final int forks;
-    final int openIssues;
-    final int watchers;
-    final String defaultBranch;
-    final Permissions permissions;
+  final int id;
+  final String nodeId;
+  final String name;
+  final String fullName;
+  final bool private;
+  final Owner owner;
+  final String htmlUrl;
+  final String description;
+  final bool fork;
+  final String url;
+  final String forksUrl;
+  final String keysUrl;
+  final String collaboratorsUrl;
+  final String teamsUrl;
+  final String hooksUrl;
+  final String issueEventsUrl;
+  final String eventsUrl;
+  final String assigneesUrl;
+  final String branchesUrl;
+  final String tagsUrl;
+  final String blobsUrl;
+  final String gitTagsUrl;
+  final String gitRefsUrl;
+  final String treesUrl;
+  final String statusesUrl;
+  final String languagesUrl;
+  final String stargazersUrl;
+  final String contributorsUrl;
+  final String subscribersUrl;
+  final String subscriptionUrl;
+  final String commitsUrl;
+  final String gitCommitsUrl;
+  final String commentsUrl;
+  final String issueCommentUrl;
+  final String contentsUrl;
+  final String compareUrl;
+  final String mergesUrl;
+  final String archiveUrl;
+  final String downloadsUrl;
+  final String issuesUrl;
+  final String pullsUrl;
+  final String milestonesUrl;
+  final String notificationsUrl;
+  final String labelsUrl;
+  final String releasesUrl;
+  final String deploymentsUrl;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime pushedAt;
+  final String gitUrl;
+  final String sshUrl;
+  final String cloneUrl;
+  final String svnUrl;
+  final dynamic homepage;
+  final int size;
+  final int stargazersCount;
+  final int watchersCount;
+  final dynamic language;
+  final bool hasIssues;
+  final bool hasProjects;
+  final bool hasDownloads;
+  final bool hasWiki;
+  final bool hasPages;
+  final int forksCount;
+  final dynamic mirrorUrl;
+  final bool archived;
+  final bool disabled;
+  final int openIssuesCount;
+  final dynamic license;
+  final int forks;
+  final int openIssues;
+  final int watchers;
+  final String defaultBranch;
+  final Permissions permissions;
 
-    factory RepositoryModel.fromRawJson(String str) => RepositoryModel.fromJson(json.decode(str));
+  factory RepositoryModel.fromRawJson(String str) =>
+      RepositoryModel.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory RepositoryModel.fromJson(Map<String, dynamic> json) => RepositoryModel(
+  factory RepositoryModel.fromJson(Map<String, dynamic> json) =>
+      RepositoryModel(
         id: json["id"] == null ? null : json["id"],
         nodeId: json["node_id"] == null ? null : json["node_id"],
         name: json["name"] == null ? null : json["name"],
@@ -170,12 +172,16 @@ class RepositoryModel {
         url: json["url"] == null ? null : json["url"],
         forksUrl: json["forks_url"] == null ? null : json["forks_url"],
         keysUrl: json["keys_url"] == null ? null : json["keys_url"],
-        collaboratorsUrl: json["collaborators_url"] == null ? null : json["collaborators_url"],
+        collaboratorsUrl: json["collaborators_url"] == null
+            ? null
+            : json["collaborators_url"],
         teamsUrl: json["teams_url"] == null ? null : json["teams_url"],
         hooksUrl: json["hooks_url"] == null ? null : json["hooks_url"],
-        issueEventsUrl: json["issue_events_url"] == null ? null : json["issue_events_url"],
+        issueEventsUrl:
+            json["issue_events_url"] == null ? null : json["issue_events_url"],
         eventsUrl: json["events_url"] == null ? null : json["events_url"],
-        assigneesUrl: json["assignees_url"] == null ? null : json["assignees_url"],
+        assigneesUrl:
+            json["assignees_url"] == null ? null : json["assignees_url"],
         branchesUrl: json["branches_url"] == null ? null : json["branches_url"],
         tagsUrl: json["tags_url"] == null ? null : json["tags_url"],
         blobsUrl: json["blobs_url"] == null ? null : json["blobs_url"],
@@ -183,58 +189,85 @@ class RepositoryModel {
         gitRefsUrl: json["git_refs_url"] == null ? null : json["git_refs_url"],
         treesUrl: json["trees_url"] == null ? null : json["trees_url"],
         statusesUrl: json["statuses_url"] == null ? null : json["statuses_url"],
-        languagesUrl: json["languages_url"] == null ? null : json["languages_url"],
-        stargazersUrl: json["stargazers_url"] == null ? null : json["stargazers_url"],
-        contributorsUrl: json["contributors_url"] == null ? null : json["contributors_url"],
-        subscribersUrl: json["subscribers_url"] == null ? null : json["subscribers_url"],
-        subscriptionUrl: json["subscription_url"] == null ? null : json["subscription_url"],
+        languagesUrl:
+            json["languages_url"] == null ? null : json["languages_url"],
+        stargazersUrl:
+            json["stargazers_url"] == null ? null : json["stargazers_url"],
+        contributorsUrl:
+            json["contributors_url"] == null ? null : json["contributors_url"],
+        subscribersUrl:
+            json["subscribers_url"] == null ? null : json["subscribers_url"],
+        subscriptionUrl:
+            json["subscription_url"] == null ? null : json["subscription_url"],
         commitsUrl: json["commits_url"] == null ? null : json["commits_url"],
-        gitCommitsUrl: json["git_commits_url"] == null ? null : json["git_commits_url"],
+        gitCommitsUrl:
+            json["git_commits_url"] == null ? null : json["git_commits_url"],
         commentsUrl: json["comments_url"] == null ? null : json["comments_url"],
-        issueCommentUrl: json["issue_comment_url"] == null ? null : json["issue_comment_url"],
+        issueCommentUrl: json["issue_comment_url"] == null
+            ? null
+            : json["issue_comment_url"],
         contentsUrl: json["contents_url"] == null ? null : json["contents_url"],
         compareUrl: json["compare_url"] == null ? null : json["compare_url"],
         mergesUrl: json["merges_url"] == null ? null : json["merges_url"],
         archiveUrl: json["archive_url"] == null ? null : json["archive_url"],
-        downloadsUrl: json["downloads_url"] == null ? null : json["downloads_url"],
+        downloadsUrl:
+            json["downloads_url"] == null ? null : json["downloads_url"],
         issuesUrl: json["issues_url"] == null ? null : json["issues_url"],
         pullsUrl: json["pulls_url"] == null ? null : json["pulls_url"],
-        milestonesUrl: json["milestones_url"] == null ? null : json["milestones_url"],
-        notificationsUrl: json["notifications_url"] == null ? null : json["notifications_url"],
+        milestonesUrl:
+            json["milestones_url"] == null ? null : json["milestones_url"],
+        notificationsUrl: json["notifications_url"] == null
+            ? null
+            : json["notifications_url"],
         labelsUrl: json["labels_url"] == null ? null : json["labels_url"],
         releasesUrl: json["releases_url"] == null ? null : json["releases_url"],
-        deploymentsUrl: json["deployments_url"] == null ? null : json["deployments_url"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        pushedAt: json["pushed_at"] == null ? null : DateTime.parse(json["pushed_at"]),
+        deploymentsUrl:
+            json["deployments_url"] == null ? null : json["deployments_url"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        pushedAt: json["pushed_at"] == null
+            ? null
+            : DateTime.parse(json["pushed_at"]),
         gitUrl: json["git_url"] == null ? null : json["git_url"],
         sshUrl: json["ssh_url"] == null ? null : json["ssh_url"],
         cloneUrl: json["clone_url"] == null ? null : json["clone_url"],
         svnUrl: json["svn_url"] == null ? null : json["svn_url"],
         homepage: json["homepage"],
         size: json["size"] == null ? null : json["size"],
-        stargazersCount: json["stargazers_count"] == null ? null : json["stargazers_count"],
-        watchersCount: json["watchers_count"] == null ? null : json["watchers_count"],
+        stargazersCount:
+            json["stargazers_count"] == null ? null : json["stargazers_count"],
+        watchersCount:
+            json["watchers_count"] == null ? null : json["watchers_count"],
         language: json["language"],
         hasIssues: json["has_issues"] == null ? null : json["has_issues"],
         hasProjects: json["has_projects"] == null ? null : json["has_projects"],
-        hasDownloads: json["has_downloads"] == null ? null : json["has_downloads"],
+        hasDownloads:
+            json["has_downloads"] == null ? null : json["has_downloads"],
         hasWiki: json["has_wiki"] == null ? null : json["has_wiki"],
         hasPages: json["has_pages"] == null ? null : json["has_pages"],
         forksCount: json["forks_count"] == null ? null : json["forks_count"],
         mirrorUrl: json["mirror_url"],
         archived: json["archived"] == null ? null : json["archived"],
         disabled: json["disabled"] == null ? null : json["disabled"],
-        openIssuesCount: json["open_issues_count"] == null ? null : json["open_issues_count"],
+        openIssuesCount: json["open_issues_count"] == null
+            ? null
+            : json["open_issues_count"],
         license: json["license"],
         forks: json["forks"] == null ? null : json["forks"],
         openIssues: json["open_issues"] == null ? null : json["open_issues"],
         watchers: json["watchers"] == null ? null : json["watchers"],
-        defaultBranch: json["default_branch"] == null ? null : json["default_branch"],
-        permissions: json["permissions"] == null ? null : Permissions.fromJson(json["permissions"]),
-    );
+        defaultBranch:
+            json["default_branch"] == null ? null : json["default_branch"],
+        permissions: json["permissions"] == null
+            ? null
+            : Permissions.fromJson(json["permissions"]),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "node_id": nodeId == null ? null : nodeId,
         "name": name == null ? null : name,
@@ -309,55 +342,55 @@ class RepositoryModel {
         "watchers": watchers == null ? null : watchers,
         "default_branch": defaultBranch == null ? null : defaultBranch,
         "permissions": permissions == null ? null : permissions.toJson(),
-    };
+      };
 }
 
 class Owner {
-    Owner({
-        this.login,
-        this.id,
-        this.nodeId,
-        this.avatarUrl,
-        this.gravatarId,
-        this.url,
-        this.htmlUrl,
-        this.followersUrl,
-        this.followingUrl,
-        this.gistsUrl,
-        this.starredUrl,
-        this.subscriptionsUrl,
-        this.organizationsUrl,
-        this.reposUrl,
-        this.eventsUrl,
-        this.receivedEventsUrl,
-        this.type,
-        this.siteAdmin,
-    });
+  Owner({
+    this.login,
+    this.id,
+    this.nodeId,
+    this.avatarUrl,
+    this.gravatarId,
+    this.url,
+    this.htmlUrl,
+    this.followersUrl,
+    this.followingUrl,
+    this.gistsUrl,
+    this.starredUrl,
+    this.subscriptionsUrl,
+    this.organizationsUrl,
+    this.reposUrl,
+    this.eventsUrl,
+    this.receivedEventsUrl,
+    this.type,
+    this.siteAdmin,
+  });
 
-    final String login;
-    final int id;
-    final String nodeId;
-    final String avatarUrl;
-    final String gravatarId;
-    final String url;
-    final String htmlUrl;
-    final String followersUrl;
-    final String followingUrl;
-    final String gistsUrl;
-    final String starredUrl;
-    final String subscriptionsUrl;
-    final String organizationsUrl;
-    final String reposUrl;
-    final String eventsUrl;
-    final String receivedEventsUrl;
-    final String type;
-    final bool siteAdmin;
+  final String login;
+  final int id;
+  final String nodeId;
+  final String avatarUrl;
+  final String gravatarId;
+  final String url;
+  final String htmlUrl;
+  final String followersUrl;
+  final String followingUrl;
+  final String gistsUrl;
+  final String starredUrl;
+  final String subscriptionsUrl;
+  final String organizationsUrl;
+  final String reposUrl;
+  final String eventsUrl;
+  final String receivedEventsUrl;
+  final String type;
+  final bool siteAdmin;
 
-    factory Owner.fromRawJson(String str) => Owner.fromJson(json.decode(str));
+  factory Owner.fromRawJson(String str) => Owner.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Owner.fromJson(Map<String, dynamic> json) => Owner(
+  factory Owner.fromJson(Map<String, dynamic> json) => Owner(
         login: json["login"] == null ? null : json["login"],
         id: json["id"] == null ? null : json["id"],
         nodeId: json["node_id"] == null ? null : json["node_id"],
@@ -365,20 +398,28 @@ class Owner {
         gravatarId: json["gravatar_id"] == null ? null : json["gravatar_id"],
         url: json["url"] == null ? null : json["url"],
         htmlUrl: json["html_url"] == null ? null : json["html_url"],
-        followersUrl: json["followers_url"] == null ? null : json["followers_url"],
-        followingUrl: json["following_url"] == null ? null : json["following_url"],
+        followersUrl:
+            json["followers_url"] == null ? null : json["followers_url"],
+        followingUrl:
+            json["following_url"] == null ? null : json["following_url"],
         gistsUrl: json["gists_url"] == null ? null : json["gists_url"],
         starredUrl: json["starred_url"] == null ? null : json["starred_url"],
-        subscriptionsUrl: json["subscriptions_url"] == null ? null : json["subscriptions_url"],
-        organizationsUrl: json["organizations_url"] == null ? null : json["organizations_url"],
+        subscriptionsUrl: json["subscriptions_url"] == null
+            ? null
+            : json["subscriptions_url"],
+        organizationsUrl: json["organizations_url"] == null
+            ? null
+            : json["organizations_url"],
         reposUrl: json["repos_url"] == null ? null : json["repos_url"],
         eventsUrl: json["events_url"] == null ? null : json["events_url"],
-        receivedEventsUrl: json["received_events_url"] == null ? null : json["received_events_url"],
+        receivedEventsUrl: json["received_events_url"] == null
+            ? null
+            : json["received_events_url"],
         type: json["type"] == null ? null : json["type"],
         siteAdmin: json["site_admin"] == null ? null : json["site_admin"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "login": login == null ? null : login,
         "id": id == null ? null : id,
         "node_id": nodeId == null ? null : nodeId,
@@ -394,36 +435,46 @@ class Owner {
         "organizations_url": organizationsUrl == null ? null : organizationsUrl,
         "repos_url": reposUrl == null ? null : reposUrl,
         "events_url": eventsUrl == null ? null : eventsUrl,
-        "received_events_url": receivedEventsUrl == null ? null : receivedEventsUrl,
+        "received_events_url":
+            receivedEventsUrl == null ? null : receivedEventsUrl,
         "type": type == null ? null : type,
         "site_admin": siteAdmin == null ? null : siteAdmin,
-    };
+      };
 }
 
 class Permissions {
-    Permissions({
-        this.admin,
-        this.push,
-        this.pull,
-    });
+  Permissions({
+    this.admin,
+    this.push,
+    this.pull,
+  });
 
-    final bool admin;
-    final bool push;
-    final bool pull;
+  final bool admin;
+  final bool push;
+  final bool pull;
 
-    factory Permissions.fromRawJson(String str) => Permissions.fromJson(json.decode(str));
+  factory Permissions.fromRawJson(String str) =>
+      Permissions.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Permissions.fromJson(Map<String, dynamic> json) => Permissions(
+  factory Permissions.fromJson(Map<String, dynamic> json) => Permissions(
         admin: json["admin"] == null ? null : json["admin"],
         push: json["push"] == null ? null : json["push"],
         pull: json["pull"] == null ? null : json["pull"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "admin": admin == null ? null : admin,
         "push": push == null ? null : push,
         "pull": pull == null ? null : pull,
-    };
+      };
+}
+
+enum GithubSearchType {
+  People,
+  Issue,
+  PullRequest,
+  Repository,
+  ORganisation,
 }

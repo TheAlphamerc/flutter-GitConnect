@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
-import 'package:flutter_github_connect/bloc/repo/index.dart';
+import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';

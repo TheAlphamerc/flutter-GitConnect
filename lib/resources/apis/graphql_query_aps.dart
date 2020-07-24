@@ -133,4 +133,61 @@ class Apis {
       }
     }
   ''';
+
+  static String searchRepo = r'''query userInfo($query: String!, $type:SearchType!) {
+    search(query: $query, first: 10, type: $type) {
+      userCount
+      nodes {
+        ... on User {
+          id
+          name
+          avatarUrl
+          bio
+          login
+        }
+        ... on Issue {
+          body
+          number
+          closed
+          participants {
+            totalCount
+          }
+          author {
+            login
+            avatarUrl
+            url
+          }
+          closedAt
+        }
+        ... on Repository {
+          id
+          name
+          description
+          stargazers {
+            totalCount
+          }
+          languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+            totalSize
+            nodes {
+              name
+              color
+            }
+          }
+          owner {
+            avatarUrl
+            login
+            url
+          }
+        }
+        ... on PullRequest {
+          id
+          author {
+            login
+            avatarUrl
+            url
+          }
+        }
+      }
+    }
+  }''';
 }

@@ -46,6 +46,7 @@ class GFlatButton extends StatelessWidget {
         },
         child: Text(
           label,
+          style: TextStyle(fontWeight:FontWeight.bold, letterSpacing:1.2, fontSize: 18)
         ),
       ),
     );

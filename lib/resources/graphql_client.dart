@@ -51,6 +51,17 @@ Future<QueryResult> getUser(String login,) async {
   return await _innerClient.query(_options);
 }
 
+Future<QueryResult> searchQueryAsync(String query, String type) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.searchRepo,
+      variables: <String, dynamic>{
+        'query': query,
+        "type": type
+      },
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null
       ? <String, dynamic>{

@@ -1,7 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_github_connect/bloc/search/index.dart';
+import 'package:flutter_github_connect/bloc/search/search_event.dart';
+import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 
@@ -82,6 +88,11 @@ class SearchPage extends StatelessWidget {
     );
   }
 
+  Future<Null> searchGithub(context, String text, GithubSearchType type) {
+    BlocProvider.of<SearchBloc>(context)
+        .add(SearchForEvent(query: text, type: type));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,9 +135,19 @@ class SearchPage extends StatelessWidget {
                               height: 0,
                             ),
                             _getUtilRos(context, "People with \"$searchText\"",
-                                color: GColors.green,
-                                onPressed: () {},
-                                icon: GIcons.people_24),
+                                color: GColors.green, onPressed: () async {
+                              await searchGithub(
+                                  context, searchText, GithubSearchType.People);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                    value: BlocProvider.of<SearchBloc>(context),
+                                    child: UserListPage(),
+                                  ),
+                                ),
+                              );
+                            }, icon: GIcons.people_24),
                             Divider(
                               height: 0,
                             ),
@@ -142,7 +163,29 @@ class SearchPage extends StatelessWidget {
                         ),
                       );
               },
-              child: SizedBox(),
+              child: Container(
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.height - 280,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    // Image.asset(GImages.githubMarkLight120, width:160),
+                    Icon(GIcons.github_1, size: 120),
+                    SizedBox(height: 16),
+                    KText(
+                      "Find your stuff.",
+                      variant: TypographyVariant.title,
+                    ),
+                    SizedBox(height: 8),
+                    KText(
+                        "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
+                        textAlign: TextAlign.center,
+                        variant: TypographyVariant.h3,
+                        style: TextStyle(letterSpacing: 1, height: 1.1)),
+                  ],
+                ),
+              ),
             )
           ],
         ),

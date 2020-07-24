@@ -28,7 +28,7 @@ class UserAvatar extends StatelessWidget {
             borderRadius: BorderRadius.circular(height / 4),
             child: customNetworkImage(imagePath, placeholder: Icon(GIcons.github)),
           ),
-          SizedBox(width: height/4),
+          SizedBox(width: name == null && subtitle == null ? 0 : height/4),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

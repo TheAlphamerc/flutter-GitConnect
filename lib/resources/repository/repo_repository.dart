@@ -1,13 +1,13 @@
-import 'package:flutter_github_connect/bloc/repo/index.dart';
+import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/resources/provider/api_gatway.dart';
 
-class RepoRepository {
+class SearchRepository {
   final ApiGateway apiGatway ;
-  RepoRepository({this.apiGatway}) : assert( apiGatway != null);
+  SearchRepository({this.apiGatway}) : assert( apiGatway != null);
 
-  
-
-  Future<List<RepositoryModel>> fetchRepositories(bool isError) async{
-    return await apiGatway.fetchRepositories();
+  Future<List<dynamic>> searchQuery({GithubSearchType type, String query}) async{
+    assert(type != null, query != null);
+    return await apiGatway.searchQuery(type:type,query:query);
   }
+
 }

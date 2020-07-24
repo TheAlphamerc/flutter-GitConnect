@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
-import 'package:flutter_github_connect/bloc/repo/repo_model.dart';
+import 'package:flutter_github_connect/bloc/search/index.dart';
+import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart' as model;
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/graphql_client.dart';
@@ -79,6 +80,35 @@ class ApiGatwayImpl implements ApiGateway {
         }).toList();
       print(list.length);
       return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List> searchQuery({GithubSearchType type, String query})async {
+    try {
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      String queryType ;
+      switch (type) {
+        case GithubSearchType.People: queryType = "USER";break;
+        case GithubSearchType.Repository: queryType = "REPOSITORY";break;
+        case GithubSearchType.PullRequest: queryType = "USER";break;
+        case GithubSearchType.Issue: queryType = "ISSUE";break;
+        case GithubSearchType.ORganisation: queryType = "USER";break;
+          
+        default:queryType = "USER";break;
+      }
+      final result = await searchQueryAsync(query,queryType);
+      if (result.hasException) {
+        print(result.exception.toString());
+        return null;
+      }
+      // final userMap = result.data['search'] as Map<String, dynamic>;
+      final user = model.Data.fromJson(result.data,type:type);
+
+      return user.search.list;
     } catch (error) {
       throw error;
     }
