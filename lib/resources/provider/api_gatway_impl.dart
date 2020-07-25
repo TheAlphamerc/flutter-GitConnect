@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart' as model;
@@ -109,6 +110,27 @@ class ApiGatwayImpl implements ApiGateway {
       final user = model.Data.fromJson(result.data,type:type);
 
       return user.search.list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<IssuesModel>> fetchIssues() async{
+    try {
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      String queryType ;
+      
+      final result = await getIssues();
+      if (result.hasException) {
+        print(result.exception.toString());
+        return null;
+      }
+      // final userMap = result.data['search'] as Map<String, dynamic>;
+      final list =IssuesData.fromJson(result.data).viewer.issues.list;
+
+      return list;
     } catch (error) {
       throw error;
     }

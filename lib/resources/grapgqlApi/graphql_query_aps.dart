@@ -1,4 +1,7 @@
-class Apis {
+import 'package:flutter_github_connect/resources/grapgqlApi/issues_api.dart';
+
+class Apis  {
+  static  String get issues => IssuesApis.issues;
   static const String user = r'''
    query userInfo($login: String!) {
       user(login: $login) {

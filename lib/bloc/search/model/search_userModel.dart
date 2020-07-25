@@ -1,4 +1,5 @@
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/search/repo_model.dart';
 
 class SearchModel {
@@ -61,7 +62,7 @@ class Search {
             list.add(RepositoriesNode.fromJson(v));
             break;
            case GithubSearchType.Issue:
-            list.add(IssueSearchModel.fromJson(v));
+            list.add(IssuesModel.fromJson(v));
             break;
           default:
             list.add(SearchRepo.fromJson(v));
@@ -246,64 +247,64 @@ class Owner {
 }
 
 /// Search Issue model
-class IssueSearchModel {
-  String title;
-  int number;
-  bool closed;
-  String closedAt;
-  Labels labels;
-  IssueAuthor author;
-  String state;
-  String type;
-  Repository repository;
-  IssueSearchModel(
-      {this.title,
-      this.number,
-      this.closed,
-      this.closedAt,
-      this.labels,
-      this.author,
-      this.state,
-      this.type,
-      this.repository
-      });
+// class IssueSearchModel {
+//   String title;
+//   int number;
+//   bool closed;
+//   String closedAt;
+//   Labels labels;
+//   IssueAuthor author;
+//   String state;
+//   String type;
+//   Repository repository;
+//   IssueSearchModel(
+//       {this.title,
+//       this.number,
+//       this.closed,
+//       this.closedAt,
+//       this.labels,
+//       this.author,
+//       this.state,
+//       this.type,
+//       this.repository
+//       });
 
-  IssueSearchModel.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    number = json['number'];
-    closed = json['closed'];
-    closedAt = json['closedAt'];
-    labels =
-        json['labels'] != null ? new Labels.fromJson(json['labels']) : null;
-    author = json['author'] != null
-        ? new IssueAuthor.fromJson(json['author'])
-        : null;
-    state = json['state'];
-    type = json['__typename'];
-    repository = json['repository'] != null
-        ? new Repository.fromJson(json['repository'])
-        : null;
-  }
+//   IssueSearchModel.fromJson(Map<String, dynamic> json) {
+//     title = json['title'];
+//     number = json['number'];
+//     closed = json['closed'];
+//     closedAt = json['closedAt'];
+//     labels =
+//         json['labels'] != null ? new Labels.fromJson(json['labels']) : null;
+//     author = json['author'] != null
+//         ? new IssueAuthor.fromJson(json['author'])
+//         : null;
+//     state = json['state'];
+//     type = json['__typename'];
+//     repository = json['repository'] != null
+//         ? new Repository.fromJson(json['repository'])
+//         : null;
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['number'] = this.number;
-    data['closed'] = this.closed;
-    data['closedAt'] = this.closedAt;
-    if (this.labels != null) {
-      data['labels'] = this.labels.toJson();
-    }
-    if (this.author != null) {
-      data['author'] = this.author.toJson();
-    }
-    data['state'] = this.state;
-      if (this.repository != null) {
-      data['repository'] = this.repository.toJson();
-    }
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['title'] = this.title;
+//     data['number'] = this.number;
+//     data['closed'] = this.closed;
+//     data['closedAt'] = this.closedAt;
+//     if (this.labels != null) {
+//       data['labels'] = this.labels.toJson();
+//     }
+//     if (this.author != null) {
+//       data['author'] = this.author.toJson();
+//     }
+//     data['state'] = this.state;
+//       if (this.repository != null) {
+//       data['repository'] = this.repository.toJson();
+//     }
+//     return data;
+//   }
+// }
 
 class Labels {
   List<ColorCode> nodes;
@@ -328,44 +329,44 @@ class Labels {
   }
 }
 
-class IssueAuthor {
-  String login;
-  String avatarUrl;
-  String url;
+// class IssueAuthor {
+//   String login;
+//   String avatarUrl;
+//   String url;
 
-  IssueAuthor({this.login, this.avatarUrl, this.url});
+//   IssueAuthor({this.login, this.avatarUrl, this.url});
 
-  IssueAuthor.fromJson(Map<String, dynamic> json) {
-    login = json['login'];
-    avatarUrl = json['avatarUrl'];
-    url = json['url'];
-  }
+//   IssueAuthor.fromJson(Map<String, dynamic> json) {
+//     login = json['login'];
+//     avatarUrl = json['avatarUrl'];
+//     url = json['url'];
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['login'] = this.login;
-    data['avatarUrl'] = this.avatarUrl;
-    data['url'] = this.url;
-    return data;
-  }
-}
-class Repository {
-  String name;
-  Owner owner;
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['login'] = this.login;
+//     data['avatarUrl'] = this.avatarUrl;
+//     data['url'] = this.url;
+//     return data;
+//   }
+// }
+// class Repository {
+//   String name;
+//   Owner owner;
 
-  Repository({this.name, this.owner});
+//   Repository({this.name, this.owner});
 
-  Repository.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    owner = json['owner'] != null ? new Owner.fromJson(json['owner']) : null;
-  }
+//   Repository.fromJson(Map<String, dynamic> json) {
+//     name = json['name'];
+//     owner = json['owner'] != null ? new Owner.fromJson(json['owner']) : null;
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    if (this.owner != null) {
-      data['owner'] = this.owner.toJson();
-    }
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['name'] = this.name;
+//     if (this.owner != null) {
+//       data['owner'] = this.owner.toJson();
+//     }
+//     return data;
+//   }
+// }

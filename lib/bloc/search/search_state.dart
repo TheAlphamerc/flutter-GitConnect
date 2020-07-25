@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
 
@@ -32,7 +33,7 @@ class LoadedSearchState extends SearchState {
     if (list != null) {
       list
         ..forEach((element) {
-           if(element.type != "Repository"){
+          if (element.type != "Repository") {
             return;
           }
           userList.add(element);
@@ -40,12 +41,13 @@ class LoadedSearchState extends SearchState {
     }
     return userList;
   }
-  List<IssueSearchModel> toPullRequest() {
-    List<IssueSearchModel> userList = [];
+  // Todo : Need to implement
+  List<IssuesModel> toPullRequest() {
+    List<IssuesModel> userList = [];
     if (list != null) {
       list
         ..forEach((element) {
-          if(element.type != "PullRequest"){
+          if (element.type != "PullRequest") {
             return;
           }
           userList.add(element);
@@ -53,12 +55,13 @@ class LoadedSearchState extends SearchState {
     }
     return userList;
   }
-  List<IssueSearchModel> toIssueList() {
-    List<IssueSearchModel> userList = [];
+
+  List<IssuesModel> toIssueList() {
+    List<IssuesModel> userList = [];
     if (list != null) {
       list
         ..forEach((element) {
-          if(element.type != "Issue"){
+          if (element.type != "Issue") {
             return;
           }
           userList.add(element);

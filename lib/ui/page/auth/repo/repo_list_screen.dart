@@ -72,7 +72,8 @@ class RepositoryListScreen extends StatelessWidget {
       appBar: hideAppBar ? null :AppBar(
         title: Text("Repositories"),
       ),
-      body: ListView.separated(
+      body: list == null ? SizedBox() :
+       ListView.separated(
         itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) =>
             Divider(height: 0),

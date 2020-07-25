@@ -1,4 +1,4 @@
-import 'package:flutter_github_connect/resources/apis/graphql_query_aps.dart';
+import 'package:flutter_github_connect/resources/grapgqlApi/graphql_query_aps.dart';
 import 'package:graphql/client.dart';
 
 GraphQLClient _client(token) {
@@ -61,6 +61,14 @@ Future<QueryResult> searchQueryAsync(String query, String type) async {
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
+
+Future<QueryResult> getIssues() async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.issues,
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
 
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
+import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _UserPageState extends State<HomePage> {
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
   @override
   void initState() {
     print("Init Profile page");
@@ -59,29 +61,90 @@ class _UserPageState extends State<HomePage> {
   }
 
   Widget _favouriteRepo() {
-    final list = widget.model.topRepositories.nodes;
-    return GCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: list.sublist(0, 4).map((model) {
-          return Column(
-            children: <Widget>[
-              _getUtilRos(GIcons.issue_closed_16, model.name,
-                  color: GColors.green, user: model.owner),
-              if (list.last != model) Divider(height: 0, indent: 50),
-            ],
+    final list = widget.model?.topRepositories?.nodes;
+    return widget.model?.topRepositories?.nodes != null
+        ? GCard(
+            color: Theme.of(context).colorScheme.surface,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: <Widget>[
+                KText(
+                    "Add favourite repositories for quick access at any time, without having to search",
+                    textAlign: TextAlign.center,
+                    variant: TypographyVariant.h3,
+                    style: TextStyle(height: 1.25)),
+                SizedBox(height: 16),
+                GFlatButton(
+                  label: "ADD FavouriteS",
+                  onPressed: () {},
+                ).ripple(() {})
+              ],
+            ),
+          )
+        : GCard(
+            color: Theme.of(context).colorScheme.surface,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: list.sublist(0, 4).map((model) {
+                return Column(
+                  children: <Widget>[
+                    _getUtilRos(GIcons.issue_closed_16, model.name,
+                        color: GColors.green, user: model.owner),
+                    if (list.last != model) Divider(height: 0, indent: 50),
+                  ],
+                );
+              }).toList(),
+            ),
           );
-        }).toList(),
-      ),
-    );
+  }
+
+  Widget _pinnedItems() {
+    final list = widget.model?.itemShowcase?.items?.nodes;
+    return widget.model.itemShowcase == null
+        ? GCard(
+            color: Theme.of(context).colorScheme.surface,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: <Widget>[
+                KText(
+                    "Add favourite repositories for quick access at any time, without having to search",
+                    textAlign: TextAlign.center,
+                    variant: TypographyVariant.h3,
+                    style: TextStyle(height: 1.25)),
+                SizedBox(height: 16),
+                GFlatButton(
+                  label: "ADD FavouriteS",
+                  onPressed: () {},
+                ).ripple(() {})
+              ],
+            ),
+          )
+        : GCard(
+            color: Theme.of(context).colorScheme.surface,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: list.map((model) {
+                return Column(
+                  children: <Widget>[
+                    _getUtilRos(GIcons.issue_closed_16, model.name,
+                        color: GColors.green, user: model.owner),
+                    if (list.last != model) Divider(height: 0, indent: 50),
+                  ],
+                );
+              }).toList(),
+            ),
+          );
   }
 
   Widget _myWorkSection() {
     return GCard(
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(GIcons.issue_opened_24, "Issues", color: GColors.green),
+          _getUtilRos(GIcons.issue_opened_24, "Issues", color: GColors.green,onPressed:(){
+            Navigator.push(context, IssuesPage.route());
+          }),
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.git_pull_request_16, "Pull Request",
               color: GColors.blue),
@@ -110,11 +173,12 @@ class _UserPageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              SizedBox(height: 16),
               KText(
                 "Home",
                 variant: TypographyVariant.title,
@@ -132,7 +196,15 @@ class _UserPageState extends State<HomePage> {
                 variant: TypographyVariant.subHeader,
               ),
               SizedBox(height: 16),
-              _favouriteRepo()
+              _favouriteRepo(),
+              SizedBox(height:30),
+              KText(
+                "Pinned Repository",
+                variant: TypographyVariant.subHeader,
+              ),
+               SizedBox(height: 16),
+              _pinnedItems(),
+              SizedBox(height: 16),
             ],
           ),
         ),

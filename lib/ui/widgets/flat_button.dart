@@ -19,15 +19,15 @@ class GFlatButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: isWraped ? null : double.infinity,
-      child: ValueListenableBuilder(
+      child: ValueListenableBuilder<bool>(
         valueListenable: isLoading ?? ValueNotifier(false),
         builder: (context, loading, child) {
           return FlatButton(
             disabledColor: GColors.disableButtonColor,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical:16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            color: !isColored ? null : Theme.of(context).buttonColor,
+            color: !isColored ? null : Theme.of(context).cardColor,
             textColor: GColors.onPrimary,
             onPressed: loading ? null : onPressed,
             child: loading
@@ -46,7 +46,12 @@ class GFlatButton extends StatelessWidget {
         },
         child: Text(
           label,
-          style: TextStyle(fontWeight:FontWeight.bold, letterSpacing:1.2, fontSize: 18)
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+            fontSize: 18,
+            color:Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
       ),
     );
