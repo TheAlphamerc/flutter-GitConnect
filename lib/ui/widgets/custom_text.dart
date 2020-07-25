@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
+import 'package:flutter_github_connect/ui/theme/theme.dart';
 
 class KText extends StatelessWidget {
   final String data;
@@ -157,12 +159,15 @@ class KText extends StatelessWidget {
   Widget build(BuildContext context) {
     TextStyle style =
         KText.styleForVariant(context, this.variant).merge(this.style);
+      Color text = CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT ? Colors.black : Colors.white;
+      Color subTitleText = CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT ? Colors.black : Colors.white54;
+    final theme = Theme.of(context);
     return Text(
       this.data,
       overflow: this.overflow,
       semanticsLabel: this.semanticsLabel,
       softWrap: this.softWrap,
-      style: style.copyWith(color:isSubtitle != null ? Colors.white60 : style.color),
+      style: style.copyWith(color:isSubtitle != null ? subTitleText:text),//style.color),
       textAlign: this.textAlign,
       textScaleFactor: this.textScaleFactor,
       textWidthBasis: this.textWidthBasis,

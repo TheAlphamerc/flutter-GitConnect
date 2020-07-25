@@ -354,6 +354,7 @@ class RepositoriesNode {
     this.owner,
     this.languages,
     this.stargazers,
+    this.type
   });
 
   final String name;
@@ -361,6 +362,7 @@ class RepositoriesNode {
   final Owner owner;
   final Languages languages;
   final Followers stargazers;
+  final String type;
 
   factory RepositoriesNode.fromRawJson(String str) =>
       RepositoriesNode.fromJson(json.decode(str));
@@ -372,6 +374,7 @@ class RepositoriesNode {
         name: json["name"] == null ? null : json["name"],
         description: json["description"] == null ? null : json["description"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        type : json['__typename'],
         languages: json["languages"] == null
             ? null
             : Languages.fromJson(json["languages"]),

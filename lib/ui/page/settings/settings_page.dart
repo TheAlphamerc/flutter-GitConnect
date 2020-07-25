@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key key}) : super(key: key);
+  SettingsPage({Key key}) : super(key: key);
+  bool isDarkTheme = true;
   Widget _getUtilRos(context, String text,
       {Function onPressed,
       Color color,
@@ -25,12 +27,12 @@ class SettingsPage extends StatelessWidget {
           isSubtitle: true,
           style: TextStyle(fontWeight: FontWeight.w300, letterSpacing: .6),
         ),
-        if(icon != null)
-        Icon(
-          icon,
-          color: Theme.of(context).colorScheme.onSurface,
-          size: 18,
-        ),
+        if (icon != null)
+          Icon(
+            icon,
+            color: Theme.of(context).colorScheme.onSurface,
+            size: 18,
+          ),
         SizedBox(width: 8, height: 50)
       ],
     ).ripple(onPressed);
@@ -38,12 +40,15 @@ class SettingsPage extends StatelessWidget {
 
   Widget _section1(context) {
     return GCard(
-      color:Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _getUtilRos(context, "Appearence",
-              color: GColors.green, selectedText: "Automaic"),
+              color: GColors.green, selectedText: "Automaic", onPressed: () {
+            _changeTheme(
+                context,CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT);
+          }),
           Divider(height: 0),
           _getUtilRos(context, "App Icon",
               color: GColors.blue, selectedText: "  "),
@@ -69,7 +74,7 @@ class SettingsPage extends StatelessWidget {
 
   Widget _section2(context) {
     return GCard(
-      color:Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -86,7 +91,7 @@ class SettingsPage extends StatelessWidget {
 
   Widget _section3(context) {
     return GCard(
-      color:Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -100,14 +105,21 @@ class SettingsPage extends StatelessWidget {
 
   Widget _section4(context) {
     return GCard(
-      color:Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(context, "Sign out", color: GColors.green,icon:null),
+          _getUtilRos(context, "Sign out", color: GColors.green, icon: null),
         ],
       ),
     );
+  }
+
+  void _changeTheme(BuildContext buildContext, ThemeType key) {
+    
+    CustomTheme.instanceOf(buildContext).changeTheme(key);
+    isDarkTheme = key == ThemeType.DARK;
+    print("$key theme set");
   }
 
   @override

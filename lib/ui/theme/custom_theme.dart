@@ -30,16 +30,20 @@ class CustomTheme extends StatefulWidget {
 
 class CustomThemeState extends State<CustomTheme> {
   ThemeData _theme;
+  ThemeType  _themeType;
+  ThemeType get themeType => _themeType;
   ThemeData get theme => _theme;
 
   @override
   void initState() {
     _theme = AppTheme.getThemeFromKey(widget.initialThemeKey);
+    _themeType = ThemeType.DARK;
     super.initState();
   }
 
   void changeTheme(ThemeType themeKey) {
     setState(() {
+      _themeType = themeKey == ThemeType.DARK ? ThemeType.DARK : ThemeType.LIGHT;
       _theme = AppTheme.getThemeFromKey(themeKey);
     });
   }

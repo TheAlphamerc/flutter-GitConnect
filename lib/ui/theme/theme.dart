@@ -8,14 +8,50 @@ class AppTheme {
   static ThemeData get darkTheme => ThemeData.dark().copyWith(
         brightness: Brightness.dark,
         buttonColor: DarkColor.cardColor,
-        backgroundColor:DarkColor.background,
+        backgroundColor: DarkColor.background,
         cardColor: DarkColor.cardColor,
         colorScheme: ThemeData.dark().colorScheme.copyWith(
-          surface: DarkColor.surfaceColor,
-          onSurface: DarkColor.onSurfaceDarkColor,
-          onBackground: DarkColor.onSurfaceLightColor
+            surface: DarkColor.surfaceColor,
+            onSurface: DarkColor.onSurfaceDarkColor,
+            onBackground: DarkColor.onSurfaceLightColor),
+        textTheme: TextTheme(
+          bodyText1: TextStyle(
+            color: GColors.red,
+          ),
+          subtitle1: TextStyle(
+            color: GColors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        textTheme:ThemeData.dark().textTheme.copyWith(bodyText1: TextStyle(color:GColors.white) )
+        appBarTheme: AppBarTheme(
+            brightness: Brightness.dark,
+            color: DarkColor.surfaceColor,
+            iconTheme: IconThemeData(color: DarkColor.white)),
+      );
+  static ThemeData get lightTheme => ThemeData.light().copyWith(
+        // brightness: Brightness.dark,
+        // buttonColor: DarkColor.cardColor,
+        backgroundColor: GColors.background,
+        cardColor: GColors.cardColor,
+        colorScheme: ThemeData.dark().colorScheme.copyWith(
+            surface: GColors.surfaceColor,
+            onSurface: GColors.onSurfaceDarkColor,
+            onPrimary: GColors.onPrimary,
+            onBackground: GColors.onSurfaceLightColor),
+        textTheme: ThemeData.dark().textTheme.copyWith(
+              bodyText1: TextStyle(color: GColors.black),
+            ),
+        appBarTheme: AppBarTheme(
+          brightness: Brightness.light,
+          color: GColors.white,
+          elevation: 0,
+          textTheme: TextTheme(
+            title: TextStyle(color: GColors.black, fontSize: 20),
+          ),
+          iconTheme: IconThemeData(
+            color: GColors.black,
+          ),
+        ),
       );
 
   // Return a scaling factor between 0.0 and 1.0 for screens heights ranging
@@ -33,7 +69,7 @@ class AppTheme {
     return low + contentScale(context) * (high - low);
   }
 
-   static double fullWidth(BuildContext context) {
+  static double fullWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
 
@@ -44,7 +80,7 @@ class AppTheme {
   static ThemeData getThemeFromKey(ThemeType themeKey) {
     switch (themeKey) {
       case ThemeType.LIGHT:
-        return darkTheme;
+        return lightTheme;
       case ThemeType.DARK:
         return darkTheme;
       default:
