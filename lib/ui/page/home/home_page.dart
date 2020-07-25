@@ -92,7 +92,7 @@ class _UserPageState extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (_) => RepositoryListScreen(
-                  list1: widget.model.repositories.nodes,
+                  list: widget.model.repositories.nodes,
                 ),
               ),
             );

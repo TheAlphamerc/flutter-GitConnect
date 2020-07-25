@@ -211,7 +211,7 @@ class UserScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => RepositoryListScreen(
-                            list1: model.repositories.nodes,
+                            list: model.repositories.nodes,
                           ),
                         ),
                       );

@@ -1,3 +1,4 @@
+import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/search/repo_model.dart';
 
 class SearchModel {
@@ -5,8 +6,10 @@ class SearchModel {
   GithubSearchType type;
   SearchModel({this.data, this.type});
 
-  SearchModel.fromJson(Map<String, dynamic> json,{GithubSearchType type}) {
-    data = json['data'] != null ? new Data.fromJson(json['data'],type:type) : null;
+  SearchModel.fromJson(Map<String, dynamic> json, {GithubSearchType type}) {
+    data = json['data'] != null
+        ? new Data.fromJson(json['data'], type: type)
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -20,11 +23,14 @@ class SearchModel {
 
 class Data {
   Search search;
-  Data({this.search,});
+  Data({
+    this.search,
+  });
 
   Data.fromJson(Map<String, dynamic> json, {GithubSearchType type}) {
-    search =
-        json['search'] != null ? new Search.fromJson(json['search'],type:type) : null;
+    search = json['search'] != null
+        ? new Search.fromJson(json['search'], type: type)
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -36,7 +42,7 @@ class Data {
   }
 }
 
-class Search{
+class Search {
   int userCount;
   List<dynamic> list;
 
@@ -48,14 +54,23 @@ class Search{
       list = new List<dynamic>();
       json['nodes'].forEach((v) {
         switch (type) {
-          case GithubSearchType.People: list.add( SearchUser.fromJson(v));break;
-          case GithubSearchType.Repository: list.add( SearchRepo.fromJson(v));break;
-          default: list.add( SearchRepo.fromJson(v));break;
+          case GithubSearchType.People:
+            list.add(SearchUser.fromJson(v));
+            break;
+          case GithubSearchType.Repository:
+            list.add(RepositoriesNode.fromJson(v));
+            break;
+           case GithubSearchType.Issue:
+            list.add(IssueSearchModel.fromJson(v));
+            break;
+          default:
+            list.add(SearchRepo.fromJson(v));
+            break;
         }
       });
     }
   }
-  
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['userCount'] = this.userCount;
@@ -66,12 +81,14 @@ class Search{
   }
 }
 
+/// Search User list
 class SearchUser {
   String id;
   String email;
   String name;
   String login;
   String avatarUrl;
+  String type;
 
   SearchUser({this.id, this.email, this.name, this.login, this.avatarUrl});
 
@@ -81,6 +98,7 @@ class SearchUser {
     name = json['name'];
     login = json['login'];
     avatarUrl = json['avatarUrl'];
+    type = json['__typename'];
   }
 
   Map<String, dynamic> toJson() {
@@ -98,10 +116,11 @@ class SearchUser {
 class SearchRepo {
   String id;
   String name;
-  Null description;
+  String description;
   Stargazers stargazers;
   Languages languages;
   Owner owner;
+  String type;
 
   SearchRepo(
       {this.id,
@@ -122,6 +141,7 @@ class SearchRepo {
         ? new Languages.fromJson(json['languages'])
         : null;
     owner = json['owner'] != null ? new Owner.fromJson(json['owner']) : null;
+    type = json['__typename'];
   }
 
   Map<String, dynamic> toJson() {
@@ -160,16 +180,16 @@ class Stargazers {
 
 class Languages {
   int totalSize;
-  List<Nodes> nodes;
+  List<ColorCode> nodes;
 
   Languages({this.totalSize, this.nodes});
 
   Languages.fromJson(Map<String, dynamic> json) {
     totalSize = json['totalSize'];
     if (json['nodes'] != null) {
-      nodes = new List<Nodes>();
+      nodes = new List<ColorCode>();
       json['nodes'].forEach((v) {
-        nodes.add(new Nodes.fromJson(v));
+        nodes.add(new ColorCode.fromJson(v));
       });
     }
   }
@@ -184,13 +204,13 @@ class Languages {
   }
 }
 
-class Nodes {
+class ColorCode {
   String name;
   String color;
 
-  Nodes({this.name, this.color});
+  ColorCode({this.name, this.color});
 
-  Nodes.fromJson(Map<String, dynamic> json) {
+  ColorCode.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     color = json['color'];
   }
@@ -221,6 +241,131 @@ class Owner {
     data['avatarUrl'] = this.avatarUrl;
     data['login'] = this.login;
     data['url'] = this.url;
+    return data;
+  }
+}
+
+/// Search Issue model
+class IssueSearchModel {
+  String title;
+  int number;
+  bool closed;
+  String closedAt;
+  Labels labels;
+  IssueAuthor author;
+  String state;
+  String type;
+  Repository repository;
+  IssueSearchModel(
+      {this.title,
+      this.number,
+      this.closed,
+      this.closedAt,
+      this.labels,
+      this.author,
+      this.state,
+      this.type,
+      this.repository
+      });
+
+  IssueSearchModel.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    number = json['number'];
+    closed = json['closed'];
+    closedAt = json['closedAt'];
+    labels =
+        json['labels'] != null ? new Labels.fromJson(json['labels']) : null;
+    author = json['author'] != null
+        ? new IssueAuthor.fromJson(json['author'])
+        : null;
+    state = json['state'];
+    type = json['__typename'];
+    repository = json['repository'] != null
+        ? new Repository.fromJson(json['repository'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['number'] = this.number;
+    data['closed'] = this.closed;
+    data['closedAt'] = this.closedAt;
+    if (this.labels != null) {
+      data['labels'] = this.labels.toJson();
+    }
+    if (this.author != null) {
+      data['author'] = this.author.toJson();
+    }
+    data['state'] = this.state;
+      if (this.repository != null) {
+      data['repository'] = this.repository.toJson();
+    }
+    return data;
+  }
+}
+
+class Labels {
+  List<ColorCode> nodes;
+
+  Labels({this.nodes});
+
+  Labels.fromJson(Map<String, dynamic> json) {
+    if (json['nodes'] != null) {
+      nodes = new List<ColorCode>();
+      json['nodes'].forEach((v) {
+        nodes.add(new ColorCode.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.nodes != null) {
+      data['nodes'] = this.nodes.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class IssueAuthor {
+  String login;
+  String avatarUrl;
+  String url;
+
+  IssueAuthor({this.login, this.avatarUrl, this.url});
+
+  IssueAuthor.fromJson(Map<String, dynamic> json) {
+    login = json['login'];
+    avatarUrl = json['avatarUrl'];
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['login'] = this.login;
+    data['avatarUrl'] = this.avatarUrl;
+    data['url'] = this.url;
+    return data;
+  }
+}
+class Repository {
+  String name;
+  Owner owner;
+
+  Repository({this.name, this.owner});
+
+  Repository.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    owner = json['owner'] != null ? new Owner.fromJson(json['owner']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    if (this.owner != null) {
+      data['owner'] = this.owner.toJson();
+    }
     return data;
   }
 }

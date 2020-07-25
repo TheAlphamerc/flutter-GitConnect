@@ -135,10 +135,11 @@ class Apis {
   ''';
 
   static String searchRepo = r'''query userInfo($query: String!, $type:SearchType!) {
-    search(query: $query, first: 10, type: $type) {
+    search(query: $query, first: 30, type: $type) {
       userCount
       nodes {
         ... on User {
+          __typename
           id
           name
           avatarUrl
@@ -146,20 +147,33 @@ class Apis {
           login
         }
         ... on Issue {
-          body
+          __typename
+          title
           number
           closed
-          participants {
-            totalCount
+          closedAt
+          repository {
+            name
+            owner{
+			      login
+            }
           }
+           labels(first: 10) {
+            __typename
+            nodes {
+               color
+               name
+             }
+           }
           author {
             login
             avatarUrl
             url
           }
-          closedAt
-        }
+          state
+          }
         ... on Repository {
+          __typename
           id
           name
           description
@@ -180,6 +194,7 @@ class Apis {
           }
         }
         ... on PullRequest {
+          __typename
           id
           author {
             login

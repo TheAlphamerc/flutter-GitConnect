@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
-import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class RepositoryListScreen extends StatelessWidget {
-  final List<RepositoryModel> list;
-  final List<RepositoriesNode> list1;
+  final List<RepositoriesNode> list;
+  final bool hideAppBar;
 
-  const RepositoryListScreen({Key key, this.list, this.list1})
+  const RepositoryListScreen({Key key, this.list, this.hideAppBar = false})
       : super(key: key);
   Widget repoCard(RepositoriesNode repo) {
     return Container(
@@ -70,15 +69,15 @@ class RepositoryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
+      appBar: hideAppBar ? null :AppBar(
         title: Text("Repositories"),
       ),
       body: ListView.separated(
-        itemCount: list1.length,
+        itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) =>
             Divider(height: 0),
         itemBuilder: (BuildContext context, int index) {
-          final repo = list1[index];
+          final repo = list[index];
           return repoCard(repo);
         },
       ),

@@ -20,7 +20,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    // doAutoLogin();
+    doAutoLogin();
     super.initState();
   }
 

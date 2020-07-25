@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/search_event.dart';
-import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
+import 'package:flutter_github_connect/ui/page/search/searcgPage/search_list_provider.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
-import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
-import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key key}) : super(key: key);
@@ -88,9 +85,31 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  Future<Null> searchGithub(context, String text, GithubSearchType type) {
+  Future<void> searchGithub(context, String text, GithubSearchType type) {
     BlocProvider.of<SearchBloc>(context)
         .add(SearchForEvent(query: text, type: type));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: BlocProvider.of<SearchBloc>(context),
+          child: SearchListProvider(type: type),
+        ),
+      ),
+    );
+    // if (type == GithubSearchType.Repository) {
+
+    // } else if (type == GithubSearchType.People) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (_) => BlocProvider.value(
+    //         value: BlocProvider.of<SearchBloc>(context),
+    //         child: UserListPage(),
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   @override
@@ -113,15 +132,19 @@ class SearchPage extends StatelessWidget {
                           children: <Widget>[
                             _getUtilRos(
                                 context, "Repository with \"$searchText\"",
-                                color: GColors.green,
-                                onPressed: () {},
-                                icon: GIcons.repo_24),
+                                color: GColors.green, onPressed: () async {
+                              await searchGithub(context, searchText,
+                                  GithubSearchType.Repository);
+                            }, icon: GIcons.repo_24),
                             Divider(
                               height: 0,
                             ),
                             _getUtilRos(context, "Issue with \"$searchText\"",
                                 color: GColors.green,
-                                onPressed: () {},
+                                onPressed: () async{
+                                  await searchGithub(
+                                  context, searchText, GithubSearchType.Issue);
+                                },
                                 icon: GIcons.issue_opened_24),
                             Divider(
                               height: 0,
@@ -138,15 +161,6 @@ class SearchPage extends StatelessWidget {
                                 color: GColors.green, onPressed: () async {
                               await searchGithub(
                                   context, searchText, GithubSearchType.People);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                    value: BlocProvider.of<SearchBloc>(context),
-                                    child: UserListPage(),
-                                  ),
-                                ),
-                              );
                             }, icon: GIcons.people_24),
                             Divider(
                               height: 0,
