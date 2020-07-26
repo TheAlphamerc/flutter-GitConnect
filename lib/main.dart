@@ -9,7 +9,7 @@ import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'ui/theme/export_theme.dart';
 
 void main() {
-  BlocSupervisor.delegate = AppBlocDelegate();
+  Bloc.observer = AppBlocDelegate();
   setUpDependency();
   final app = GitApp(
     home: SplashPage(),

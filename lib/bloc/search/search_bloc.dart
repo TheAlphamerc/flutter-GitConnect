@@ -6,21 +6,13 @@ import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/search_event.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  // todo: check singleton for logic in project
-  static final SearchBloc _repoBlocSingleton = SearchBloc._internal();
-  factory SearchBloc() {
-    return _repoBlocSingleton;
-  }
-  SearchBloc._internal();
+  SearchBloc() : super(LoadingSearchState());
 
   @override
   Future<void> close() async {
     // dispose objects
     await super.close();
   }
-
-  @override
-  SearchState get initialState => LoadingSearchState();
 
   @override
   Stream<SearchState> mapEventToState(

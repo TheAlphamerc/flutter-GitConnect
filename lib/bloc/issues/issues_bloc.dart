@@ -5,9 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_github_connect/bloc/issues/index.dart';
 
 class IssuesBloc extends Bloc<IssuesEvent, IssuesState> {
-
-  @override
-  IssuesState get initialState => LoadingUserState();
+  IssuesBloc() : super(LoadingUserState());
 
   @override
   Stream<IssuesState> mapEventToState(

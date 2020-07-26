@@ -34,7 +34,7 @@ dependencies:
   graphql: ^3.0.2
   equatable: ^1.2.0
   google_fonts: ^1.1.0
-  flutter_bloc: ^4.0.0
+  flutter_bloc: ^6.0.0
   url_launcher: ^5.4.10
   webview_flutter: ^0.3.22+1
   shared_preferences: ^0.5.7+3

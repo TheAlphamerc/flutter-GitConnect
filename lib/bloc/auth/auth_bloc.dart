@@ -5,22 +5,13 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_github_connect/bloc/auth/index.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  // AuthBloc();
-  // todo: check singleton for logic in project
-  // static final AuthBloc _authBlocSingleton = AuthBloc._internal();
-  // factory AuthBloc() {
-  //   return _authBlocSingleton;
-  // }
-  // AuthBloc._internal();
-
-  // @override
-  // Future<void> close() async {
-  //   // dispose objects
-  //   await super.close();
-  // }
-
+  AuthBloc() : super(LoadingWebViewState(loadingView: true));
   @override
-  AuthState get initialState => LoadingWebViewState(loadingView: true);
+  Future<void> close() async {
+    // dispose objects
+    await super.close();
+  }
+
   @override
   Stream<AuthState> mapEventToState(
     AuthEvent event,

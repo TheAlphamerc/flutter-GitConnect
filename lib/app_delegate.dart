@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AppBlocDelegate extends BlocDelegate {
+class AppBlocDelegate extends BlocObserver {
   @override
   void onEvent(Bloc bloc, dynamic event) {
     super.onEvent(bloc, event);
     // debugPrint("[Trigger Event] $event");
-    if(event.props != null){
-      event.props.forEach((x){
+    if (event.props != null) {
+      event.props.forEach((x) {
         print(x);
       });
     }
@@ -20,10 +20,9 @@ class AppBlocDelegate extends BlocDelegate {
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    // GetIt.instance<ErrorsProducer>().pushError(error, stacktrace);
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     debugPrint(error.toString());
-    debugPrint(stacktrace.toString());
+    debugPrint(stackTrace.toString());
+    super.onError(cubit, error, stackTrace);
   }
 }
