@@ -27,6 +27,9 @@ class OnLoad extends UserEvent {
       yield LoadingUserState();
       final userModel = await _userRepository.fetchUserProfile();
       yield LoadedUserState(userModel);
+
+      final eventList = await _userRepository.fetchUserEvent();
+      yield LoadedEventsState(user: userModel, eventList:eventList );
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);

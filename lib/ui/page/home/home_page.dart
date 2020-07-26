@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
@@ -10,8 +13,9 @@ import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key, this.model}) : super(key: key);
+  const HomePage({Key key, this.model, this.eventList}) : super(key: key);
   final UserModel model;
+  final List<EventModel> eventList;
 
   @override
   _UserPageState createState() => _UserPageState();
@@ -62,7 +66,7 @@ class _UserPageState extends State<HomePage> {
 
   Widget _favouriteRepo() {
     final list = widget.model?.topRepositories?.nodes;
-    return widget.model?.topRepositories?.nodes != null
+    return widget.eventList != null
         ? GCard(
             color: Theme.of(context).colorScheme.surface,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -142,7 +146,8 @@ class _UserPageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(GIcons.issue_opened_24, "Issues", color: GColors.green,onPressed:(){
+          _getUtilRos(GIcons.issue_opened_24, "Issues", color: GColors.green,
+              onPressed: () {
             Navigator.push(context, IssuesPage.route());
           }),
           Divider(height: 0, indent: 50),
@@ -175,6 +180,7 @@ class _UserPageState extends State<HomePage> {
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -197,13 +203,21 @@ class _UserPageState extends State<HomePage> {
               ),
               SizedBox(height: 16),
               _favouriteRepo(),
-              SizedBox(height:30),
+              SizedBox(height: 30),
+              // KText(
+              //   "Pinned Repository",
+              //   variant: TypographyVariant.subHeader,
+              // ),
+              //  SizedBox(height: 16),
+              // _pinnedItems(),
               KText(
-                "Pinned Repository",
+                "Recent",
                 variant: TypographyVariant.subHeader,
               ),
-               SizedBox(height: 16),
-              _pinnedItems(),
+              SizedBox(height: 16),
+              EventsPage(
+                eventList: widget.eventList,
+              ),
               SizedBox(height: 16),
             ],
           ),

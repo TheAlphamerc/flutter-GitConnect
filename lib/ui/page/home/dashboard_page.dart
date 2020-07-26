@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/navigation/index.dart';
 import 'package:flutter_github_connect/ui/page/home/home_page.dart';
 import 'package:flutter_github_connect/ui/page/notification/notification_page.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 
 class DashBoardPage extends StatefulWidget {
   @override
@@ -119,8 +121,13 @@ class HomePageScreen extends StatelessWidget {
             ),
           );
         } else if (currentState is LoadedUserState) {
+          List<EventModel> eventList;
+          if(currentState is LoadedEventsState){
+              eventList = currentState.eventList;
+          }
           return HomePage(
             model: currentState.user,
+            eventList: eventList,
           );
         } else {
           return Center(

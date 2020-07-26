@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
@@ -71,12 +72,7 @@ class ApiGatwayImpl implements ApiGateway {
         ),
       );
       List<NotificationModel> list = [];
-    //  await _dioClient
-    //       .getJsonBodyList(response)
-    //       .map((model){
-    //          list.add(NotificationModel.fromJson(_dioClient.getJsonBody(model)));
-    //       });
-        list = _dioClient.getJsonBodyList(response).map((value) {
+       list = _dioClient.getJsonBodyList(response).map((value) {
           return NotificationModel.fromJson(value);
         }).toList();
       print(list.length);
@@ -130,6 +126,30 @@ class ApiGatwayImpl implements ApiGateway {
       // final userMap = result.data['search'] as Map<String, dynamic>;
       final list =IssuesData.fromJson(result.data).viewer.issues.list;
 
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<EventModel>> fetchUserEvent() async{
+     try {
+      var accesstoken = await _sessionService.loadSession();
+      var response = await _dioClient.get(
+        Config.getEvent("TheAlphamerc"),
+        options: Options(
+          headers: {
+            'Authorization': 'token $accesstoken',
+            'Accept':'application/vnd.github.v3+json'
+          },
+        ),
+      );
+      List<EventModel> list = [];
+       list = _dioClient.getJsonBodyList(response).map((value) {
+          return EventModel.fromJson(value);
+        }).toList();
+      print(list.length);
       return list;
     } catch (error) {
       throw error;

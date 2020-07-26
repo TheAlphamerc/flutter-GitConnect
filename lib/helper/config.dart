@@ -8,4 +8,8 @@ class Config{
   static const String user = "user";
   static const String repos = "user/repos";
   static const String notificationsList = "notifications?all=true";
+
+  static String getEvent(userName) {
+    return "users/$userName/events";
+  }
 }
