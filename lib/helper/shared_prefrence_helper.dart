@@ -21,6 +21,16 @@ class SharedPrefrenceHelper {
         .getString(UserPreferenceKey.AccesssToken.toString());
   }
 
+  Future<bool> setUserName(String value) async {
+    return (await SharedPreferences.getInstance())
+        .setString(UserPreferenceKey.UserName.toString(), value);
+  }
+
+  Future<String> getUserName() async {
+    return (await SharedPreferences.getInstance())
+        .getString(UserPreferenceKey.UserName.toString());
+  }
+
   Future<String> getCountryIsoCode() async {
     return (await SharedPreferences.getInstance())
         .getString(UserPreferenceKey.CountryISOCode.toString());
@@ -59,5 +69,6 @@ enum UserPreferenceKey {
   LanguageCode,
   CountryISOCode,
   AccesssToken,
-  UserProfile
+  UserProfile,
+  UserName
 }

@@ -69,6 +69,13 @@ Future<QueryResult> getIssues() async {
   return await _innerClient.query(_options);
 }
 
+Future<QueryResult> getAuthUserName() async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.userName,
+      fetchPolicy: FetchPolicy.cacheAndNetwork);
+  return await _innerClient.query(_options);
+}
+
 
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null

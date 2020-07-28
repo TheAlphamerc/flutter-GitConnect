@@ -1,5 +1,5 @@
 import 'package:flutter_github_connect/bloc/issues/index.dart';
-import 'package:flutter_github_connect/resources/provider/api_gatway.dart';
+import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 
 class IssuesRepository {
   IssuesRepository({this.apiGatway}) : assert(apiGatway != null);

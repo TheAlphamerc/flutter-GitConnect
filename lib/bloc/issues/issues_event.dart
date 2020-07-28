@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_github_connect/bloc/issues/index.dart';
-import 'package:flutter_github_connect/resources/provider/api_gatway.dart';
+import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/repository/issues_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';

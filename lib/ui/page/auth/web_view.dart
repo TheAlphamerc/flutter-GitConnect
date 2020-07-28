@@ -15,6 +15,7 @@ class WebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Builder(
         builder: (BuildContext context) {
           return Stack(

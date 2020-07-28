@@ -66,7 +66,7 @@ class _UserPageState extends State<HomePage> {
 
   Widget _favouriteRepo() {
     final list = widget.model?.topRepositories?.nodes;
-    return widget.eventList != null
+    return list == null
         ? GCard(
             color: Theme.of(context).colorScheme.surface,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),

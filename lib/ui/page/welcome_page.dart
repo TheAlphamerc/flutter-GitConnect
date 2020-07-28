@@ -22,7 +22,7 @@ class WelcomePage extends StatelessWidget {
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Container(
-            height: 350,//MediaQuery.of(context).size.height * .5,
+            height: 320, //MediaQuery.of(context).size.height * .5,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
                 color: theme.colorScheme.surface,
@@ -32,18 +32,19 @@ class WelcomePage extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                SizedBox(height: 8),
                 Icon(GIcons.github,
-                    size: 120, color: theme.colorScheme.onPrimary),
+                    size: 100, color: theme.colorScheme.onPrimary),
                 SizedBox(height: 30),
                 KText(
-                  "Signin to Github\nto continue with Github Connect",
-                  variant: TypographyVariant.header,
+                  "Signin to Github\nto continue with GitConnect",
+                  variant: TypographyVariant.h3,
                   textAlign: TextAlign.center,
-                  style: TextStyle(letterSpacing: 1.1)
+                  style: TextStyle(letterSpacing: 1.3, height:1.25),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 16),
                 Divider(),
-                SizedBox(height: 8),
+                SizedBox(height: 12),
                 GFlatButton(
                   label: "Sign in",
                   onPressed: () async {

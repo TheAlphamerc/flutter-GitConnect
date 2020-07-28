@@ -208,4 +208,10 @@ class Apis  {
       }
     }
   }''';
+
+  static const String userName = r'''query  {
+         viewer {
+             login
+         }
+     }''';
 }

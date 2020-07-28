@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_github_connect/bloc/auth/index.dart';
 import 'package:flutter_github_connect/resources/repository/auth_repository.dart';
 import 'package:flutter_github_connect/resources/service/auth_service.dart';
-import 'package:flutter_github_connect/resources/service/session_servoce.dart';
+import 'package:flutter_github_connect/resources/service/session_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 

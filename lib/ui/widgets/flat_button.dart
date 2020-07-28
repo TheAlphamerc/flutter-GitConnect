@@ -28,6 +28,7 @@ class GFlatButton extends StatelessWidget {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             color: !isColored ? null : Theme.of(context).cardColor,
+            splashColor: Theme.of(context).colorScheme.background,
             textColor: GColors.onPrimary,
             onPressed: loading ? null : onPressed,
             child: loading

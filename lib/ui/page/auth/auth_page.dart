@@ -62,11 +62,11 @@ class _AuthPageState extends State<AuthPage> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   _subscription.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
