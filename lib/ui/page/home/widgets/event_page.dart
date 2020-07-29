@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
-import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
+import 'package:get_it/get_it.dart';
 
 class EventsPage extends StatelessWidget {
   const EventsPage({Key key, this.eventList}) : super(key: key);
+  final int widthOffset = 66;
   final List<EventModel> eventList;
   Widget _recentEvents(context) {
     final list = eventList;
@@ -17,54 +18,96 @@ class EventsPage extends StatelessWidget {
         ? GCard(
             color: Theme.of(context).colorScheme.surface,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              children: <Widget>[
-                KText(
-                    "Add favourite repositories for quick access at any time, without having to search",
-                    textAlign: TextAlign.center,
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(height: 1.25)),
-                SizedBox(height: 16),
-                GFlatButton(
-                  label: "ADD FavouriteS",
-                  onPressed: () {},
-                ).ripple(() {})
-              ],
-            ),
+            child: Text(
+                "No recent activity detected at your github account yet.",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyText2),
           )
-        : GCard(
-            color: Theme.of(context).colorScheme.surface,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ...list
-                    .where((element) =>
-                        element.type == UserEventType.ISSUES_EVENT ||
-                        element.type == UserEventType.PUSH_EVENT)
-                    .map((model) {
-                  if (model.type == UserEventType.PUSH_EVENT) {
-                    return Column(
-                      children: <Widget>[
-                        _createRepoEvent(context, model),
-                        if (list.last != model) Divider(height: 0, indent: 50),
-                      ],
-                    );
-                  }
-                  else{
-                    return Column(
-                    children: <Widget>[
-                      _issueTile(context, model),
-                      if (list.last != model) Divider(height: 0, indent: 50),
-                    ],
-                  );
-                  }
-                }).toList(),
-              ],
-            ),
+        : FutureBuilder(
+            initialData: "",
+            future: GetIt.instance<SharedPrefrenceHelper>().getUserName(),
+            builder: (context, AsyncSnapshot<String> snapshot) {
+              return GCard(
+                color: Theme.of(context).colorScheme.surface,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ...list.map((model) {
+                      if (model.type == UserEventType.PUSH_EVENT) {
+                        return Column(
+                          children: <Widget>[
+                            // Text(model.type.toString()),
+                            _pushCommitEvent(
+                                context, model, snapshot.data ?? ""),
+                            if (list.last != model)
+                              Divider(height: 0, indent: 50),
+                          ],
+                        );
+                      } else if (model.type == UserEventType.ISSUES_EVENT) {
+                        return Column(
+                          children: <Widget>[
+                            // Text(model.type.toString()),
+                            _issueTile(context, model, snapshot.data ?? ""),
+                            if (list.last != model)
+                              Divider(height: 0, indent: 50),
+                          ],
+                        );
+                      } else if (model.type ==
+                          UserEventType.ISSUE_COMMENT_EVENT) {
+                        return Column(
+                          children: <Widget>[
+                            _issueTile(context, model, snapshot.data ?? "",
+                                isCommented: true),
+                            if (list.last != model)
+                              Divider(height: 0, indent: 50),
+                          ],
+                        );
+                      } else if (model.type ==
+                          UserEventType.PULL_REQUEST_EVENT) {
+                        return Column(
+                          children: <Widget>[
+                            _pullRequestTile(
+                                context, model, snapshot.data ?? "",
+                                isCommented: true),
+                            Divider(height: 0, indent: 50),
+                          ],
+                        );
+                      } else if (model.type == UserEventType.CREATE_EVENT) {
+                        return Column(
+                          children: <Widget>[
+                            _createRepoEventTile(
+                              context,
+                              model,
+                              snapshot.data ?? "",
+                            )
+                          ],
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                      // else if (model.type == UserEventType.CREATE_EVENT) {
+                      //   return Text("Repository  Created").p(8);
+                      // } else if (model.type == UserEventType.WATCH_EVENT) {
+                      //   return Text("Started  watch").p(8);
+                      // } else {
+                      //   return Column(
+                      //     children: <Widget>[
+                      //       Text("Undetermined: ${model.type}"),
+                      //       if (list.last != model)
+                      //         Divider(height: 0, indent: 50),
+                      //     ],
+                      //   );
+                      // }
+                    }).toList(),
+                  ],
+                ),
+              );
+            },
           );
   }
 
-  Widget _issueTile(context, EventModel model) {
+  Widget _issueTile(context, EventModel model, String username,
+      {bool isCommented = false}) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
         child: Row(
@@ -83,59 +126,51 @@ class EventsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width - 120,
-                  child: KText(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
                     '${model.repo.name} #${model.payload.issue.number}',
-                    isSubtitle: true,
-                    maxLines: 1,
+                    style: Theme.of(context).textTheme.subtitle2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(height: 8),
                 Container(
-                  width: MediaQuery.of(context).size.width - 120,
-                  child: KText(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
                     '${model.payload.issue.title}',
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(fontWeight: FontWeight.w400),
-                    maxLines: 1,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(height: 8),
-
-                /// Todo : Replace static string you commned with original String text
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: "You commented",
+                  subtitle: username == model.actor.login && isCommented
+                      ? "You Commented"
+                      : model.actor.login,
                 ),
                 SizedBox(height: 8),
-                // if (model.payload.issue.labels != null &&
-                //     model.payload.issue.labels.isNotEmpty)
-                //   Container(
-                //     padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                //     decoration: BoxDecoration(
-                //         color:
-                //             getColor(model.payload.issue.state).withAlpha(200),
-                //         borderRadius: BorderRadius.all(Radius.circular(5)),
-                //         border: Border.all(
-                //             color: getColor(model.payload.issue.state))),
-                //     child: KText(
-                //       '${model.payload.issue.labels?.first?.name ?? ""}',
-                //       isSubtitle: true,
-                //       variant: TypographyVariant.bodySmall,
-                //     ),
-                //   ),
+                if (model.payload.issue.closedAt != null)
+                  Container(
+                    width: MediaQuery.of(context).size.width - widthOffset,
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      Utility.getPassedTime(
+                              model.payload.issue.closedAt.toString()) +
+                          " ago",
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ),
+                SizedBox(height: 8),
               ],
             ),
-            Spacer(),
-            KText(
-                Utility.getPassedTime(model.payload.issue.closedAt.toString())),
-            SizedBox(width: 16),
+            // Spacer(),
           ],
         ).vP16);
   }
 
-  Widget _createRepoEvent(context, EventModel model) {
+  Widget _pushCommitEvent(context, EventModel model, String username) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
         child: Row(
@@ -144,7 +179,6 @@ class EventsPage extends StatelessWidget {
             SizedBox(
               width: 50,
               child: Icon(
-                // getIcon(model.payload.issue.state),
                 GIcons.commit_24,
                 color: GColors.green,
                 size: 20,
@@ -154,56 +188,194 @@ class EventsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                // Container(
-                //   width: MediaQuery.of(context).size.width - 120,
-                //   child: KText(
-                //     '${model.repo.name} #${model.payload.masterBranch}',
-                //     isSubtitle: true,
-                //     maxLines: 1,
-                //   ),
-                // ),
-                // SizedBox(height: 8),
                 Container(
-                  width: MediaQuery.of(context).size.width - 141,
-                  child: KText(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
                     '${model.repo.name}',
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(fontWeight: FontWeight.w400),
-                    overflow: TextOverflow.clip,
-                    maxLines: 1,
+                    style: Theme.of(context).textTheme.subtitle1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(height: 8),
-
-                /// Todo : Replace static string you commned with original String text
+                Container(
+                  padding: EdgeInsets.only(right: 5),
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
+                    '${model.payload?.commits?.first?.message ?? ""}',
+                    style: Theme.of(context).textTheme.bodyText1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 8),
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: model.actor.login,
+                  subtitle: username == model.actor.login
+                      ? "You pushed a commit"
+                      : model.actor.login,
                 ),
                 SizedBox(height: 8),
                 Container(
-                  width: MediaQuery.of(context).size.width - 140,
-                  child: KText(
-                    '${model.payload?.commits?.first?.message ?? ""}',
-                    isSubtitle: true,
-                    variant: TypographyVariant.bodySmall,
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    Utility.getPassedTime(model.createdAt.toString()) + " ago",
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
-                ),
+                )
               ],
             ),
-            Spacer(),
-            KText(Utility.getPassedTime(model.createdAt.toString())),
-            SizedBox(width: 16),
           ],
         ).vP16);
   }
 
-  IconData getIcon(IssueState type) {
-    switch (type) {
-      case IssueState.OPEN:
+  Widget _pullRequestTile(context, EventModel model, String username,
+      {bool isCommented = false}) {
+    return GCard(
+        color: Theme.of(context).colorScheme.surface,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 50,
+              child: Icon(
+                getIcon(null, eventType: model.type),
+                color: getColor(null, eventType: model.type),
+                size: 20,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
+                    '${model.repo.name}',
+                    style: Theme.of(context).textTheme.subtitle1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
+                    '${model.payload.pullRequest.title ?? "N/A"}',
+                    style: Theme.of(context).textTheme.bodyText1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 8),
+                UserAvatar(
+                  imagePath: model.actor.avatarUrl,
+                  height: 18,
+                  subtitle: username == model.actor.login && isCommented
+                      ? "You created a pull request"
+                      : model.actor.login,
+                ),
+                if (model.payload.pullRequest.createdAt != null)
+                  Container(
+                    width: MediaQuery.of(context).size.width - widthOffset,
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      Utility.getPassedTime(
+                              model.payload.pullRequest.createdAt.toString()) +
+                          " ago",
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  )
+              ],
+            ),
+            // Spacer(),
+          ],
+        ).vP16);
+  }
+
+  Widget _createRepoEventTile(context, EventModel model, String username) {
+    return GCard(
+        color: Theme.of(context).colorScheme.surface,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 50,
+              child: Icon(
+               getCreatedIcon(model.payload.refType),
+                color: GColors.green,
+                size: 20,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
+                    '${model.repo.name}',
+                    style: Theme.of(context).textTheme.subtitle1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  padding: EdgeInsets.only(right: 5),
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
+                    '${model.payload?.ref ?? ""}',
+                    style: Theme.of(context).textTheme.bodyText1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 8),
+                UserAvatar(
+                  imagePath: model.actor.avatarUrl,
+                  height: 18,
+                  subtitle: username == model.actor.login
+                      ? "You created a ${model.payload.refType}"
+                      : model.actor.login,
+                ),
+                SizedBox(height: 8),
+                Container(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    Utility.getPassedTime(model.createdAt.toString()) + " ago",
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ).vP16);
+  }
+  IconData getCreatedIcon(String ref){
+     switch (ref) {
+      case "branch":
+        return GIcons.git_branch_24;
+      case "repository":
+        return GIcons.repo_24;
+       case "issue":
         return GIcons.issue_opened_24;
-      case IssueState.CLOSED:
+      default:
+        return GIcons.arrow_both_16;
+    }
+  }
+  IconData getIcon(EventState type, {UserEventType eventType}) {
+    if (eventType != null) {
+      switch (eventType) {
+        case UserEventType.PULL_REQUEST_EVENT:
+          return GIcons.git_pull_request_24;
+        default:
+          print(eventType);
+          return GIcons.arrow_both_16;
+      }
+    }
+
+    switch (type) {
+      case EventState.OPEN:
+        return GIcons.issue_opened_24;
+      case EventState.CLOSED:
         return GIcons.issue_closed_24;
       default:
         print(type);
@@ -211,11 +383,20 @@ class EventsPage extends StatelessWidget {
     }
   }
 
-  Color getColor(IssueState type) {
+  Color getColor(EventState type, {UserEventType eventType}) {
+    if (eventType != null) {
+      switch (eventType) {
+        case UserEventType.PULL_REQUEST_EVENT:
+          return GColors.purple;
+        default:
+          print(eventType);
+          return GColors.yellow;
+      }
+    }
     switch (type) {
-      case IssueState.OPEN:
+      case EventState.OPEN:
         return GColors.green;
-      case IssueState.CLOSED:
+      case EventState.CLOSED:
         return GColors.red;
       default:
         return GColors.blue;

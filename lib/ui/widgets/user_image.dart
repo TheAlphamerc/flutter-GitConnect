@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
-
+import "package:build_context/build_context.dart";
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
     Key key,
@@ -11,12 +11,14 @@ class UserAvatar extends StatelessWidget {
     this.subtitle,
     this.variant = TypographyVariant.body,
     this.height = 20,
-    this.subVarient = TypographyVariant.body,
+    this.subVarient = TypographyVariant.body, this.titleStyle, this.subTitleStyle,
   }) : super(key: key);
   final String imagePath;
   final String name, subtitle;
   final TypographyVariant variant, subVarient;
   final double height;
+  final TextStyle titleStyle;
+  final TextStyle subTitleStyle;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,19 +38,17 @@ class UserAvatar extends StatelessWidget {
               name == null ? SizedBox.shrink() : SizedBox(width: 10),
               name == null
                   ? SizedBox.shrink()
-                  : KText(
+                  : Text(
                       name,
-                      variant: variant,
+                      style:titleStyle ?? context.textTheme.bodyText1
                     ),
               subtitle == null ? SizedBox.shrink() : name == null
                   ? SizedBox.shrink() : SizedBox(height: 10),
               subtitle == null
                   ? SizedBox.shrink()
-                  : KText(
+                  : Text(
                       subtitle,
-                      variant: subVarient,
-                      isSubtitle:true,
-                      style: TextStyle(letterSpacing: 1),
+                      style:titleStyle ?? context.textTheme.subtitle2
                     ),
             ],
           ),

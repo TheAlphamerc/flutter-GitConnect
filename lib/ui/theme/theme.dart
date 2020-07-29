@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/ui/theme/color/dark_color.dart';
 import 'package:flutter_github_connect/ui/theme/colors.dart';
+import 'package:flutter_github_connect/ui/theme/texttheme/text_theme.dart';
 
 enum ThemeType { LIGHT, DARK }
 
@@ -14,19 +15,13 @@ class AppTheme {
             surface: DarkColor.surfaceColor,
             onSurface: DarkColor.onSurfaceDarkColor,
             onBackground: DarkColor.onSurfaceLightColor),
-        textTheme: TextTheme(
-          bodyText1: TextStyle(
-            color: GColors.red,
-          ),
-          subtitle1: TextStyle(
-            color: GColors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        // primaryTextTheme: TextThemes.darkTheme,
+        textTheme: TextThemes.darkTextTheme,
         appBarTheme: AppBarTheme(
-            brightness: Brightness.dark,
-            color: DarkColor.surfaceColor,
-            iconTheme: IconThemeData(color: DarkColor.white)),
+          brightness: Brightness.dark,
+          color: DarkColor.surfaceColor,
+          iconTheme: IconThemeData(color: DarkColor.white),
+        ),
       );
   static ThemeData get lightTheme => ThemeData.light().copyWith(
         // brightness: Brightness.dark,
@@ -38,9 +33,7 @@ class AppTheme {
             onSurface: GColors.onSurfaceDarkColor,
             onPrimary: GColors.onPrimary,
             onBackground: GColors.onSurfaceLightColor),
-        textTheme: ThemeData.dark().textTheme.copyWith(
-              bodyText1: TextStyle(color: GColors.black),
-            ),
+       textTheme: TextThemes.lightTextTheme,
         appBarTheme: AppBarTheme(
           brightness: Brightness.light,
           color: GColors.white,

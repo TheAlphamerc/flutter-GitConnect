@@ -1,0 +1,132 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class TextThemes {
+  static TextTheme get darkTextTheme => TextTheme(
+        headline1: GoogleFonts.montserrat(
+          fontSize: 36.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: -1.5
+        ),
+        headline2: GoogleFonts.montserrat(
+          fontSize: 34.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: -.5
+        ),
+        headline3: GoogleFonts.montserrat(
+          fontSize: 32.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: 0
+        ),
+        headline4: GoogleFonts.montserrat(
+          fontSize: 30.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          letterSpacing: .25
+        ),
+        headline5: GoogleFonts.montserrat(
+          fontSize: 24.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          letterSpacing: .0
+        ),
+        headline6: GoogleFonts.montserrat(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+          letterSpacing: .15
+        ),
+        subtitle1: GoogleFonts.montserrat(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w400,
+          color: Colors.white60,
+        ),
+        subtitle2: GoogleFonts.montserrat(
+          fontSize: 14.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.white60,
+          letterSpacing: .5
+        ),
+        bodyText1: GoogleFonts.montserrat(
+          fontSize: 16.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          letterSpacing: .5
+        ),
+        bodyText2: GoogleFonts.montserrat(
+          fontSize: 14.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          letterSpacing: .25
+        ),
+        caption: GoogleFonts.montserrat(
+          fontSize: 12.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          letterSpacing: .4
+        ),
+        overline: GoogleFonts.montserrat(
+          fontSize: 10.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          letterSpacing: 1.5
+        ),
+      
+        button: GoogleFonts.montserrat(
+          fontSize: 14.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+          letterSpacing: 1.2
+        ),
+      );
+   static TextTheme get lightTextTheme => TextTheme(
+        headline3: GoogleFonts.montserrat(
+          fontSize: 42.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        headline4: GoogleFonts.montserrat(
+          fontSize: 25.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        headline5: GoogleFonts.montserrat(
+          fontSize: 24.0,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+        ),
+        headline6: GoogleFonts.montserrat(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+        subtitle1: GoogleFonts.montserrat(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w400,
+          color: Colors.black87,
+        ),
+        subtitle2: GoogleFonts.montserrat(
+          fontSize: 14.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black87,
+        ),
+        bodyText1: GoogleFonts.montserrat(
+          fontSize: 15.0,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+        ),
+        bodyText2: GoogleFonts.montserrat(
+          fontSize: 12.0,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+        ),
+        button: GoogleFonts.montserrat(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+      );
+}

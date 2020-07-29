@@ -41,10 +41,7 @@ class _AppState extends State<GitApp> {
         const Locale('en'),
         const Locale('ar'),
       ],
-      theme: CustomTheme.of(context).copyWith(
-        textTheme: GoogleFonts.montserratTextTheme()
-      ),
-      // home: widget.home,
+      theme: CustomTheme.of(context),
       home:  widget.home
     );
   }

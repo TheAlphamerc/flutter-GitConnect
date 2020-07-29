@@ -13,10 +13,9 @@ import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import "package:build_context/build_context.dart";
 
 class DashBoardPage extends StatelessWidget {
-  
-
   Widget getPage(int index) {
     switch (index) {
       case 0:
@@ -45,7 +44,8 @@ class DashBoardPage extends StatelessWidget {
           index = currentState.index;
         }
         return Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor:
+              context.backgroundColor, //Theme.of(context).backgroundColor,
           bottomNavigationBar: GBottomNavigationBar(),
           appBar: index == 2
               ? null
@@ -129,12 +129,12 @@ class HomePageScreen extends StatelessWidget {
                       GFlatButton(
                         isLoading: ValueNotifier(false),
                         label: "Reload",
-                        onPressed: (){
+                        onPressed: () {
                           BlocProvider.of<UserBloc>(context).add(OnLoad());
                         },
                         isWraped: true,
                       ),
-                      ],
+                    ],
                   ),
                 ),
               ],

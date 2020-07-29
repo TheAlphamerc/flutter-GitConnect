@@ -5,6 +5,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
+import 'package:flutter_github_connect/ui/page/home/widgets/typography.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
@@ -41,16 +42,9 @@ class _UserPageState extends State<HomePage> {
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: user == null
               ? Icon(icon, size: 15)
-              : UserAvatar(
-                  imagePath: user.avatarUrl,
-                  height: 30,
-                ),
+              : UserAvatar(imagePath: user.avatarUrl, height: 30),
         ),
-        KText(
-          text,
-          variant: TypographyVariant.h3,
-          style: TextStyle(fontWeight: FontWeight.w300, letterSpacing: .6),
-        ),
+        Text(text, style: Theme.of(context).textTheme.bodyText1),
         Spacer(),
         Icon(
           GIcons.chevron_right_24,
@@ -68,15 +62,16 @@ class _UserPageState extends State<HomePage> {
     final list = widget.model?.topRepositories?.nodes;
     return list == null
         ? GCard(
+            margin: EdgeInsets.symmetric(horizontal: 16),
             color: Theme.of(context).colorScheme.surface,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: <Widget>[
-                KText(
-                    "Add favourite repositories for quick access at any time, without having to search",
-                    textAlign: TextAlign.center,
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(height: 1.25)),
+                Text(
+                  "Add favourite repositories for quick access at any time, without having to search",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
                 SizedBox(height: 16),
                 GFlatButton(
                   label: "ADD FavouriteS",
@@ -86,6 +81,7 @@ class _UserPageState extends State<HomePage> {
             ),
           )
         : GCard(
+            margin: EdgeInsets.symmetric(horizontal: 16),
             color: Theme.of(context).colorScheme.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,6 +138,7 @@ class _UserPageState extends State<HomePage> {
 
   Widget _myWorkSection() {
     return GCard(
+      margin: EdgeInsets.symmetric(horizontal: 16),
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,50 +172,48 @@ class _UserPageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     print("User Page build");
+    print(Theme.of(context).textTheme.headline6.color.toString());
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 0),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 16),
-              KText(
-                "Home",
-                variant: TypographyVariant.title,
-              ),
-              SizedBox(height: 40),
-              KText(
+              // Text("Home", style: Theme.of(context).textTheme.headline3),
+              // SizedBox(height: 40),
+              Text(
                 "My Work",
-                variant: TypographyVariant.subHeader,
-              ),
+                style: Theme.of(context).textTheme.headline6,
+              ).hP16,
               SizedBox(height: 16),
               _myWorkSection(),
               SizedBox(height: 30),
-              KText(
+              Text(
                 "Favourite",
-                variant: TypographyVariant.subHeader,
-              ),
+                style: Theme.of(context).textTheme.headline6,
+              ).hP16,
               SizedBox(height: 16),
               _favouriteRepo(),
               SizedBox(height: 30),
-              // KText(
-              //   "Pinned Repository",
-              //   variant: TypographyVariant.subHeader,
-              // ),
-              //  SizedBox(height: 16),
-              // _pinnedItems(),
-              KText(
+              Text(
                 "Recent",
-                variant: TypographyVariant.subHeader,
-              ),
+                style: Theme.of(context).textTheme.headline6,
+              ).hP16,
               SizedBox(height: 16),
               EventsPage(
                 eventList: widget.eventList,
               ),
               SizedBox(height: 16),
+              // Text(
+              //   "Typography",
+              //   style: Theme.of(context).textTheme.headline6,
+              // ),
+              // SizedBox(height: 16),
+              // TypograpgyWidget(),
             ],
           ),
         ),

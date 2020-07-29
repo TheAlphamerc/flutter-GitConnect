@@ -101,6 +101,7 @@ class Payload {
         this.masterBranch,
         this.description,
         this.pusherType,
+        this.pullRequest
     });
 
     final String action;
@@ -117,7 +118,7 @@ class Payload {
     final String masterBranch;
     final String description;
     final String pusherType;
-
+    final PullRequest pullRequest;
     factory Payload.fromRawJson(String str) => Payload.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
@@ -137,6 +138,7 @@ class Payload {
         masterBranch: json["master_branch"] == null ? null : json["master_branch"],
         description: json["description"] == null ? null : json["description"],
         pusherType: json["pusher_type"] == null ? null : json["pusher_type"],
+        pullRequest: json["pull_request"] == null ? null : PullRequest.fromJson(json["pull_request"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -154,6 +156,7 @@ class Payload {
         "master_branch": masterBranch == null ? null : masterBranch,
         "description": description == null ? null : description,
         "pusher_type": pusherType == null ? null : pusherType,
+        "pull_request": pullRequest == null ? null : pullRequest.toJson(),
     };
 }
 
@@ -410,7 +413,7 @@ class Issue {
     final String title;
     final User user;
     final List<Label> labels;
-    final IssueState state;
+    final EventState state;
     final bool locked;
     final dynamic assignee;
     final List<dynamic> assignees;
@@ -529,11 +532,12 @@ class Label {
     };
 }
 
-enum IssueState { CLOSED, OPEN }
+enum EventState { CLOSED, OPEN,CREATED }
 
 final stateValues = EnumValues({
-    "closed": IssueState.CLOSED,
-    "open": IssueState.OPEN
+    "closed": EventState.CLOSED,
+    "open": EventState.OPEN,
+    "created": EventState.CREATED,
 });
 
 class Repo {
@@ -544,7 +548,7 @@ class Repo {
     });
 
     final int id;
-    final String name;
+    final String  name;
     final String url;
 
     factory Repo.fromRawJson(String str) => Repo.fromJson(json.decode(str));
@@ -565,15 +569,640 @@ class Repo {
 }
 
 
+class PullRequest {
+    PullRequest({
+        this.url,
+        this.id,
+        this.nodeId,
+        this.htmlUrl,
+        this.diffUrl,
+        this.patchUrl,
+        this.issueUrl,
+        this.number,
+        this.state,
+        this.locked,
+        this.title,
+        this.user,
+        this.body,
+        this.createdAt,
+        this.updatedAt,
+        this.closedAt,
+        this.mergedAt,
+        this.mergeCommitSha,
+        this.assignee,
+        this.assignees,
+        this.requestedReviewers,
+        this.requestedTeams,
+        this.labels,
+        this.milestone,
+        this.draft,
+        this.commitsUrl,
+        this.reviewCommentsUrl,
+        this.reviewCommentUrl,
+        this.commentsUrl,
+        this.statusesUrl,
+        this.head,
+        this.base,
+        this.links,
+        this.authorAssociation,
+        this.activeLockReason,
+        this.merged,
+        this.mergeable,
+        this.rebaseable,
+        this.mergeableState,
+        this.mergedBy,
+        this.comments,
+        this.reviewComments,
+        this.maintainerCanModify,
+        this.commits,
+        this.additions,
+        this.deletions,
+        this.changedFiles,
+    });
 
-enum UserEventType { ISSUE_COMMENT_EVENT, PUSH_EVENT, WATCH_EVENT, CREATE_EVENT, ISSUES_EVENT }
+    final String url;
+    final int id;
+    final String nodeId;
+    final String htmlUrl;
+    final String diffUrl;
+    final String patchUrl;
+    final String issueUrl;
+    final int number;
+    final EventState state;
+    final bool locked;
+    final String title;
+    final User user;
+    final String body;
+    final DateTime createdAt;
+    final DateTime updatedAt;
+    final DateTime closedAt;
+    final DateTime mergedAt;
+    final String mergeCommitSha;
+    final dynamic assignee;
+    final List<dynamic> assignees;
+    final List<dynamic> requestedReviewers;
+    final List<dynamic> requestedTeams;
+    final List<dynamic> labels;
+    final dynamic milestone;
+    final bool draft;
+    final String commitsUrl;
+    final String reviewCommentsUrl;
+    final String reviewCommentUrl;
+    final String commentsUrl;
+    final String statusesUrl;
+    final Base head;
+    final Base base;
+    final Links links;
+    final String authorAssociation;
+    final dynamic activeLockReason;
+    final bool merged;
+    final dynamic mergeable;
+    final dynamic rebaseable;
+    final String mergeableState;
+    final User mergedBy;
+    final int comments;
+    final int reviewComments;
+    final bool maintainerCanModify;
+    final int commits;
+    final int additions;
+    final int deletions;
+    final int changedFiles;
+
+    factory PullRequest.fromRawJson(String str) => PullRequest.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory PullRequest.fromJson(Map<String, dynamic> json) => PullRequest(
+        url: json["url"] == null ? null : json["url"],
+        id: json["id"] == null ? null : json["id"],
+        nodeId: json["node_id"] == null ? null : json["node_id"],
+        htmlUrl: json["html_url"] == null ? null : json["html_url"],
+        diffUrl: json["diff_url"] == null ? null : json["diff_url"],
+        patchUrl: json["patch_url"] == null ? null : json["patch_url"],
+        issueUrl: json["issue_url"] == null ? null : json["issue_url"],
+        number: json["number"] == null ? null : json["number"],
+        state: json["state"] == null ? null : stateValues.map[json["state"]],
+        locked: json["locked"] == null ? null : json["locked"],
+        title: json["title"] == null ? null : json["title"],
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        body: json["body"] == null ? null : json["body"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        closedAt: json["closed_at"] == null ? null : DateTime.parse(json["closed_at"]),
+        mergedAt: json["merged_at"] == null ? null : DateTime.parse(json["merged_at"]),
+        mergeCommitSha: json["merge_commit_sha"] == null ? null : json["merge_commit_sha"],
+        assignee: json["assignee"],
+        assignees: json["assignees"] == null ? null : List<dynamic>.from(json["assignees"].map((x) => x)),
+        requestedReviewers: json["requested_reviewers"] == null ? null : List<dynamic>.from(json["requested_reviewers"].map((x) => x)),
+        requestedTeams: json["requested_teams"] == null ? null : List<dynamic>.from(json["requested_teams"].map((x) => x)),
+        labels: json["labels"] == null ? null : List<dynamic>.from(json["labels"].map((x) => x)),
+        milestone: json["milestone"],
+        draft: json["draft"] == null ? null : json["draft"],
+        commitsUrl: json["commits_url"] == null ? null : json["commits_url"],
+        reviewCommentsUrl: json["review_comments_url"] == null ? null : json["review_comments_url"],
+        reviewCommentUrl: json["review_comment_url"] == null ? null : json["review_comment_url"],
+        commentsUrl: json["comments_url"] == null ? null : json["comments_url"],
+        statusesUrl: json["statuses_url"] == null ? null : json["statuses_url"],
+        head: json["head"] == null ? null : Base.fromJson(json["head"]),
+        base: json["base"] == null ? null : Base.fromJson(json["base"]),
+        links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
+        authorAssociation: json["author_association"] == null ? null : json["author_association"],
+        activeLockReason: json["active_lock_reason"],
+        merged: json["merged"] == null ? null : json["merged"],
+        mergeable: json["mergeable"],
+        rebaseable: json["rebaseable"],
+        mergeableState: json["mergeable_state"] == null ? null : json["mergeable_state"],
+        mergedBy: json["merged_by"] == null ? null : User.fromJson(json["merged_by"]),
+        comments: json["comments"] == null ? null : json["comments"],
+        reviewComments: json["review_comments"] == null ? null : json["review_comments"],
+        maintainerCanModify: json["maintainer_can_modify"] == null ? null : json["maintainer_can_modify"],
+        commits: json["commits"] == null ? null : json["commits"],
+        additions: json["additions"] == null ? null : json["additions"],
+        deletions: json["deletions"] == null ? null : json["deletions"],
+        changedFiles: json["changed_files"] == null ? null : json["changed_files"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "url": url == null ? null : url,
+        "id": id == null ? null : id,
+        "node_id": nodeId == null ? null : nodeId,
+        "html_url": htmlUrl == null ? null : htmlUrl,
+        "diff_url": diffUrl == null ? null : diffUrl,
+        "patch_url": patchUrl == null ? null : patchUrl,
+        "issue_url": issueUrl == null ? null : issueUrl,
+        "number": number == null ? null : number,
+        "state": state == null ? null : stateValues.reverse[state],
+        "locked": locked == null ? null : locked,
+        "title": title == null ? null : title,
+        "user": user == null ? null : user.toJson(),
+        "body": body == null ? null : body,
+        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
+        "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "closed_at": closedAt == null ? null : closedAt.toIso8601String(),
+        "merged_at": mergedAt == null ? null : mergedAt.toIso8601String(),
+        "merge_commit_sha": mergeCommitSha == null ? null : mergeCommitSha,
+        "assignee": assignee,
+        "assignees": assignees == null ? null : List<dynamic>.from(assignees.map((x) => x)),
+        "requested_reviewers": requestedReviewers == null ? null : List<dynamic>.from(requestedReviewers.map((x) => x)),
+        "requested_teams": requestedTeams == null ? null : List<dynamic>.from(requestedTeams.map((x) => x)),
+        "labels": labels == null ? null : List<dynamic>.from(labels.map((x) => x)),
+        "milestone": milestone,
+        "draft": draft == null ? null : draft,
+        "commits_url": commitsUrl == null ? null : commitsUrl,
+        "review_comments_url": reviewCommentsUrl == null ? null : reviewCommentsUrl,
+        "review_comment_url": reviewCommentUrl == null ? null : reviewCommentUrl,
+        "comments_url": commentsUrl == null ? null : commentsUrl,
+        "statuses_url": statusesUrl == null ? null : statusesUrl,
+        "head": head == null ? null : head.toJson(),
+        "base": base == null ? null : base.toJson(),
+        "_links": links == null ? null : links.toJson(),
+        "author_association": authorAssociation == null ? null : authorAssociation,
+        "active_lock_reason": activeLockReason,
+        "merged": merged == null ? null : merged,
+        "mergeable": mergeable,
+        "rebaseable": rebaseable,
+        "mergeable_state": mergeableState == null ? null : mergeableState,
+        "merged_by": mergedBy == null ? null : mergedBy.toJson(),
+        "comments": comments == null ? null : comments,
+        "review_comments": reviewComments == null ? null : reviewComments,
+        "maintainer_can_modify": maintainerCanModify == null ? null : maintainerCanModify,
+        "commits": commits == null ? null : commits,
+        "additions": additions == null ? null : additions,
+        "deletions": deletions == null ? null : deletions,
+        "changed_files": changedFiles == null ? null : changedFiles,
+    };
+}
+
+class Base {
+    Base({
+        this.label,
+        this.ref,
+        this.sha,
+        this.user,
+        this.repo,
+    });
+
+    final String label;
+    final String ref;
+    final String sha;
+    final User user;
+    final BaseRepo repo;
+
+    factory Base.fromRawJson(String str) => Base.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Base.fromJson(Map<String, dynamic> json) => Base(
+        label: json["label"] == null ? null : json["label"],
+        ref: json["ref"] == null ? null : json["ref"],
+        sha: json["sha"] == null ? null : json["sha"],
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        repo: json["repo"] == null ? null : BaseRepo.fromJson(json["repo"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "label": label == null ? null : label,
+        "ref": ref == null ? null : ref,
+        "sha": sha == null ? null : sha,
+        "user": user == null ? null : user.toJson(),
+        "repo": repo == null ? null : repo.toJson(),
+    };
+}
+
+class BaseRepo {
+    BaseRepo({
+        this.id,
+        this.nodeId,
+        this.name,
+        this.fullName,
+        this.private,
+        this.owner,
+        this.htmlUrl,
+        this.description,
+        this.fork,
+        this.url,
+        this.forksUrl,
+        this.keysUrl,
+        this.collaboratorsUrl,
+        this.teamsUrl,
+        this.hooksUrl,
+        this.issueEventsUrl,
+        this.eventsUrl,
+        this.assigneesUrl,
+        this.branchesUrl,
+        this.tagsUrl,
+        this.blobsUrl,
+        this.gitTagsUrl,
+        this.gitRefsUrl,
+        this.treesUrl,
+        this.statusesUrl,
+        this.languagesUrl,
+        this.stargazersUrl,
+        this.contributorsUrl,
+        this.subscribersUrl,
+        this.subscriptionUrl,
+        this.commitsUrl,
+        this.gitCommitsUrl,
+        this.commentsUrl,
+        this.issueCommentUrl,
+        this.contentsUrl,
+        this.compareUrl,
+        this.mergesUrl,
+        this.archiveUrl,
+        this.downloadsUrl,
+        this.issuesUrl,
+        this.pullsUrl,
+        this.milestonesUrl,
+        this.notificationsUrl,
+        this.labelsUrl,
+        this.releasesUrl,
+        this.deploymentsUrl,
+        this.createdAt,
+        this.updatedAt,
+        this.pushedAt,
+        this.gitUrl,
+        this.sshUrl,
+        this.cloneUrl,
+        this.svnUrl,
+        this.homepage,
+        this.size,
+        this.stargazersCount,
+        this.watchersCount,
+        this.language,
+        this.hasIssues,
+        this.hasProjects,
+        this.hasDownloads,
+        this.hasWiki,
+        this.hasPages,
+        this.forksCount,
+        this.mirrorUrl,
+        this.archived,
+        this.disabled,
+        this.openIssuesCount,
+        this.license,
+        this.forks,
+        this.openIssues,
+        this.watchers,
+        this.defaultBranch,
+    });
+
+    final int id;
+    final String nodeId;
+    final String name;
+    final String fullName;
+    final bool private;
+    final User owner;
+    final String htmlUrl;
+    final dynamic description;
+    final bool fork;
+    final String url;
+    final String forksUrl;
+    final String keysUrl;
+    final String collaboratorsUrl;
+    final String teamsUrl;
+    final String hooksUrl;
+    final String issueEventsUrl;
+    final String eventsUrl;
+    final String assigneesUrl;
+    final String branchesUrl;
+    final String tagsUrl;
+    final String blobsUrl;
+    final String gitTagsUrl;
+    final String gitRefsUrl;
+    final String treesUrl;
+    final String statusesUrl;
+    final String languagesUrl;
+    final String stargazersUrl;
+    final String contributorsUrl;
+    final String subscribersUrl;
+    final String subscriptionUrl;
+    final String commitsUrl;
+    final String gitCommitsUrl;
+    final String commentsUrl;
+    final String issueCommentUrl;
+    final String contentsUrl;
+    final String compareUrl;
+    final String mergesUrl;
+    final String archiveUrl;
+    final String downloadsUrl;
+    final String issuesUrl;
+    final String pullsUrl;
+    final String milestonesUrl;
+    final String notificationsUrl;
+    final String labelsUrl;
+    final String releasesUrl;
+    final String deploymentsUrl;
+    final DateTime createdAt;
+    final DateTime updatedAt;
+    final DateTime pushedAt;
+    final String gitUrl;
+    final String sshUrl;
+    final String cloneUrl;
+    final String svnUrl;
+    final dynamic homepage;
+    final int size;
+    final int stargazersCount;
+    final int watchersCount;
+    final dynamic language;
+    final bool hasIssues;
+    final bool hasProjects;
+    final bool hasDownloads;
+    final bool hasWiki;
+    final bool hasPages;
+    final int forksCount;
+    final dynamic mirrorUrl;
+    final bool archived;
+    final bool disabled;
+    final int openIssuesCount;
+    final dynamic license;
+    final int forks;
+    final int openIssues;
+    final int watchers;
+    final String defaultBranch;
+
+    factory BaseRepo.fromRawJson(String str) => BaseRepo.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory BaseRepo.fromJson(Map<String, dynamic> json) => BaseRepo(
+        id: json["id"] == null ? null : json["id"],
+        nodeId: json["node_id"] == null ? null : json["node_id"],
+        name: json["name"] == null ? null : json["name"],
+        fullName: json["full_name"] == null ? null : json["full_name"],
+        private: json["private"] == null ? null : json["private"],
+        owner: json["owner"] == null ? null : User.fromJson(json["owner"]),
+        htmlUrl: json["html_url"] == null ? null : json["html_url"],
+        description: json["description"],
+        fork: json["fork"] == null ? null : json["fork"],
+        url: json["url"] == null ? null : json["url"],
+        forksUrl: json["forks_url"] == null ? null : json["forks_url"],
+        keysUrl: json["keys_url"] == null ? null : json["keys_url"],
+        collaboratorsUrl: json["collaborators_url"] == null ? null : json["collaborators_url"],
+        teamsUrl: json["teams_url"] == null ? null : json["teams_url"],
+        hooksUrl: json["hooks_url"] == null ? null : json["hooks_url"],
+        issueEventsUrl: json["issue_events_url"] == null ? null : json["issue_events_url"],
+        eventsUrl: json["events_url"] == null ? null : json["events_url"],
+        assigneesUrl: json["assignees_url"] == null ? null : json["assignees_url"],
+        branchesUrl: json["branches_url"] == null ? null : json["branches_url"],
+        tagsUrl: json["tags_url"] == null ? null : json["tags_url"],
+        blobsUrl: json["blobs_url"] == null ? null : json["blobs_url"],
+        gitTagsUrl: json["git_tags_url"] == null ? null : json["git_tags_url"],
+        gitRefsUrl: json["git_refs_url"] == null ? null : json["git_refs_url"],
+        treesUrl: json["trees_url"] == null ? null : json["trees_url"],
+        statusesUrl: json["statuses_url"] == null ? null : json["statuses_url"],
+        languagesUrl: json["languages_url"] == null ? null : json["languages_url"],
+        stargazersUrl: json["stargazers_url"] == null ? null : json["stargazers_url"],
+        contributorsUrl: json["contributors_url"] == null ? null : json["contributors_url"],
+        subscribersUrl: json["subscribers_url"] == null ? null : json["subscribers_url"],
+        subscriptionUrl: json["subscription_url"] == null ? null : json["subscription_url"],
+        commitsUrl: json["commits_url"] == null ? null : json["commits_url"],
+        gitCommitsUrl: json["git_commits_url"] == null ? null : json["git_commits_url"],
+        commentsUrl: json["comments_url"] == null ? null : json["comments_url"],
+        issueCommentUrl: json["issue_comment_url"] == null ? null : json["issue_comment_url"],
+        contentsUrl: json["contents_url"] == null ? null : json["contents_url"],
+        compareUrl: json["compare_url"] == null ? null : json["compare_url"],
+        mergesUrl: json["merges_url"] == null ? null : json["merges_url"],
+        archiveUrl: json["archive_url"] == null ? null : json["archive_url"],
+        downloadsUrl: json["downloads_url"] == null ? null : json["downloads_url"],
+        issuesUrl: json["issues_url"] == null ? null : json["issues_url"],
+        pullsUrl: json["pulls_url"] == null ? null : json["pulls_url"],
+        milestonesUrl: json["milestones_url"] == null ? null : json["milestones_url"],
+        notificationsUrl: json["notifications_url"] == null ? null : json["notifications_url"],
+        labelsUrl: json["labels_url"] == null ? null : json["labels_url"],
+        releasesUrl: json["releases_url"] == null ? null : json["releases_url"],
+        deploymentsUrl: json["deployments_url"] == null ? null : json["deployments_url"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        pushedAt: json["pushed_at"] == null ? null : DateTime.parse(json["pushed_at"]),
+        gitUrl: json["git_url"] == null ? null : json["git_url"],
+        sshUrl: json["ssh_url"] == null ? null : json["ssh_url"],
+        cloneUrl: json["clone_url"] == null ? null : json["clone_url"],
+        svnUrl: json["svn_url"] == null ? null : json["svn_url"],
+        homepage: json["homepage"],
+        size: json["size"] == null ? null : json["size"],
+        stargazersCount: json["stargazers_count"] == null ? null : json["stargazers_count"],
+        watchersCount: json["watchers_count"] == null ? null : json["watchers_count"],
+        language: json["language"],
+        hasIssues: json["has_issues"] == null ? null : json["has_issues"],
+        hasProjects: json["has_projects"] == null ? null : json["has_projects"],
+        hasDownloads: json["has_downloads"] == null ? null : json["has_downloads"],
+        hasWiki: json["has_wiki"] == null ? null : json["has_wiki"],
+        hasPages: json["has_pages"] == null ? null : json["has_pages"],
+        forksCount: json["forks_count"] == null ? null : json["forks_count"],
+        mirrorUrl: json["mirror_url"],
+        archived: json["archived"] == null ? null : json["archived"],
+        disabled: json["disabled"] == null ? null : json["disabled"],
+        openIssuesCount: json["open_issues_count"] == null ? null : json["open_issues_count"],
+        license: json["license"],
+        forks: json["forks"] == null ? null : json["forks"],
+        openIssues: json["open_issues"] == null ? null : json["open_issues"],
+        watchers: json["watchers"] == null ? null : json["watchers"],
+        defaultBranch: json["default_branch"] == null ? null : json["default_branch"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
+        "node_id": nodeId == null ? null : nodeId,
+        "name": name == null ? null : name,
+        "full_name": fullName == null ? null : fullName,
+        "private": private == null ? null : private,
+        "owner": owner == null ? null : owner.toJson(),
+        "html_url": htmlUrl == null ? null : htmlUrl,
+        "description": description,
+        "fork": fork == null ? null : fork,
+        "url": url == null ? null : url,
+        "forks_url": forksUrl == null ? null : forksUrl,
+        "keys_url": keysUrl == null ? null : keysUrl,
+        "collaborators_url": collaboratorsUrl == null ? null : collaboratorsUrl,
+        "teams_url": teamsUrl == null ? null : teamsUrl,
+        "hooks_url": hooksUrl == null ? null : hooksUrl,
+        "issue_events_url": issueEventsUrl == null ? null : issueEventsUrl,
+        "events_url": eventsUrl == null ? null : eventsUrl,
+        "assignees_url": assigneesUrl == null ? null : assigneesUrl,
+        "branches_url": branchesUrl == null ? null : branchesUrl,
+        "tags_url": tagsUrl == null ? null : tagsUrl,
+        "blobs_url": blobsUrl == null ? null : blobsUrl,
+        "git_tags_url": gitTagsUrl == null ? null : gitTagsUrl,
+        "git_refs_url": gitRefsUrl == null ? null : gitRefsUrl,
+        "trees_url": treesUrl == null ? null : treesUrl,
+        "statuses_url": statusesUrl == null ? null : statusesUrl,
+        "languages_url": languagesUrl == null ? null : languagesUrl,
+        "stargazers_url": stargazersUrl == null ? null : stargazersUrl,
+        "contributors_url": contributorsUrl == null ? null : contributorsUrl,
+        "subscribers_url": subscribersUrl == null ? null : subscribersUrl,
+        "subscription_url": subscriptionUrl == null ? null : subscriptionUrl,
+        "commits_url": commitsUrl == null ? null : commitsUrl,
+        "git_commits_url": gitCommitsUrl == null ? null : gitCommitsUrl,
+        "comments_url": commentsUrl == null ? null : commentsUrl,
+        "issue_comment_url": issueCommentUrl == null ? null : issueCommentUrl,
+        "contents_url": contentsUrl == null ? null : contentsUrl,
+        "compare_url": compareUrl == null ? null : compareUrl,
+        "merges_url": mergesUrl == null ? null : mergesUrl,
+        "archive_url": archiveUrl == null ? null : archiveUrl,
+        "downloads_url": downloadsUrl == null ? null : downloadsUrl,
+        "issues_url": issuesUrl == null ? null : issuesUrl,
+        "pulls_url": pullsUrl == null ? null : pullsUrl,
+        "milestones_url": milestonesUrl == null ? null : milestonesUrl,
+        "notifications_url": notificationsUrl == null ? null : notificationsUrl,
+        "labels_url": labelsUrl == null ? null : labelsUrl,
+        "releases_url": releasesUrl == null ? null : releasesUrl,
+        "deployments_url": deploymentsUrl == null ? null : deploymentsUrl,
+        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
+        "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "pushed_at": pushedAt == null ? null : pushedAt.toIso8601String(),
+        "git_url": gitUrl == null ? null : gitUrl,
+        "ssh_url": sshUrl == null ? null : sshUrl,
+        "clone_url": cloneUrl == null ? null : cloneUrl,
+        "svn_url": svnUrl == null ? null : svnUrl,
+        "homepage": homepage,
+        "size": size == null ? null : size,
+        "stargazers_count": stargazersCount == null ? null : stargazersCount,
+        "watchers_count": watchersCount == null ? null : watchersCount,
+        "language": language,
+        "has_issues": hasIssues == null ? null : hasIssues,
+        "has_projects": hasProjects == null ? null : hasProjects,
+        "has_downloads": hasDownloads == null ? null : hasDownloads,
+        "has_wiki": hasWiki == null ? null : hasWiki,
+        "has_pages": hasPages == null ? null : hasPages,
+        "forks_count": forksCount == null ? null : forksCount,
+        "mirror_url": mirrorUrl,
+        "archived": archived == null ? null : archived,
+        "disabled": disabled == null ? null : disabled,
+        "open_issues_count": openIssuesCount == null ? null : openIssuesCount,
+        "license": license,
+        "forks": forks == null ? null : forks,
+        "open_issues": openIssues == null ? null : openIssues,
+        "watchers": watchers == null ? null : watchers,
+        "default_branch": defaultBranch == null ? null : defaultBranch,
+    };
+}
+
+class Links {
+    Links({
+        this.self,
+        this.html,
+        this.issue,
+        this.comments,
+        this.reviewComments,
+        this.reviewComment,
+        this.commits,
+        this.statuses,
+    });
+
+    final Comments self;
+    final Comments html;
+    final Comments issue;
+    final Comments comments;
+    final Comments reviewComments;
+    final Comments reviewComment;
+    final Comments commits;
+    final Comments statuses;
+
+    factory Links.fromRawJson(String str) => Links.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Links.fromJson(Map<String, dynamic> json) => Links(
+        self: json["self"] == null ? null : Comments.fromJson(json["self"]),
+        html: json["html"] == null ? null : Comments.fromJson(json["html"]),
+        issue: json["issue"] == null ? null : Comments.fromJson(json["issue"]),
+        comments: json["comments"] == null ? null : Comments.fromJson(json["comments"]),
+        reviewComments: json["review_comments"] == null ? null : Comments.fromJson(json["review_comments"]),
+        reviewComment: json["review_comment"] == null ? null : Comments.fromJson(json["review_comment"]),
+        commits: json["commits"] == null ? null : Comments.fromJson(json["commits"]),
+        statuses: json["statuses"] == null ? null : Comments.fromJson(json["statuses"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "self": self == null ? null : self.toJson(),
+        "html": html == null ? null : html.toJson(),
+        "issue": issue == null ? null : issue.toJson(),
+        "comments": comments == null ? null : comments.toJson(),
+        "review_comments": reviewComments == null ? null : reviewComments.toJson(),
+        "review_comment": reviewComment == null ? null : reviewComment.toJson(),
+        "commits": commits == null ? null : commits.toJson(),
+        "statuses": statuses == null ? null : statuses.toJson(),
+    };
+}
+
+class Comments {
+    Comments({
+        this.href,
+    });
+
+    final String href;
+
+    factory Comments.fromRawJson(String str) => Comments.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Comments.fromJson(Map<String, dynamic> json) => Comments(
+        href: json["href"] == null ? null : json["href"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "href": href == null ? null : href,
+    };
+}
+
+enum Ref { THE_ALPHAMERC_PATCH_1, REFS_HEADS_MASTER }
+
+final refValues = EnumValues({
+    "refs/heads/master": Ref.REFS_HEADS_MASTER,
+    "TheAlphamerc-patch-1": Ref.THE_ALPHAMERC_PATCH_1
+});
+
+
+enum UserEventType { ISSUE_COMMENT_EVENT, PUSH_EVENT, WATCH_EVENT, CREATE_EVENT, ISSUES_EVENT, DELETE_EVENT, PULL_REQUEST_EVENT }
 
 final userEventTypeValues = EnumValues({
     "CreateEvent": UserEventType.CREATE_EVENT,
     "IssuesEvent": UserEventType.ISSUES_EVENT,
     "IssueCommentEvent": UserEventType.ISSUE_COMMENT_EVENT,
     "PushEvent": UserEventType.PUSH_EVENT,
-    "WatchEvent": UserEventType.WATCH_EVENT
+    "WatchEvent": UserEventType.WATCH_EVENT,
+    "DeleteEvent": UserEventType.DELETE_EVENT,
+    "PullRequestEvent": UserEventType.PULL_REQUEST_EVENT,
 });
 
 class EnumValues<T> {
