@@ -12,99 +12,6 @@ class EventsPage extends StatelessWidget {
   const EventsPage({Key key, this.eventList}) : super(key: key);
   final int widthOffset = 66;
   final List<EventModel> eventList;
-  Widget _recentEvents(context) {
-    final list = eventList;
-    return list == null
-        ? GCard(
-            color: Theme.of(context).colorScheme.surface,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Text(
-                "No recent activity detected at your github account yet.",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText2),
-          )
-        : FutureBuilder(
-            initialData: "",
-            future: GetIt.instance<SharedPrefrenceHelper>().getUserName(),
-            builder: (context, AsyncSnapshot<String> snapshot) {
-              return GCard(
-                color: Theme.of(context).colorScheme.surface,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ...list.map((model) {
-                      if (model.type == UserEventType.PUSH_EVENT) {
-                        return Column(
-                          children: <Widget>[
-                            // Text(model.type.toString()),
-                            _pushCommitEvent(
-                                context, model, snapshot.data ?? ""),
-                            if (list.last != model)
-                              Divider(height: 0, indent: 50),
-                          ],
-                        );
-                      } else if (model.type == UserEventType.ISSUES_EVENT) {
-                        return Column(
-                          children: <Widget>[
-                            // Text(model.type.toString()),
-                            _issueTile(context, model, snapshot.data ?? ""),
-                            if (list.last != model)
-                              Divider(height: 0, indent: 50),
-                          ],
-                        );
-                      } else if (model.type ==
-                          UserEventType.ISSUE_COMMENT_EVENT) {
-                        return Column(
-                          children: <Widget>[
-                            _issueTile(context, model, snapshot.data ?? "",
-                                isCommented: true),
-                            if (list.last != model)
-                              Divider(height: 0, indent: 50),
-                          ],
-                        );
-                      } else if (model.type ==
-                          UserEventType.PULL_REQUEST_EVENT) {
-                        return Column(
-                          children: <Widget>[
-                            _pullRequestTile(
-                                context, model, snapshot.data ?? "",
-                                isCommented: true),
-                            Divider(height: 0, indent: 50),
-                          ],
-                        );
-                      } else if (model.type == UserEventType.CREATE_EVENT) {
-                        return Column(
-                          children: <Widget>[
-                            _createRepoEventTile(
-                              context,
-                              model,
-                              snapshot.data ?? "",
-                            )
-                          ],
-                        );
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                      // else if (model.type == UserEventType.CREATE_EVENT) {
-                      //   return Text("Repository  Created").p(8);
-                      // } else if (model.type == UserEventType.WATCH_EVENT) {
-                      //   return Text("Started  watch").p(8);
-                      // } else {
-                      //   return Column(
-                      //     children: <Widget>[
-                      //       Text("Undetermined: ${model.type}"),
-                      //       if (list.last != model)
-                      //         Divider(height: 0, indent: 50),
-                      //     ],
-                      //   );
-                      // }
-                    }).toList(),
-                  ],
-                ),
-              );
-            },
-          );
-  }
 
   Widget _issueTile(context, EventModel model, String username,
       {bool isCommented = false}) {
@@ -180,7 +87,7 @@ class EventsPage extends StatelessWidget {
               width: 50,
               child: Icon(
                 GIcons.commit_24,
-                color: GColors.green,
+                color: GColors.yellow,
                 size: 20,
               ),
             ),
@@ -300,7 +207,7 @@ class EventsPage extends StatelessWidget {
             SizedBox(
               width: 50,
               child: Icon(
-               getCreatedIcon(model.payload.refType),
+                getCreatedIcon(model.payload.refType),
                 color: GColors.green,
                 size: 20,
               ),
@@ -349,18 +256,30 @@ class EventsPage extends StatelessWidget {
           ],
         ).vP16);
   }
-  IconData getCreatedIcon(String ref){
-     switch (ref) {
+
+  Widget _noActivity(context) {
+    return GCard(
+      color: Theme.of(context).colorScheme.surface,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Text("No recent activity detected at your github account yet.",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText2),
+    );
+  }
+
+  IconData getCreatedIcon(String ref) {
+    switch (ref) {
       case "branch":
         return GIcons.git_branch_24;
       case "repository":
         return GIcons.repo_24;
-       case "issue":
+      case "issue":
         return GIcons.issue_opened_24;
       default:
         return GIcons.arrow_both_16;
     }
   }
+
   IconData getIcon(EventState type, {UserEventType eventType}) {
     if (eventType != null) {
       switch (eventType) {
@@ -405,6 +324,79 @@ class EventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _recentEvents(context);
+    return eventList == null
+        ? _noActivity(context)
+        : FutureBuilder(
+            initialData: "",
+            future: GetIt.instance<SharedPrefrenceHelper>().getUserName(),
+            builder: (context, AsyncSnapshot<String> snapshot) {
+              return GCard(
+                color: Theme.of(context).colorScheme.surface,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ...eventList.map(
+                      (model) {
+                        if (model.type == UserEventType.PUSH_EVENT) {
+                          return Column(
+                            children: <Widget>[
+                              // Text(model.type.toString()),
+                              _pushCommitEvent(
+                                  context, model, snapshot.data ?? ""),
+                              if (eventList.last != model)
+                                Divider(height: 1, indent: 50),
+                            ],
+                          );
+                        } else if (model.type == UserEventType.ISSUES_EVENT) {
+                          return Column(
+                            children: <Widget>[
+                              // Text(model.type.toString()),
+                              _issueTile(context, model, snapshot.data ?? ""),
+                              if (eventList.last != model)
+                                Divider(height: 1, indent: 50),
+                            ],
+                          );
+                        } else if (model.type ==
+                            UserEventType.ISSUE_COMMENT_EVENT) {
+                          return Column(
+                            children: <Widget>[
+                              _issueTile(context, model, snapshot.data ?? "",
+                                  isCommented: true),
+                              if (eventList.last != model)
+                               Divider(height: 1, indent: 50),
+                            ],
+                          );
+                        } else if (model.type ==
+                            UserEventType.PULL_REQUEST_EVENT) {
+                          return Column(
+                            children: <Widget>[
+                              _pullRequestTile(
+                                  context, model, snapshot.data ?? "",
+                                  isCommented: true),
+                             Divider(height: 1, indent: 50),
+                            ],
+                          );
+                        } else if (model.type == UserEventType.CREATE_EVENT) {
+                          return Column(
+                            children: <Widget>[
+                              _createRepoEventTile(
+                                context,
+                                model,
+                                snapshot.data ?? "",
+                              ),
+                              if (eventList.last != model)
+                               Divider(height: 1, indent: 50),
+                            ],
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ).toList(),
+                  ],
+                ),
+              );
+            },
+          );
   }
 }

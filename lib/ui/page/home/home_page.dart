@@ -38,7 +38,7 @@ class _UserPageState extends State<HomePage> {
               color: user == null ? color : Colors.transparent,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: user == null
-              ? Icon(icon, size: 15)
+              ? Icon(icon, size: 15,color:Theme.of(context).colorScheme.onPrimary)
               : UserAvatar(imagePath: user.avatarUrl, height: 30),
         ),
         Text(text, style: Theme.of(context).textTheme.bodyText1),

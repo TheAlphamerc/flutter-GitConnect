@@ -11,10 +11,13 @@ class AppTheme {
         buttonColor: DarkColor.cardColor,
         backgroundColor: DarkColor.background,
         cardColor: DarkColor.cardColor,
+        iconTheme: IconThemeData(color: GColors.gray),
         colorScheme: ThemeData.dark().colorScheme.copyWith(
             surface: DarkColor.surfaceColor,
             onSurface: DarkColor.onSurfaceDarkColor,
-            onBackground: DarkColor.onSurfaceLightColor),
+            onBackground: DarkColor.onSurfaceLightColor,
+            onPrimary: DarkColor.white,
+            ),
         // primaryTextTheme: TextThemes.darkTheme,
         textTheme: TextThemes.darkTextTheme,
         appBarTheme: AppBarTheme(
@@ -28,12 +31,14 @@ class AppTheme {
         // buttonColor: DarkColor.cardColor,
         backgroundColor: GColors.background,
         cardColor: GColors.cardColor,
+        iconTheme: IconThemeData(color: GColors.gray),
         colorScheme: ThemeData.dark().colorScheme.copyWith(
             surface: GColors.surfaceColor,
             onSurface: GColors.onSurfaceDarkColor,
             onPrimary: GColors.onPrimary,
+            onSecondary: GColors.onPrimary,
             onBackground: GColors.onSurfaceLightColor),
-       textTheme: TextThemes.lightTextTheme,
+        textTheme: TextThemes.lightTextTheme,
         appBarTheme: AppBarTheme(
           brightness: Brightness.light,
           color: GColors.white,

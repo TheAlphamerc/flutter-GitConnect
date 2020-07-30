@@ -18,24 +18,21 @@ class GBottomNavigationBar extends StatelessWidget {
           pageindex = state.index;
         }
         return BottomNavigationBar(
-          elevation: 10,
+          elevation: 20,
           backgroundColor: Theme.of(context).colorScheme.surface,
-          unselectedIconTheme: IconThemeData(
-            color: theme.colorScheme.onPrimary,
-          ),
           type: BottomNavigationBarType.fixed,
           unselectedLabelStyle: TextStyle(
-            color: GColors.red,
+            color: theme.iconTheme.color,
             fontWeight: FontWeight.normal,
             fontSize:14,
-
           ),
+          unselectedItemColor: theme.iconTheme.color,
           onTap: (index) {
             final NavigationBloc bloc =
                 BlocProvider.of<NavigationBloc>(context);
             bloc.add(IndexSelected(index));
           },
-          showUnselectedLabels: false,
+          showUnselectedLabels: true,
           showSelectedLabels: true,
           selectedItemColor: GColors.blue,
           currentIndex: pageindex,
