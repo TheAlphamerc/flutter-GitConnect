@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
-import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
-import 'package:flutter_github_connect/ui/page/home/widgets/typography.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -106,11 +103,11 @@ class _UserPageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               children: <Widget>[
-                KText(
+                Text(
                     "Add favourite repositories for quick access at any time, without having to search",
                     textAlign: TextAlign.center,
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(height: 1.25)),
+                    style: Theme.of(context).textTheme.headline5
+                    ),
                 SizedBox(height: 16),
                 GFlatButton(
                   label: "ADD FavouriteS",

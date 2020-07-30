@@ -6,11 +6,10 @@ import 'package:flutter_github_connect/bloc/search/search_event.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/search_list_provider.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key key}) : super(key: key);
-  ValueNotifier<String> searchText = ValueNotifier("");
+  final ValueNotifier<String> searchText = ValueNotifier("");
   Widget _getAppBar(context) {
     final theme = Theme.of(context);
     return AppBar(
@@ -19,9 +18,10 @@ class SearchPage extends StatelessWidget {
       title: Container(
         alignment: Alignment.bottomLeft,
         padding: EdgeInsets.only(top: 20),
-        child: KText(
-          "Search",
-          variant: TypographyVariant.header,
+        child: Title(
+          title:"Search",
+          color:Colors.black,
+          child: Text("Search",style: Theme.of(context).textTheme.headline6),
         ),
       ),
       bottom: PreferredSize(
@@ -46,10 +46,7 @@ class SearchPage extends StatelessWidget {
             ),
           ),
         ),
-        preferredSize: Size(
-          MediaQuery.of(context).size.width,
-          70,
-        ),
+        preferredSize: Size(MediaQuery.of(context).size.width, 70),
       ),
     );
   }
@@ -73,9 +70,8 @@ class SearchPage extends StatelessWidget {
           size: 18,
         ),
       ),
-      title: KText(
+      title: Text(
         text,
-        variant: TypographyVariant.h3,
       ),
       trailing: Icon(
         GIcons.chevron_right_24,
@@ -140,12 +136,10 @@ class SearchPage extends StatelessWidget {
                               height: 0,
                             ),
                             _getUtilRos(context, "Issue with \"$searchText\"",
-                                color: GColors.green,
-                                onPressed: () async{
-                                  await searchGithub(
+                                color: GColors.green, onPressed: () async {
+                              await searchGithub(
                                   context, searchText, GithubSearchType.Issue);
-                                },
-                                icon: GIcons.issue_opened_24),
+                            }, icon: GIcons.issue_opened_24),
                             Divider(
                               height: 0,
                             ),
@@ -170,9 +164,7 @@ class SearchPage extends StatelessWidget {
                                 color: GColors.green,
                                 onPressed: () {},
                                 icon: GIcons.organization_24),
-                            Divider(
-                              height: 0,
-                            ),
+                            Divider(height: 0),
                           ],
                         ),
                       );
@@ -187,16 +179,16 @@ class SearchPage extends StatelessWidget {
                     // Image.asset(GImages.githubMarkLight120, width:160),
                     Icon(GIcons.github_1, size: 120),
                     SizedBox(height: 16),
-                    KText(
+                    Text(
                       "Find your stuff.",
-                      variant: TypographyVariant.title,
+                      style: Theme.of(context).textTheme.headline4,
                     ),
                     SizedBox(height: 8),
-                    KText(
-                        "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
-                        textAlign: TextAlign.center,
-                        variant: TypographyVariant.h3,
-                        style: TextStyle(letterSpacing: 1, height: 1.1)),
+                    Text(
+                      "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ],
                 ),
               ),

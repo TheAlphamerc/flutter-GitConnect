@@ -5,7 +5,6 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 
 class SearchListProvider extends StatelessWidget {
   final GithubSearchType type;
@@ -19,33 +18,34 @@ class SearchListProvider extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          // Image.asset(GImages.githubMarkLight120, width:160),
           Icon(GIcons.github_1, size: 120),
           SizedBox(height: 16),
-          KText(
-            "No user found",
-            variant: TypographyVariant.title,
-          ),
+          Text("No user found", style: Theme.of(context).textTheme.headline5),
           SizedBox(height: 8),
-          KText("Try again with different username",
-              textAlign: TextAlign.center,
-              variant: TypographyVariant.h3,
-              style: TextStyle(letterSpacing: 1, height: 1.1)),
+          Text(
+            "Try again with different username",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText2,
+            ),
         ],
       ),
     );
   }
-  
-  String _getAppBarTitle(){
+
+  String _getAppBarTitle() {
     switch (type) {
-          case GithubSearchType.People: return "People";
-          case GithubSearchType.Repository:return "Repository";
-           case GithubSearchType.Issue: return "Issues";
-            
-          default: return "People";
-            
-        }
+      case GithubSearchType.People:
+        return "People";
+      case GithubSearchType.Repository:
+        return "Repository";
+      case GithubSearchType.Issue:
+        return "Issues";
+
+      default:
+        return "People";
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +78,7 @@ class SearchListProvider extends StatelessWidget {
             ));
           }
           if (currentState is LoadedSearchState) {
-            if (currentState.list == null) {
+            if (currentState.list.isEmpty) {
               return _noContant(context);
             }
             switch (currentState.type) {
@@ -100,7 +100,6 @@ class SearchListProvider extends StatelessWidget {
                 );
               default:
             }
-           
           }
           return Center(
             child: CircularProgressIndicator(),

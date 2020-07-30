@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
-import 'package:flutter_github_connect/helper/GIcons.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
@@ -23,11 +19,14 @@ class UserListPage extends StatelessWidget {
             imagePath: user.avatarUrl,
           ),
         ),
-        title: KText(user.name ?? "N/A").pB(5),
-        subtitle: KText(
+        title: Text(
+          user.name ?? "N/A",
+          style: Theme.of(context).textTheme.bodyText1,
+        ).pB(3),
+        subtitle: Text(
           user.login ?? "N/A",
-          isSubtitle: true,
-        ).pT(5),
+          style: Theme.of(context).textTheme.subtitle2,
+        ).pT(3),
       ),
     );
   }
@@ -41,7 +40,12 @@ class UserListPage extends StatelessWidget {
           : AppBar(
               elevation: 0,
               backgroundColor: Theme.of(context).colorScheme.surface,
-              title: KText("People"),
+              title: Title(
+                title: "People",
+                color: Colors.black,
+                child: Text("People",
+                    style: Theme.of(context).textTheme.headline6),
+              ),
             ),
       body: ListView.separated(
         itemCount: list.length,

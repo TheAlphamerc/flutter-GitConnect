@@ -9,7 +9,6 @@ import 'package:flutter_github_connect/ui/page/notification/notification_page.da
 import 'package:flutter_github_connect/ui/page/search/search_page.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/bottom_navigation_bar.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -78,9 +77,14 @@ class DashBoardPage extends StatelessWidget {
                       }),
                     );
                   }),
-                  title: Text(
-                      index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer"),
+                  title: Title(
+                    title: index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer",
+                    color: Colors.black,
+                    child: Text(index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer",
+                        style: Theme.of(context).textTheme.headline6),
+                  ),
                 ),
+
           body: getPage(index),
         );
       },
@@ -112,16 +116,15 @@ class HomePageScreen extends StatelessWidget {
                     children: <Widget>[
                       Icon(GIcons.github_1, size: 120),
                       SizedBox(height: 16),
-                      KText(
+                      Text(
                         "Seems like into trouble",
-                        variant: TypographyVariant.title,
+                        style: Theme.of(context).textTheme.headline5,
                       ),
                       SizedBox(height: 8),
-                      KText(
+                      Text(
                         currentState.errorMessage,
                         textAlign: TextAlign.center,
-                        variant: TypographyVariant.h3,
-                        style: TextStyle(letterSpacing: 1, height: 1.1),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(
                         height: 24,

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({Key key}) : super(key: key);
-  bool isDarkTheme = true;
   Widget _getUtilRos(context, String text,
       {Function onPressed,
       Color color,
@@ -16,16 +14,15 @@ class SettingsPage extends StatelessWidget {
     return Row(
       children: <Widget>[
         SizedBox(width: 16, height: 50),
-        KText(
+        Text(
           text,
-          variant: TypographyVariant.h3,
+          style: Theme.of(context).textTheme.bodyText1,
         ),
         Spacer(),
-        KText(
+        Text(
           selectedText,
-          variant: TypographyVariant.h3,
-          isSubtitle: true,
-          style: TextStyle(fontWeight: FontWeight.w300, letterSpacing: .6),
+          
+          style: Theme.of(context).textTheme.subtitle2,
         ),
         if (icon != null)
           Icon(
@@ -118,7 +115,6 @@ class SettingsPage extends StatelessWidget {
   void _changeTheme(BuildContext buildContext, ThemeType key) {
     
     CustomTheme.instanceOf(buildContext).changeTheme(key);
-    isDarkTheme = key == ThemeType.DARK;
     print("$key theme set");
   }
 

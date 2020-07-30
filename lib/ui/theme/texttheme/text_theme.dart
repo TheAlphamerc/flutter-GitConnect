@@ -52,13 +52,13 @@ class TextThemes {
         ),
         bodyText1: GoogleFonts.montserrat(
           fontSize: 16.0,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w400,
           color: Colors.white,
           letterSpacing: .5
         ),
         bodyText2: GoogleFonts.montserrat(
           fontSize: 14.0,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w400,
           color: Colors.white,
           letterSpacing: .25
         ),
@@ -83,25 +83,41 @@ class TextThemes {
         ),
       );
    static TextTheme get lightTextTheme => TextTheme(
-        headline3: GoogleFonts.montserrat(
-          fontSize: 42.0,
+        headline1: GoogleFonts.montserrat(
+          fontSize: 36.0,
           fontWeight: FontWeight.bold,
           color: Colors.black,
+          letterSpacing: -1.5
+        ),
+        headline2: GoogleFonts.montserrat(
+          fontSize: 34.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          letterSpacing: -.5
+        ),
+        headline3: GoogleFonts.montserrat(
+          fontSize: 32.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          letterSpacing: 0
         ),
         headline4: GoogleFonts.montserrat(
-          fontSize: 25.0,
-          fontWeight: FontWeight.bold,
+          fontSize: 30.0,
+          fontWeight: FontWeight.normal,
           color: Colors.black,
+          letterSpacing: .25
         ),
         headline5: GoogleFonts.montserrat(
           fontSize: 24.0,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.normal,
           color: Colors.black,
+          letterSpacing: .0
         ),
         headline6: GoogleFonts.montserrat(
           fontSize: 20.0,
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          letterSpacing: .15
         ),
         subtitle1: GoogleFonts.montserrat(
           fontSize: 16.0,
@@ -112,21 +128,38 @@ class TextThemes {
           fontSize: 14.0,
           fontWeight: FontWeight.w500,
           color: Colors.black87,
+          letterSpacing: .5
         ),
         bodyText1: GoogleFonts.montserrat(
-          fontSize: 15.0,
+          fontSize: 16.0,
           fontWeight: FontWeight.w400,
           color: Colors.black,
+          letterSpacing: .5
         ),
         bodyText2: GoogleFonts.montserrat(
-          fontSize: 12.0,
+          fontSize: 14.0,
           fontWeight: FontWeight.w400,
           color: Colors.black,
+          letterSpacing: .25
         ),
+        caption: GoogleFonts.montserrat(
+          fontSize: 12.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+          letterSpacing: .4
+        ),
+        overline: GoogleFonts.montserrat(
+          fontSize: 10.0,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+          letterSpacing: 1.5
+        ),
+      
         button: GoogleFonts.montserrat(
-          fontSize: 16.0,
+          fontSize: 14.0,
           fontWeight: FontWeight.w500,
           color: Colors.black,
+          letterSpacing: 1.2
         ),
       );
 }

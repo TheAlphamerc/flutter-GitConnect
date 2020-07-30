@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class IssueListPage extends StatelessWidget {
@@ -29,24 +28,22 @@ class IssueListPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width - 116,
-                  child: KText(
+                  width: MediaQuery.of(context).size.width - 66,
+                  child: Text(
                     '${model.author.login}/${model.repository.name} #${model.number}',
-                    isSubtitle: true,
+                    style: Theme.of(context).textTheme.subtitle1,
                     maxLines: 1,
                   ),
                 ),
                 SizedBox(height: 8),
                 Container(
-                  width: MediaQuery.of(context).size.width - 116,
-                  child: KText(
+                  width: MediaQuery.of(context).size.width - 66,
+                  child: Text(
                     '${model.title}',
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(fontWeight: FontWeight.w400),
+                    style: Theme.of(context).textTheme.bodyText1,
                     maxLines: 1,
                   ),
                 ),
-                SizedBox(height: 8),
                 SizedBox(height: 8),
                 if (model.labels != null && model.labels.nodes.isNotEmpty)
                   Container(
@@ -55,17 +52,22 @@ class IssueListPage extends StatelessWidget {
                         color: getColor(model.state).withAlpha(200),
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         border: Border.all(color: getColor(model.state))),
-                    child: KText(
+                    child: Text(
                       '${model.labels?.nodes?.first?.name ?? ""}',
-                      isSubtitle: true,
-                      variant: TypographyVariant.bodySmall,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ),
+                if (model.closedAt != null)
+                  Container(
+                    width: MediaQuery.of(context).size.width - 66,
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      Utility.getPassedTime(model.closedAt) + " ago",
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                   )
               ],
             ),
-            Spacer(),
-            KText(Utility.getPassedTime(model.closedAt)),
-            SizedBox(width: 16)
           ],
         ).vP16);
   }
@@ -102,7 +104,12 @@ class IssueListPage extends StatelessWidget {
             : AppBar(
                 elevation: 0,
                 backgroundColor: Theme.of(context).colorScheme.surface,
-                title: KText("People"),
+                title: Title(
+                  title: "People",
+                  color: Colors.black,
+                  child: Text("People",
+                      style: Theme.of(context).textTheme.headline6),
+                ),
               ),
         body: ListView.separated(
           itemCount: list.length,

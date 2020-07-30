@@ -5,7 +5,6 @@ import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
@@ -21,7 +20,10 @@ class UserScreen extends StatelessWidget {
         children: <Widget>[
           Icon(icon, color: Theme.of(context).colorScheme.onSurface, size: 18),
           SizedBox(width: 10),
-          KText(text ?? "N/A")
+          Text(
+            text ?? "N/A",
+            style: Theme.of(context).textTheme.bodyText1,
+          )
         ],
       ),
     );
@@ -41,9 +43,9 @@ class UserScreen extends StatelessWidget {
             imagePath: repo.owner.avatarUrl,
           ),
           SizedBox(height: 16),
-          KText(
+          Text(
             repo.name,
-            variant: TypographyVariant.h3,
+            
           ),
           SizedBox(height: 8),
           Spacer(),
@@ -55,10 +57,9 @@ class UserScreen extends StatelessWidget {
                     size: 16, color: Colors.yellowAccent[700]),
               ),
               SizedBox(width: 10),
-              KText(
+              Text(
                 "${repo.stargazers.totalCount}",
-                variant: TypographyVariant.h4,
-                isSubtitle: true,
+                style: Theme.of(context).textTheme.subtitle2,
               ),
               SizedBox(width: 20),
               Icon(
@@ -67,10 +68,9 @@ class UserScreen extends StatelessWidget {
                 size: 15,
               ),
               SizedBox(width: 5),
-              KText(
+              Text(
                 "${repo.languages.nodes.first.name}",
-                isSubtitle: true,
-                variant: TypographyVariant.h4,
+                style: Theme.of(context).textTheme.subtitle2,
               ),
             ],
           ),
@@ -87,12 +87,11 @@ class UserScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: <Widget>[
-            KText(key),
+            Text(key,style: Theme.of(context).textTheme.bodyText1),
             Spacer(),
-            KText(
+            Text(
               value,
-              isSubtitle: true,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              style: Theme.of(context).textTheme.subtitle2,
             ),
             Icon(
               GIcons.chevron_right_24,
@@ -145,23 +144,20 @@ class UserScreen extends StatelessWidget {
                     subtitle: model.login,
                     imagePath: model.avatarUrl,
                     height: 64,
-                    variant: TypographyVariant.header,
-                    subVarient: TypographyVariant.h4,
                   ),
                   SizedBox(height: 8),
                   GCard(
                     width: double.infinity,
                     margin: EdgeInsets.symmetric(vertical: 12),
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    child: KText(
+                    child: Text(
                       model?.status?.message ?? "N/A",
-                      variant: TypographyVariant.h3,
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  KText(
+                  Text(
                     model.bio,
-                    variant: TypographyVariant.h3,
-                    style: TextStyle(letterSpacing: .7, height: 1.4),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 8),
                   _iconWithText(context, GIcons.people_24, model.login),
@@ -185,7 +181,7 @@ class UserScreen extends StatelessWidget {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        KText("Top Repository").hP16,
+                        Text("Top Repository",style: Theme.of(context).textTheme.headline6,).hP16,
                         SizedBox(height: 8),
                         Container(
                           height: 150,

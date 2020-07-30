@@ -1185,13 +1185,6 @@ class Comments {
     };
 }
 
-enum Ref { THE_ALPHAMERC_PATCH_1, REFS_HEADS_MASTER }
-
-final refValues = EnumValues({
-    "refs/heads/master": Ref.REFS_HEADS_MASTER,
-    "TheAlphamerc-patch-1": Ref.THE_ALPHAMERC_PATCH_1
-});
-
 
 enum UserEventType { ISSUE_COMMENT_EVENT, PUSH_EVENT, WATCH_EVENT, CREATE_EVENT, ISSUES_EVENT, DELETE_EVENT, PULL_REQUEST_EVENT }
 

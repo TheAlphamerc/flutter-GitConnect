@@ -5,7 +5,6 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/ui/page/auth/auth_page.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,7 +21,7 @@ class WelcomePage extends StatelessWidget {
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Container(
-            height: 320, //MediaQuery.of(context).size.height * .5,
+            height: 320,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
                 color: theme.colorScheme.surface,
@@ -30,17 +29,15 @@ class WelcomePage extends StatelessWidget {
             alignment: Alignment.center,
             child: ListView(
               physics: NeverScrollableScrollPhysics(),
-              // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 SizedBox(height: 8),
                 Icon(GIcons.github,
                     size: 100, color: theme.colorScheme.onPrimary),
                 SizedBox(height: 30),
-                KText(
+                Text(
                   "Signin to Github\nto continue with GitConnect",
-                  variant: TypographyVariant.h3,
+                  style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
-                  style: TextStyle(letterSpacing: 1.3, height:1.25),
                 ),
                 SizedBox(height: 16),
                 Divider(),

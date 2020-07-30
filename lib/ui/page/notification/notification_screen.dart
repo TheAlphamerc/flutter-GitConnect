@@ -3,8 +3,6 @@ import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
-
 class NotificationScreen extends StatelessWidget {
   final List<NotificationModel> list;
 
@@ -23,10 +21,10 @@ class NotificationScreen extends StatelessWidget {
                   color: getColor(model.reason),
                   size: 20,
                 ),
-                SizedBox(height:3),
-                 Icon(
+                SizedBox(height: 3),
+                Icon(
                   GIcons.dot_24,
-                  color:model.unread ? GColors.blue : Colors.transparent,
+                  color: model.unread ? GColors.blue : Colors.transparent,
                   size: 20,
                 ),
               ],
@@ -36,18 +34,21 @@ class NotificationScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: MediaQuery.of(context).size.width - 116,
-              child: KText(
-                '${model.repository.fullName}',
-                isSubtitle: true,
-                overflow: TextOverflow.fade,
+              width: MediaQuery.of(context).size.width - 66,
+              child: Text(
+                '${trimMessage(model.repository.fullName)}',
+                style: Theme.of(context).textTheme.subtitle1,
+                overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
             ),
             SizedBox(height: 8),
             SizedBox(
-              width: MediaQuery.of(context).size.width - 116,
-              child: KText('${model.subject.title}'),
+              width: MediaQuery.of(context).size.width - 66,
+              child: Text(
+                '${model.subject.title}',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
             ),
             SizedBox(height: 8),
             Container(
@@ -56,17 +57,19 @@ class NotificationScreen extends StatelessWidget {
                   color: getColor(model.reason).withAlpha(200),
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   border: Border.all(color: getColor(model.reason))),
-              child: KText(
+              child: Text(
                 '${model.reason}',
-                isSubtitle: true,
-                variant: TypographyVariant.bodySmall,
+                style: Theme.of(context).textTheme.subtitle2,
               ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width - 66,
+              alignment: Alignment.bottomRight,
+              child: Text(Utility.getPassedTime(model.updatedAt) + " ago",
+                  style: Theme.of(context).textTheme.subtitle2),
             )
           ],
         ),
-        Spacer(),
-        KText(Utility.getPassedTime(model.updatedAt)),
-        SizedBox(width: 16)
       ],
     ).vP16);
   }
@@ -116,6 +119,14 @@ class NotificationScreen extends StatelessWidget {
         break;
       default:
         return GColors.blue;
+    }
+  }
+
+  String trimMessage(String text) {
+    if (text.length > 40) {
+      return text.substring(0, 37) + " ...";
+    } else {
+      return text;
     }
   }
 

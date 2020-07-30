@@ -24,7 +24,7 @@ class AppTheme {
         ),
       );
   static ThemeData get lightTheme => ThemeData.light().copyWith(
-        // brightness: Brightness.dark,
+        brightness: Brightness.light,
         // buttonColor: DarkColor.cardColor,
         backgroundColor: GColors.background,
         cardColor: GColors.cardColor,
@@ -39,7 +39,7 @@ class AppTheme {
           color: GColors.white,
           elevation: 0,
           textTheme: TextTheme(
-            title: TextStyle(color: GColors.black, fontSize: 20),
+            headline6: TextStyle(color: GColors.black, fontSize: 20),
           ),
           iconTheme: IconThemeData(
             color: GColors.black,

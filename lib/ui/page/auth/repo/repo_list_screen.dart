@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
-import 'package:flutter_github_connect/ui/widgets/custom_text.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class RepositoryListScreen extends StatelessWidget {
@@ -10,7 +9,7 @@ class RepositoryListScreen extends StatelessWidget {
 
   const RepositoryListScreen({Key key, this.list, this.hideAppBar = false})
       : super(key: key);
-  Widget repoCard(RepositoriesNode repo) {
+  Widget repoCard(context, RepositoriesNode repo) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
@@ -19,17 +18,17 @@ class RepositoryListScreen extends StatelessWidget {
           UserAvatar(
             subtitle: repo.owner.login,
             imagePath: repo.owner.avatarUrl,
+            titleStyle: Theme.of(context).textTheme.subtitle1,
           ),
           SizedBox(height: 16),
-          KText(
+          Text(
             repo.name,
-            variant: TypographyVariant.h2,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
-          SizedBox(height: 8),
-          KText(
+          SizedBox(height: 4),
+          Text(
             repo.description ?? "N/A",
-            variant: TypographyVariant.h4,
-            style: TextStyle(letterSpacing: .6, height: 1.3),
+            style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: 16),
           repo.languages.nodes.isEmpty
@@ -42,9 +41,9 @@ class RepositoryListScreen extends StatelessWidget {
                           size: 20, color: Colors.yellowAccent[700]),
                     ),
                     SizedBox(width: 10),
-                    KText(
+                    Text(
                       "${repo.stargazers.totalCount}",
-                      variant: TypographyVariant.h4,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                     SizedBox(width: 20),
                     Icon(
@@ -53,10 +52,9 @@ class RepositoryListScreen extends StatelessWidget {
                       size: 15,
                     ),
                     SizedBox(width: 5),
-                    KText(
+                    Text(
                       "${repo.languages.nodes.first.name}",
-                      variant: TypographyVariant.h4,
-                      isSubtitle: true,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ],
                 ),
@@ -69,19 +67,22 @@ class RepositoryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: hideAppBar ? null :AppBar(
-        title: Text("Repositories"),
-      ),
-      body: list == null ? SizedBox() :
-       ListView.separated(
-        itemCount: list.length,
-        separatorBuilder: (BuildContext context, int index) =>
-            Divider(height: 0),
-        itemBuilder: (BuildContext context, int index) {
-          final repo = list[index];
-          return repoCard(repo);
-        },
-      ),
+      appBar: hideAppBar
+          ? null
+          : AppBar(
+              title: Text("Repositories"),
+            ),
+      body: list == null
+          ? SizedBox()
+          : ListView.separated(
+              itemCount: list.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  Divider(height: 0),
+              itemBuilder: (BuildContext context, int index) {
+                final repo = list[index];
+                return repoCard(context, repo);
+              },
+            ),
     );
   }
 }
