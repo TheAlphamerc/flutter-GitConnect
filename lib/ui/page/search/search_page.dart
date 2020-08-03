@@ -19,9 +19,9 @@ class SearchPage extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         padding: EdgeInsets.only(top: 20),
         child: Title(
-          title:"Search",
-          color:Colors.black,
-          child: Text("Search",style: Theme.of(context).textTheme.headline6),
+          title: "Search",
+          color: Colors.black,
+          child: Text("Search", style: Theme.of(context).textTheme.headline6),
         ),
       ),
       bottom: PreferredSize(
@@ -81,7 +81,7 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  Future<void> searchGithub(context, String text, GithubSearchType type) {
+  void searchGithub(context, String text, GithubSearchType type) {
     BlocProvider.of<SearchBloc>(context)
         .add(SearchForEvent(query: text, type: type));
     Navigator.push(
@@ -93,19 +93,6 @@ class SearchPage extends StatelessWidget {
         ),
       ),
     );
-    // if (type == GithubSearchType.Repository) {
-
-    // } else if (type == GithubSearchType.People) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (_) => BlocProvider.value(
-    //         value: BlocProvider.of<SearchBloc>(context),
-    //         child: UserListPage(),
-    //       ),
-    //     ),
-    //   );
-    // }
   }
 
   @override
@@ -129,7 +116,7 @@ class SearchPage extends StatelessWidget {
                             _getUtilRos(
                                 context, "Repository with \"$searchText\"",
                                 color: GColors.green, onPressed: () async {
-                              await searchGithub(context, searchText,
+                               searchGithub(context, searchText,
                                   GithubSearchType.Repository);
                             }, icon: GIcons.repo_24),
                             Divider(
@@ -137,7 +124,7 @@ class SearchPage extends StatelessWidget {
                             ),
                             _getUtilRos(context, "Issue with \"$searchText\"",
                                 color: GColors.green, onPressed: () async {
-                              await searchGithub(
+                               searchGithub(
                                   context, searchText, GithubSearchType.Issue);
                             }, icon: GIcons.issue_opened_24),
                             Divider(
@@ -153,7 +140,7 @@ class SearchPage extends StatelessWidget {
                             ),
                             _getUtilRos(context, "People with \"$searchText\"",
                                 color: GColors.green, onPressed: () async {
-                              await searchGithub(
+                               searchGithub(
                                   context, searchText, GithubSearchType.People);
                             }, icon: GIcons.people_24),
                             Divider(
@@ -162,7 +149,10 @@ class SearchPage extends StatelessWidget {
                             _getUtilRos(
                                 context, "Orgnisation with \"$searchText\"",
                                 color: GColors.green,
-                                onPressed: () {},
+                                onPressed: () {
+                                   searchGithub(
+                                  context, searchText, GithubSearchType.People);
+                                },
                                 icon: GIcons.organization_24),
                             Divider(height: 0),
                           ],

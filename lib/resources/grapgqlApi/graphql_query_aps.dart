@@ -1,7 +1,9 @@
 import 'package:flutter_github_connect/resources/grapgqlApi/issues_api.dart';
+import 'package:flutter_github_connect/resources/grapgqlApi/pull_request_api.dart';
 
 class Apis  {
   static  String get issues => IssuesApis.issues;
+  static  String get pullRequests => PullRequestQraphQl.pullRequests;
   static const String user = r'''
    query userInfo($login: String!) {
       user(login: $login) {
@@ -148,6 +150,11 @@ class Apis  {
           avatarUrl
           bio
           login
+        }
+        ... on Organization {
+         name
+         avatarUrl
+         login
         }
         ... on Issue {
           __typename

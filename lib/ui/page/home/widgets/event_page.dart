@@ -55,16 +55,16 @@ class EventsPage extends StatelessWidget {
                   height: 18,
                   subtitle: username == model.actor.login && isCommented
                       ? "You Commented"
-                      : model.actor.login,
+                      : model.payload.action == "closed" ? "You closed this issue" : model.actor.login,
                 ),
                 SizedBox(height: 8),
-                if (model.payload.issue.closedAt != null)
+                if (model.createdAt != null)
                   Container(
                     width: MediaQuery.of(context).size.width - widthOffset,
                     alignment: Alignment.bottomRight,
                     child: Text(
                       Utility.getPassedTime(
-                              model.payload.issue.closedAt.toString()) +
+                              model.createdAt.toString()) +
                           " ago",
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
@@ -180,13 +180,13 @@ class EventsPage extends StatelessWidget {
                       ? "You created a pull request"
                       : model.actor.login,
                 ),
-                if (model.payload.pullRequest.createdAt != null)
+                if (model.createdAt != null)
                   Container(
                     width: MediaQuery.of(context).size.width - widthOffset,
                     alignment: Alignment.bottomRight,
                     child: Text(
                       Utility.getPassedTime(
-                              model.payload.pullRequest.createdAt.toString()) +
+                              model.createdAt.toString()) +
                           " ago",
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
@@ -360,6 +360,7 @@ class EventsPage extends StatelessWidget {
                             UserEventType.ISSUE_COMMENT_EVENT) {
                           return Column(
                             children: <Widget>[
+                              // Text(model.type.toString()),
                               _issueTile(context, model, snapshot.data ?? "",
                                   isCommented: true),
                               if (eventList.last != model)
@@ -370,15 +371,18 @@ class EventsPage extends StatelessWidget {
                             UserEventType.PULL_REQUEST_EVENT) {
                           return Column(
                             children: <Widget>[
+                              // Text(model.type.toString()),
                               _pullRequestTile(
                                   context, model, snapshot.data ?? "",
                                   isCommented: true),
-                             Divider(height: 1, indent: 50),
+                             if (eventList.last != model)
+                               Divider(height: 1, indent: 50),
                             ],
                           );
                         } else if (model.type == UserEventType.CREATE_EVENT) {
                           return Column(
                             children: <Widget>[
+                              // Text(model.type.toString()),
                               _createRepoEventTile(
                                 context,
                                 model,

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
+import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -38,7 +40,8 @@ class _UserPageState extends State<HomePage> {
               color: user == null ? color : Colors.transparent,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: user == null
-              ? Icon(icon, size: 15,color:Theme.of(context).colorScheme.onPrimary)
+              ? Icon(icon,
+                  size: 15, color: Theme.of(context).colorScheme.onPrimary)
               : UserAvatar(imagePath: user.avatarUrl, height: 30),
         ),
         Text(text, style: Theme.of(context).textTheme.bodyText1),
@@ -106,8 +109,7 @@ class _UserPageState extends State<HomePage> {
                 Text(
                     "Add favourite repositories for quick access at any time, without having to search",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline5
-                    ),
+                    style: Theme.of(context).textTheme.headline5),
                 SizedBox(height: 16),
                 GFlatButton(
                   label: "ADD FavouriteS",
@@ -146,7 +148,16 @@ class _UserPageState extends State<HomePage> {
           }),
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.git_pull_request_16, "Pull Request",
-              color: GColors.blue),
+              color: GColors.blue, onPressed: () {
+                final bloc = BlocProvider.of<UserBloc>(context);
+                bloc.add(OnPullRequestLoad());
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PullRequestPage(bloc: bloc),
+              ),
+            );
+          }),
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.repo_clone_16, "Repository", color: GColors.purple,
               onPressed: () {
@@ -169,7 +180,6 @@ class _UserPageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     print("User Page build");
-    print(Theme.of(context).textTheme.headline6.color.toString());
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(

@@ -13,6 +13,7 @@ abstract class UserEvent extends Equatable {
   @override
   List<Object> get props => [];
   Stream<UserState> getUser({UserState currentState, UserBloc bloc});
+  Stream<UserState> getPullRequest({UserState currentState, UserBloc bloc});
   final UserRepository _userRepository =
       UserRepository(apiGatway: GetIt.instance<ApiGateway>());
 }
@@ -36,4 +37,38 @@ class OnLoad extends UserEvent {
       yield ErrorUserState(_?.toString());
     }
   }
+
+  @override
+  Stream<LoadedPullRequestState> getPullRequest({UserState currentState, UserBloc bloc}) {
+   return null;
+  }
+}
+
+class OnPullRequestLoad extends UserEvent {
+  @override
+  
+  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
+  }
+
+  @override
+  Stream<UserState> getPullRequest({UserState currentState, UserBloc bloc}) async*{
+   try {
+      if(currentState is LoadedUserState){
+        return;
+      }
+      final state = currentState as LoadedEventsState;
+      yield LoadingUserState();
+      // final userModel = await _userRepository.fetchUserProfile();
+      // yield LoadedUserState(userModel);
+      print("Loading UserState");
+      final pullRequestsList = await _userRepository.fetchPullRequest();
+      print("Loading End");
+      yield LoadedPullRequestState(user: state.user, eventList:state.eventList,pullRequestsList: pullRequestsList );
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      yield ErrorUserState(_?.toString());
+    }
+  }
+ 
 }

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/model/pul_request.dart';
 
 abstract class UserState extends Equatable {
   UserState();
@@ -29,6 +30,17 @@ class LoadedEventsState extends LoadedUserState {
   final List<EventModel> eventList;
 
   LoadedEventsState({@required this.user,this.eventList}) : super(user);
+
+  @override
+  String toString() => 'LoadedUserState $user';
+}
+
+class LoadedPullRequestState extends LoadedUserState {
+  final UserModel user;
+  final List<EventModel> eventList;
+  final UserPullRequests pullRequestsList;
+
+  LoadedPullRequestState({@required this.user,this.eventList,this.pullRequestsList}) : super(user);
 
   @override
   String toString() => 'LoadedUserState $user';

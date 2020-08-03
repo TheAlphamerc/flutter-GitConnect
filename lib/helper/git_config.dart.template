@@ -1,0 +1,4 @@
+class GitConfig{
+  static const String CLIENT_ID = "<GITHUB APP CLIENT ID>";
+  static const String CLIENT_SECRET = "GITHUB APP SECRET";
+}

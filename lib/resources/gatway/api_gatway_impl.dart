@@ -7,6 +7,7 @@ import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
     as model;
 import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/model/pul_request.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/graphql_client.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
@@ -128,8 +129,6 @@ class ApiGatwayImpl implements ApiGateway {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
-      String queryType;
-
       final result = await getIssues();
       if (result.hasException) {
         print(result.exception.toString());
@@ -164,6 +163,30 @@ class ApiGatwayImpl implements ApiGateway {
         return EventModel.fromJson(value);
       }).toList();
       print(list.length);
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<UserPullRequests> fetchPullRequest() async{
+      try {
+      print("fetchPullRequest Init");
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      print("fetchPullRequest");
+      var login = await _sessionService.getUserName();
+      assert(login != null);
+      final result = await getUserPullRequest(login);
+      if (result.hasException) {
+        print(result.exception.toString());
+        return null;
+      }
+      print(result.data);
+      // final userMap = result.data['search'] as Map<String, dynamic>;
+      final list = UserPullRequestResponse.fromJson(result.data).data.user.pullRequests;
+
       return list;
     } catch (error) {
       throw error;
