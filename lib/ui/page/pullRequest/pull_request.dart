@@ -25,7 +25,7 @@ class PullRequestPage extends StatelessWidget {
               BuildContext context,
               UserState currentState,
             ) {
-              if (currentState is ErrorUserState) {
+              if (currentState is ErrorPullRequestState) {
                 return Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +37,7 @@ class PullRequestPage extends StatelessWidget {
                         color: Colors.blue,
                         child: Text('reload'),
                         onPressed: () {
-                          BlocProvider.of<UserBloc>(context)..add(OnLoad());
+                          bloc..add(OnPullRequestLoad());
                           print("Load Notification");
                         },
                       ),

@@ -6,7 +6,6 @@ import 'package:flutter_github_connect/bloc/notification/index.dart' as notif;
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/ui/page/home/dashboard_page.dart';
-import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/page/welcome_page.dart';
 import 'package:get_it/get_it.dart';
 
@@ -31,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
     if (accessToken != null) {
       print("***************** Auto Login ***********************");
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute<UserPage>(
+        MaterialPageRoute(
           builder: (context) {
             return MultiBlocProvider(
               providers: [

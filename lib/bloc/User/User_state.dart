@@ -54,3 +54,13 @@ class ErrorUserState extends UserState {
   @override
   String toString() => 'ErrorUserState';
 }
+
+class ErrorPullRequestState extends LoadedEventsState {
+  final String errorMessage;
+  final UserModel user;
+  final List<EventModel> eventList;
+  ErrorPullRequestState(this.errorMessage,{ this.user, this.eventList}) : super(user:user,eventList:eventList) ;
+
+  @override
+  String toString() => 'ErrorUserState';
+}

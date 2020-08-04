@@ -78,7 +78,7 @@ class SearchListProvider extends StatelessWidget {
             ));
           }
           if (currentState is LoadedSearchState) {
-            if (currentState.list.isEmpty) {
+            if (!(currentState.list != null && currentState.list.isNotEmpty)) {
               return _noContant(context);
             }
             switch (currentState.type) {

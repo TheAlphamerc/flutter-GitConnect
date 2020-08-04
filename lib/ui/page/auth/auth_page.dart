@@ -36,7 +36,7 @@ class _AuthPageState extends State<AuthPage> {
       if (state is SucessState) {
         if (state.isSuccess) {
           print("Navigate to Profile page");
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute<UserPage>(
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
             builder: (context) {
               return MultiBlocProvider(
                 providers: [

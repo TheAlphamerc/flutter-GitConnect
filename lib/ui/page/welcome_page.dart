@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/navigation/index.dart';
+import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/ui/page/auth/auth_page.dart';
+import 'package:flutter_github_connect/ui/page/home/dashboard_page.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
+import 'package:flutter_github_connect/bloc/notification/index.dart' as notif;
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:get_it/get_it.dart';
 
@@ -54,11 +58,28 @@ class WelcomePage extends StatelessWidget {
                       print(
                           "***************** Auto Login ***********************");
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<UserPage>(
+                        MaterialPageRoute(
                           builder: (context) {
-                            return BlocProvider.value(
-                              value: UserBloc()..add(OnLoad()),
-                              child: UserPage(),
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider<NavigationBloc>(
+                                  create: (BuildContext context) =>
+                                      NavigationBloc(),
+                                ),
+                                BlocProvider<UserBloc>(
+                                  create: (BuildContext context) =>
+                                      UserBloc()..add(OnLoad()),
+                                ),
+                                BlocProvider<SearchBloc>(
+                                    create: (BuildContext context) =>
+                                        SearchBloc()),
+                                BlocProvider<notif.NotificationBloc>(
+                                  create: (BuildContext context) =>
+                                      notif.NotificationBloc()
+                                        ..add(notif.OnLoad()),
+                                ),
+                              ],
+                              child: DashBoardPage(),
                             );
                           },
                         ),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
 import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
@@ -10,8 +13,9 @@ import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
+  final UserBloc bloc;
 
-  const UserScreen({Key key, this.model}) : super(key: key);
+  const UserScreen({Key key, this.model, this.bloc}) : super(key: key);
 
   Widget _iconWithText(context, IconData icon, String text) {
     return Padding(
@@ -45,7 +49,6 @@ class UserScreen extends StatelessWidget {
           SizedBox(height: 16),
           Text(
             repo.name,
-            
           ),
           SizedBox(height: 8),
           Spacer(),
@@ -87,7 +90,7 @@ class UserScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: <Widget>[
-            Text(key,style: Theme.of(context).textTheme.bodyText1),
+            Text(key, style: Theme.of(context).textTheme.bodyText1),
             Spacer(),
             Text(
               value,
@@ -181,7 +184,10 @@ class UserScreen extends StatelessWidget {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Top Repository",style: Theme.of(context).textTheme.headline6,).hP16,
+                        Text(
+                          "Top Repository",
+                          style: Theme.of(context).textTheme.headline6,
+                        ).hP16,
                         SizedBox(height: 8),
                         Container(
                           height: 150,
@@ -226,6 +232,14 @@ class UserScreen extends StatelessWidget {
                     model.pullRequests.totalCount.toString(),
                     onPressed: () {
                       print("Get user Repository");
+
+                      bloc.add(OnPullRequestLoad());
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PullRequestPage(bloc: bloc),
+                        ),
+                      );
                       // Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
                     },
                   ).hP16,

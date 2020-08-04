@@ -13,9 +13,10 @@ import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key, this.model, this.eventList}) : super(key: key);
+  const HomePage({Key key, this.model, this.eventList, this.bloc}) : super(key: key);
   final UserModel model;
   final List<EventModel> eventList;
+  final UserBloc bloc;
 
   @override
   _UserPageState createState() => _UserPageState();
@@ -149,12 +150,11 @@ class _UserPageState extends State<HomePage> {
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.git_pull_request_16, "Pull Request",
               color: GColors.blue, onPressed: () {
-                final bloc = BlocProvider.of<UserBloc>(context);
-                bloc.add(OnPullRequestLoad());
+                widget.bloc.add(OnPullRequestLoad());
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PullRequestPage(bloc: bloc),
+                builder: (_) => PullRequestPage(bloc:  widget.bloc),
               ),
             );
           }),

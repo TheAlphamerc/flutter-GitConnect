@@ -22,7 +22,7 @@ class OnLoad extends UserEvent {
   @override
   Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
     try {
-      if(currentState is LoadedUserState){
+      if (currentState is LoadedUserState) {
         return;
       }
       yield LoadingUserState();
@@ -30,7 +30,7 @@ class OnLoad extends UserEvent {
       yield LoadedUserState(userModel);
 
       final eventList = await _userRepository.fetchUserEvent();
-      yield LoadedEventsState(user: userModel, eventList:eventList );
+      yield LoadedEventsState(user: userModel, eventList: eventList);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
@@ -39,36 +39,39 @@ class OnLoad extends UserEvent {
   }
 
   @override
-  Stream<LoadedPullRequestState> getPullRequest({UserState currentState, UserBloc bloc}) {
-   return null;
+  Stream<LoadedPullRequestState> getPullRequest(
+      {UserState currentState, UserBloc bloc}) {
+    return null;
   }
 }
 
 class OnPullRequestLoad extends UserEvent {
   @override
-  
-  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
-  }
+  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {}
 
   @override
-  Stream<UserState> getPullRequest({UserState currentState, UserBloc bloc}) async*{
-   try {
-      if(currentState is LoadedUserState){
-        return;
-      }
-      final state = currentState as LoadedEventsState;
+  Stream<UserState> getPullRequest(
+      {UserState currentState, UserBloc bloc}) async* {
+    if (currentState is LoadedPullRequestState) {
+      return;
+    }
+    final state = currentState as LoadedEventsState;
+    try {
       yield LoadingUserState();
       // final userModel = await _userRepository.fetchUserProfile();
       // yield LoadedUserState(userModel);
       print("Loading UserState");
       final pullRequestsList = await _userRepository.fetchPullRequest();
       print("Loading End");
-      yield LoadedPullRequestState(user: state.user, eventList:state.eventList,pullRequestsList: pullRequestsList );
+      yield LoadedPullRequestState(
+          user: state.user,
+          eventList: state.eventList,
+          pullRequestsList: pullRequestsList);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
-      yield ErrorUserState(_?.toString());
+      yield ErrorPullRequestState(_?.toString(),
+          user: state.user, eventList: state.eventList);
     }
   }
- 
 }

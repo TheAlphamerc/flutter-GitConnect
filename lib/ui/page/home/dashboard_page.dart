@@ -71,16 +71,18 @@ class DashBoardPage extends StatelessWidget {
                         }
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => UserScreen(model: user),
+                            builder: (_) => UserScreen(model: user, bloc:BlocProvider.of<UserBloc>(context),),
                           ),
                         );
                       }),
                     );
                   }),
                   title: Title(
-                    title: index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer",
+                    title:
+                        index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer",
                     color: Colors.black,
-                    child: Text(index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer",
+                    child: Text(
+                        index == 0 ? "Home" : index == 1 ? "Inbox" : "Explorer",
                         style: Theme.of(context).textTheme.headline6),
                   ),
                 ),
@@ -98,6 +100,15 @@ class HomePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserState>(
+      buildWhen: (oldState, newState) {
+        if (oldState != newState) {
+          print("oldState != newState");
+          return true;
+        } else {
+          print("oldState == newState");
+          return false;
+        }
+      },
       builder: (
         BuildContext context,
         UserState currentState,
@@ -151,6 +162,7 @@ class HomePageScreen extends StatelessWidget {
           return HomePage(
             model: currentState.user,
             eventList: eventList,
+            bloc:  BlocProvider.of<UserBloc>(context),
           );
         } else {
           return Center(

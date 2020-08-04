@@ -259,6 +259,7 @@ class EventsPage extends StatelessWidget {
 
   Widget _noActivity(context) {
     return GCard(
+      margin: EdgeInsets.symmetric(horizontal: 16),
       color: Theme.of(context).colorScheme.surface,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Text("No recent activity detected at your github account yet.",

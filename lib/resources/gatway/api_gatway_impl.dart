@@ -185,7 +185,7 @@ class ApiGatwayImpl implements ApiGateway {
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list = UserPullRequestResponse.fromJson(result.data).data.user.pullRequests;
+      final list = UserPullRequestResponse.fromJson(result.data).user.pullRequests;
 
       return list;
     } catch (error) {
