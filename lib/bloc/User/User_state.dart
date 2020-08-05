@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
 
 abstract class UserState extends Equatable {
@@ -35,12 +36,23 @@ class LoadedEventsState extends LoadedUserState {
   String toString() => 'LoadedUserState $user';
 }
 
-class LoadedPullRequestState extends LoadedUserState {
+class LoadedPullRequestState extends LoadedEventsState {
   final UserModel user;
   final List<EventModel> eventList;
   final UserPullRequests pullRequestsList;
 
-  LoadedPullRequestState({@required this.user,this.eventList,this.pullRequestsList}) : super(user);
+  LoadedPullRequestState({@required this.user,this.eventList,this.pullRequestsList}) : super(user:user,eventList:eventList);
+
+  @override
+  String toString() => 'LoadedUserState $user';
+}
+
+class LoadedGitState extends LoadedEventsState {
+  final UserModel user;
+  final List<EventModel> eventList;
+  final Gists gist;
+
+  LoadedGitState({@required this.user,this.eventList,this.gist}) : super(user:user,eventList:eventList);
 
   @override
   String toString() => 'LoadedUserState $user';
@@ -60,6 +72,16 @@ class ErrorPullRequestState extends LoadedEventsState {
   final UserModel user;
   final List<EventModel> eventList;
   ErrorPullRequestState(this.errorMessage,{ this.user, this.eventList}) : super(user:user,eventList:eventList) ;
+
+  @override
+  String toString() => 'ErrorUserState';
+}
+
+class ErrorGitState extends LoadedEventsState {
+  final String errorMessage;
+  final UserModel user;
+  final List<EventModel> eventList;
+  ErrorGitState(this.errorMessage,{ this.user, this.eventList}) : super(user:user,eventList:eventList) ;
 
   @override
   String toString() => 'ErrorUserState';

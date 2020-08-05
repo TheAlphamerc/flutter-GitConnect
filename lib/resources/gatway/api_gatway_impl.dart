@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/graphql_client.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/service/session_service.dart';
+
 class ApiGatwayImpl implements ApiGateway {
   final DioClient _dioClient;
   final SessionService _sessionService;
@@ -170,8 +172,8 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<UserPullRequests> fetchPullRequest() async{
-      try {
+  Future<UserPullRequests> fetchPullRequest() async {
+    try {
       print("fetchPullRequest Init");
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
@@ -185,7 +187,33 @@ class ApiGatwayImpl implements ApiGateway {
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list = UserPullRequestResponse.fromJson(result.data).user.pullRequests;
+      final list =
+          UserPullRequestResponse.fromJson(result.data).user.pullRequests;
+
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<Gists> fetchGistList()async {
+    try {
+      print("fetchPullRequest Init");
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      print("fetchPullRequest");
+      var login = await _sessionService.getUserName();
+      assert(login != null);
+      final result = await getUserGistList(login);
+      if (result.hasException) {
+        print(result.exception.toString());
+        return null;
+      }
+      print(result.data);
+      // final userMap = result.data['search'] as Map<String, dynamic>;
+      final list =
+          GistResponse.fromJson(result.data).user.gists;
 
       return list;
     } catch (error) {

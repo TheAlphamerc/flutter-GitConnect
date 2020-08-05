@@ -13,6 +13,7 @@ abstract class UserEvent extends Equatable {
   @override
   List<Object> get props => [];
   Stream<UserState> getUser({UserState currentState, UserBloc bloc});
+  Stream<UserState> getGist({UserState currentState, UserBloc bloc});
   Stream<UserState> getPullRequest({UserState currentState, UserBloc bloc});
   final UserRepository _userRepository =
       UserRepository(apiGatway: GetIt.instance<ApiGateway>());
@@ -43,9 +44,15 @@ class OnLoad extends UserEvent {
       {UserState currentState, UserBloc bloc}) {
     return null;
   }
+
+  @override
+  Stream<UserState> getGist({UserState currentState, UserBloc bloc}) async* {}
 }
 
 class OnPullRequestLoad extends UserEvent {
+  @override
+  Stream<UserState> getGist({UserState currentState, UserBloc bloc}) async* {}
+
   @override
   Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {}
 
@@ -58,8 +65,6 @@ class OnPullRequestLoad extends UserEvent {
     final state = currentState as LoadedEventsState;
     try {
       yield LoadingUserState();
-      // final userModel = await _userRepository.fetchUserProfile();
-      // yield LoadedUserState(userModel);
       print("Loading UserState");
       final pullRequestsList = await _userRepository.fetchPullRequest();
       print("Loading End");
@@ -71,6 +76,37 @@ class OnPullRequestLoad extends UserEvent {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
       yield ErrorPullRequestState(_?.toString(),
+          user: state.user, eventList: state.eventList);
+    }
+  }
+}
+
+class OnGistLoad extends UserEvent {
+  @override
+  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {}
+
+  @override
+  Stream<UserState> getPullRequest(
+      {UserState currentState, UserBloc bloc}) async* {}
+  @override
+  Stream<UserState> getGist({UserState currentState, UserBloc bloc}) async* {
+    if (currentState is LoadedGitState) {
+      return;
+    }
+    final state = currentState as LoadedEventsState;
+    try {
+      yield LoadingUserState();
+      print("Loading Gist state");
+      final pullRequestsList = await _userRepository.fetchGistList();
+      print("Loading End");
+      yield LoadedGitState(
+          user: state.user,
+          eventList: state.eventList,
+          gist: pullRequestsList);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      yield ErrorGitState(_?.toString(),
           user: state.user, eventList: state.eventList);
     }
   }

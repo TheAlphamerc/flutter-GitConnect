@@ -5,8 +5,10 @@ import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
 import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
+import 'package:flutter_github_connect/ui/page/user/gist/gist_list_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
@@ -220,19 +222,26 @@ class UserScreen extends StatelessWidget {
                     },
                   ).hP16,
                   _keyValueTile(
-                    context,
-                    "Public Gist",
-                    model?.gists?.totalCount != null
-                        ? model.gists.totalCount.toString()
-                        : "N/A",
-                  ).hP16,
+                      context,
+                      "Public Gist",
+                      model?.gists?.totalCount != null
+                          ? model.gists.totalCount.toString()
+                          : "N/A", onPressed: () {
+                    bloc.add(OnGistLoad());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => GistlistPage(
+                          bloc: bloc,
+                        ),
+                      ),
+                    );
+                  }).hP16,
                   _keyValueTile(
                     context,
                     "Pull Request",
                     model.pullRequests.totalCount.toString(),
                     onPressed: () {
-                      print("Get user Repository");
-
                       bloc.add(OnPullRequestLoad());
                       Navigator.push(
                         context,
@@ -240,7 +249,6 @@ class UserScreen extends StatelessWidget {
                           builder: (_) => PullRequestPage(bloc: bloc),
                         ),
                       );
-                      // Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
                     },
                   ).hP16,
                   _keyValueTile(
@@ -248,8 +256,7 @@ class UserScreen extends StatelessWidget {
                     "Issues",
                     model.issues.totalCount.toString(),
                     onPressed: () {
-                      print("Get user Repository");
-                      // Navigator.push(context, MaterialPageRoute(builder: (_)=> RepositoryListPage()));
+                      Navigator.push(context, IssuesPage.route());
                     },
                   ).hP16,
                 ],

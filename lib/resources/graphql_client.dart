@@ -86,6 +86,16 @@ Future<QueryResult> getUserPullRequest(String login,) async {
   return await _innerClient.query(_options);
 }
 
+Future<QueryResult> getUserGistList(String login,) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.gist,
+      variables: <String, dynamic>{
+        'login': login,
+      },
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null
       ? <String, dynamic>{

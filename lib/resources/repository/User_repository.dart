@@ -1,5 +1,6 @@
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 class UserRepository {
@@ -15,5 +16,9 @@ class UserRepository {
 
   Future<UserPullRequests> fetchPullRequest() async{
     return await apiGatway.fetchPullRequest();
+  }
+
+  Future<Gists> fetchGistList() async{
+    return await apiGatway.fetchGistList();
   }
 }
