@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/auth/index.dart';
 import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/helper/git_config.dart';
+import 'package:flutter_github_connect/ui/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatelessWidget {
@@ -15,16 +17,19 @@ class WebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: Builder(
         builder: (BuildContext context) {
           return Stack(
             children: <Widget>[
               WebView(
-                initialUrl: "${Config.authUrl}ca0290b6cbf8bae69c5a",
+                initialUrl: "${Config.authUrl}${GitConfig.CLIENT_ID}",
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (WebViewController webViewController) {
                   print('Web view completed');
+                  showLoader.value = true;
                   _controller.complete(webViewController);
                 },
                 javascriptChannels: <JavascriptChannel>[
@@ -34,13 +39,13 @@ class WebViewPage extends StatelessWidget {
                   if (request.url.startsWith('https://www.google.com/')) {
                     final code = request.url.split("code=")[1];
                     log(code);
-                    print('blocking navigation to $request}');
+                    print('blocking navigation to}');
 
                     _load(context, code);
 
                     return NavigationDecision.prevent;
                   }
-                  print('allowing navigation to $request');
+                  print('allowing navigation');
                   return NavigationDecision.navigate;
                 },
                 onPageStarted: (String url) {
@@ -49,21 +54,23 @@ class WebViewPage extends StatelessWidget {
                 },
                 onPageFinished: (String url) {
                   showLoader.value = false;
-                  print('Page finished loading: $url');
+                  print('Page finished loading:');
                 },
                 gestureNavigationEnabled: true,
               ),
-              ValueListenableBuilder(
+              ValueListenableBuilder<bool>(
                 valueListenable: showLoader,
-                builder: (context, bool value, child) {
-                  return child;
+                builder: (context, value, child) {
+                  return Align(
+                    alignment: Alignment.center,
+                    child: value
+                        ? CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(GColors.blue),
+                          )
+                        : Container(),
+                  );
                 },
-                child: Align(
-                  alignment: Alignment.center,
-                  child: showLoader.value
-                      ? CircularProgressIndicator()
-                      : Container(),
-                ),
+                // child:
               ),
             ],
           );

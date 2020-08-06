@@ -174,7 +174,7 @@ class Owner {
         this.avatarUrl,
     });
 
-    final Login login;
+    final String login;
     final String avatarUrl;
 
     factory Owner.fromRawJson(String str) => Owner.fromJson(json.decode(str));
@@ -182,21 +182,16 @@ class Owner {
     String toRawJson() => json.encode(toJson());
 
     factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-        login: json["login"] == null ? null : loginValues.map[json["login"]],
+        login: json["login"] == null ? null : json["login"],
         avatarUrl: json["avatarUrl"] == null ? null : json["avatarUrl"],
     );
 
     Map<String, dynamic> toJson() => {
-        "login": login == null ? null : loginValues.reverse[login],
+        "login": login == null ? null :login,
         "avatarUrl": avatarUrl == null ? null : avatarUrl,
     };
 }
 
-enum Login { THE_ALPHAMERC }
-
-final loginValues = EnumValues({
-    "TheAlphamerc": Login.THE_ALPHAMERC
-});
 
 class Stargazers {
     Stargazers({

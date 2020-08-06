@@ -1,7 +1,7 @@
 class GistGraphQl {
   static const String gist = r'''query user($login: String!) {
     user(login: $login) {
-      gists(first: 30) {
+      gists(first: 30, orderBy: {field: CREATED_AT, direction: DESC}) {
         totalCount
         nodes {
           ... on Gist {

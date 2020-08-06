@@ -4,7 +4,6 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
-import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,7 +21,7 @@ class GistListScreen extends StatelessWidget {
             SizedBox(
               width: 50,
               child: Icon(
-                GIcons.repo_24,
+                GIcons.code_square_24,
                 color: GColors.gray,
                 size: 20,
               ),
@@ -34,7 +33,7 @@ class GistListScreen extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width - widthOffset,
                   child: Text(
-                    '${model.files.first.name}',
+                    '${model.owner.login}/${model.files.first.name}',
                     style: Theme.of(context).textTheme.subtitle1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -43,19 +42,50 @@ class GistListScreen extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width - widthOffset,
                   child: Text(
-                    '${model.files.first.name?? "N/A"}',
+                    '${model.files.first.name ?? "N/A"}',
                     style: Theme.of(context).textTheme.bodyText1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(height: 8),
-                // SizedBox(
-                //   width: MediaQuery.of(context).size.width - widthOffset,
-                //   child: Text(
-                //     "#${model.number} by ${model.author.login}   was ${model.getPullRequestState()} " ,
-                //     style: Theme.of(context).textTheme.subtitle2,
-                //   ),
-                // ),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Icon(GIcons.star_fill_24,
+                          size: 16, color: Colors.yellowAccent[700]),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "${model.stargazers.totalCount}",
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    SizedBox(width: 20),
+                    Icon(
+                      GIcons.file_24,
+                      color: Colors.blue,
+                      size: 15,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "${model.files.length} ${model.files.length > 1 ? "Files" : "File"}",
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    SizedBox(width: 20),
+                    if (model.isFork)
+                      Icon(
+                        GIcons.git_fork_24,
+                        color: Colors.purple,
+                        size: 15,
+                      ),
+                    if (model.isFork)
+                      Text(
+                        "${model.isFork ? "Forked" : "Created"}",
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                  ],
+                ),
+
                 if (model.createdAt != null)
                   Container(
                     width: MediaQuery.of(context).size.width - widthOffset,
@@ -83,38 +113,6 @@ class GistListScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText2),
     );
   }
-
-
-  // IconData getIcon(
-  //   PullRequestState type,
-  // ) {
-  //   switch (type) {
-  //     case PullRequestState.OPEN:
-  //       return GIcons.git_pull_request_24;
-  //     case PullRequestState.CLOSED:
-  //       return GIcons.git_pull_request_24;
-  //     case PullRequestState.MERGED:
-  //       return GIcons.git_merge_24;
-  //     default:
-  //       print(type);
-  //       return GIcons.arrow_both_16;
-  //   }
-  // }
-
-  // Color getColor(
-  //   PullRequestState type,
-  // ) {
-  //   switch (type) {
-  //     case PullRequestState.OPEN:
-  //       return GColors.green;
-  //     case PullRequestState.CLOSED:
-  //       return GColors.red;
-  //     case PullRequestState.MERGED:
-  //       return GColors.purple;
-  //     default:
-  //       return GColors.blue;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
