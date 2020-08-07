@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
+import 'package:flutter_github_connect/ui/page/home/dashboard_page.dart';
+import 'package:flutter_github_connect/ui/page/splash.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
+import 'package:get_it/get_it.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({Key key}) : super(key: key);
@@ -21,7 +25,6 @@ class SettingsPage extends StatelessWidget {
         Spacer(),
         Text(
           selectedText,
-          
           style: Theme.of(context).textTheme.subtitle2,
         ),
         if (icon != null)
@@ -44,7 +47,10 @@ class SettingsPage extends StatelessWidget {
           _getUtilRos(context, "Appearence",
               color: GColors.green, selectedText: "Automaic", onPressed: () {
             _changeTheme(
-                context,CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT);
+                context,
+                CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT
+                    ? ThemeType.DARK
+                    : ThemeType.LIGHT);
           }),
           Divider(height: 0),
           _getUtilRos(context, "App Icon",
@@ -106,14 +112,24 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(context, "Sign out", color: GColors.green, icon: null),
+          _getUtilRos(context, "Sign out", color: GColors.green, icon: null,
+              onPressed: () {
+            /// [Todo] Temprary workaround for logout
+            final getIt = GetIt.instance;
+            final prefs = getIt<SharedPrefrenceHelper>();
+            prefs.cleaPrefrenceValues();
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+              builder: (context) {
+                return SplashPage();
+              },
+            ), (_) => false);
+          }),
         ],
       ),
     );
   }
 
   void _changeTheme(BuildContext buildContext, ThemeType key) {
-    
     CustomTheme.instanceOf(buildContext).changeTheme(key);
     print("$key theme set");
   }

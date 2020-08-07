@@ -52,7 +52,7 @@ class PullRequestScreen extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width - widthOffset,
                   child: Text(
-                    "#${model.number} by ${model.author.login}   was ${model.getPullRequestState()} " ,
+                    "#${model.number} by ${model.author.login} was ${model.getPullRequestState()} " ,
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ),

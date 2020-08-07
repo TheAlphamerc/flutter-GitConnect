@@ -141,7 +141,7 @@ class Apis  {
     }
   ''';
 
-  static String searchRepo = r'''query userInfo($query: String!, $type:SearchType!) {
+  static String search = r'''query userInfo($query: String!, $type:SearchType!) {
     search(query: $query, first: 30, type: $type) {
       userCount
       nodes {
@@ -153,11 +153,11 @@ class Apis  {
           bio
           login
         }
-        ... on Organization {
-         name
-         avatarUrl
-         login
-        }
+      #  ... on Organization {
+      #   name
+      #   avatarUrl
+      #   login
+      #  }
         ... on Issue {
           __typename
           title

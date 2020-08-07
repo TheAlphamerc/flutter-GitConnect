@@ -1,4 +1,4 @@
-// part of 'graphql_query_aps.dart';
+// part of 'graphql_query_api.dart';
 
 class IssuesApis {
   static const String issues = r'''{

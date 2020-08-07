@@ -1,4 +1,4 @@
-import 'package:flutter_github_connect/resources/grapgqlApi/graphql_query_aps.dart';
+import 'package:flutter_github_connect/resources/grapgqlApi/graphql_query_api.dart';
 import 'package:graphql/client.dart';
 
 GraphQLClient _client(token) {
@@ -53,7 +53,7 @@ Future<QueryResult> getUser(String login,) async {
 
 Future<QueryResult> searchQueryAsync(String query, String type) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.searchRepo,
+      document: Apis.search,
       variables: <String, dynamic>{
         'query': query,
         "type": type

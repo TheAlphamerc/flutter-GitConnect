@@ -50,11 +50,8 @@ class GistListScreen extends StatelessWidget {
                 SizedBox(height: 8),
                 Row(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(GIcons.star_fill_24,
+                    Icon(GIcons.star_fill_24,
                           size: 16, color: Colors.yellowAccent[700]),
-                    ),
                     SizedBox(width: 10),
                     Text(
                       "${model.stargazers.totalCount}",

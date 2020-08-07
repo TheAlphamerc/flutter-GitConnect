@@ -59,7 +59,7 @@ class SearchPage extends StatelessWidget {
     IconData icon,
   }) {
     return ListTile(
-      onTap: onPressed,
+      // onTap: onPressed,
       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
       leading: Container(
         width: 30,
@@ -78,7 +78,7 @@ class SearchPage extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSurface,
         size: 18,
       ),
-    );
+    ).ripple(onPressed);
   }
 
   void searchGithub(context, String text, GithubSearchType type) {
@@ -150,8 +150,8 @@ class SearchPage extends StatelessWidget {
                                 context, "Orgnisation with \"$searchText\"",
                                 color: GColors.green,
                                 onPressed: () {
-                                   searchGithub(
-                                  context, searchText, GithubSearchType.People);
+                                  //  searchGithub(
+                                  // context, searchText, GithubSearchType.ORganisation);
                                 },
                                 icon: GIcons.organization_24),
                             Divider(height: 0),
