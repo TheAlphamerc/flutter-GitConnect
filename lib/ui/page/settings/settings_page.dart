@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _getUtilRos(context, "Appearence",
-              color: GColors.green, selectedText: "Automaic", onPressed: () {
+              color: GColors.green, selectedText: "Automatic", onPressed: () {
             _changeTheme(
                 context,
                 CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT

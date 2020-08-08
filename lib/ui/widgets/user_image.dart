@@ -22,7 +22,6 @@ class UserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
       child: Row(
         children: <Widget>[
           imagePath == null
@@ -36,7 +35,8 @@ class UserAvatar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(height / 4),
                   child: customNetworkImage(
                     imagePath,
-                    placeholder: Container(
+                      height:height,
+                      placeholder: Container(
                       height: height,
                       width: height,
                       alignment: Alignment.center,
