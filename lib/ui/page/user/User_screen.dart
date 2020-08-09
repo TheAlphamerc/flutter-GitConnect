@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
+import 'package:flutter_github_connect/ui/page/people/people_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
 import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_page.dart';
@@ -31,6 +34,20 @@ class UserScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText1,
           )
         ],
+      ),
+    );
+  }
+
+  void loadPeoples(context, PeopleType type) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return BlocProvider<PeopleBloc>(
+            create: (BuildContext context) => PeopleBloc()
+              ..add(LoadFollowerEvent(model.login, type)),
+            child: ActorPage(type:type),
+          );
+        },
       ),
     );
   }
@@ -170,8 +187,35 @@ class UserScreen extends StatelessWidget {
                   _iconWithText(context, GIcons.gift_24,
                       Utility.toDMYformate(model.createdAt)),
                   _iconWithText(context, Icons.location_city, model.location),
-                  _iconWithText(context, GIcons.person_24,
-                      "${model.followers.totalCount} flollowers  ${model.following.totalCount} Following"),
+                  // _iconWithText(context, GIcons.person_24,
+                  //     "${model.followers.totalCount} flollowers  ${model.following.totalCount} Following"),
+                  Row(
+                    children: <Widget>[
+                      _iconWithText(context, GIcons.person_24,
+                          "${model.followers.totalCount}"),
+                      SizedBox(width: 10),
+                      Text(
+                        "Followers",
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ).ripple(() {
+                        loadPeoples(context, PeopleType.Follower);
+                      }),
+                      SizedBox(width: 20),
+                      Text(
+                        "${model.following.totalCount}",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Following",
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ).ripple(
+                        () {
+                          loadPeoples(context, PeopleType.Following);
+                        },
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

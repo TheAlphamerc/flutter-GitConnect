@@ -95,7 +95,24 @@ Future<QueryResult> getUserGistList(String login,) async {
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-
+Future<QueryResult> getFollowerList(String login,) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.followers,
+      variables: <String, dynamic>{
+        'login': login,
+      },
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+Future<QueryResult> getFollowingList(String login,) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.following,
+      variables: <String, dynamic>{
+        'login': login,
+      },
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null
       ? <String, dynamic>{

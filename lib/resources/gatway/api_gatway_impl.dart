@@ -13,6 +13,7 @@ import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/graphql_client.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/service/session_service.dart';
+import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
 
 class ApiGatwayImpl implements ApiGateway {
   final DioClient _dioClient;
@@ -199,10 +200,8 @@ class ApiGatwayImpl implements ApiGateway {
   @override
   Future<Gists> fetchGistList()async {
     try {
-      print("fetchPullRequest Init");
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
-      print("fetchPullRequest");
       var login = await _sessionService.getUserName();
       assert(login != null);
       final result = await getUserGistList(login);
@@ -214,6 +213,52 @@ class ApiGatwayImpl implements ApiGateway {
       // final userMap = result.data['search'] as Map<String, dynamic>;
       final list =
           GistResponse.fromJson(result.data).user.gists;
+
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<people.Followers> fetchFollowersList(String login)async {
+  try {
+      assert(login != null);
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      print("Get Followers list");
+      final result = await getFollowerList(login);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      // final userMap = result.data['search'] as Map<String, dynamic>;
+      final list =
+          people.User.fromJson(result.data["user"]).followers;
+
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<people.Following> fetchFollowingList(String login)async {
+  try {
+      assert(login != null);
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      print("Get Following list");
+      final result = await getFollowingList(login);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      // final userMap = result.data['search'] as Map<String, dynamic>;
+      final list =
+          people.User.fromJson(result.data["user"]).following;
 
       return list;
     } catch (error) {
