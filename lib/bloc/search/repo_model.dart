@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class RepositoryModel {
-  RepositoryModel({
+class RepositoryModel2 {
+  RepositoryModel2({
     this.id,
     this.nodeId,
     this.name,
@@ -59,7 +59,7 @@ class RepositoryModel {
     this.size,
     this.stargazersCount,
     this.watchersCount,
-    this.language,
+    this.primaryLanguage,
     this.hasIssues,
     this.hasProjects,
     this.hasDownloads,
@@ -135,7 +135,7 @@ class RepositoryModel {
   final int size;
   final int stargazersCount;
   final int watchersCount;
-  final dynamic language;
+  final PrimaryLanguage primaryLanguage;
   final bool hasIssues;
   final bool hasProjects;
   final bool hasDownloads;
@@ -149,17 +149,17 @@ class RepositoryModel {
   final dynamic license;
   final int forks;
   final int openIssues;
-  final int watchers;
+  final Watchers watchers;
   final String defaultBranch;
   final Permissions permissions;
 
-  factory RepositoryModel.fromRawJson(String str) =>
-      RepositoryModel.fromJson(json.decode(str));
+  factory RepositoryModel2.fromRawJson(String str) =>
+      RepositoryModel2.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory RepositoryModel.fromJson(Map<String, dynamic> json) =>
-      RepositoryModel(
+  factory RepositoryModel2.fromJson(Map<String, dynamic> json) =>
+      RepositoryModel2(
         id: json["id"] == null ? null : json["id"],
         nodeId: json["node_id"] == null ? null : json["node_id"],
         name: json["name"] == null ? null : json["name"],
@@ -240,9 +240,8 @@ class RepositoryModel {
         size: json["size"] == null ? null : json["size"],
         stargazersCount:
             json["stargazers_count"] == null ? null : json["stargazers_count"],
-        watchersCount:
-            json["watchers_count"] == null ? null : json["watchers_count"],
-        language: json["language"],
+        watchersCount: json["watchers_count"] == null ? null : json["watchers_count"],
+        primaryLanguage: json["primaryLanguage"] == null ? null : PrimaryLanguage.fromJson(json["primaryLanguage"]),
         hasIssues: json["has_issues"] == null ? null : json["has_issues"],
         hasProjects: json["has_projects"] == null ? null : json["has_projects"],
         hasDownloads:
@@ -259,7 +258,7 @@ class RepositoryModel {
         license: json["license"],
         forks: json["forks"] == null ? null : json["forks"],
         openIssues: json["open_issues"] == null ? null : json["open_issues"],
-        watchers: json["watchers"] == null ? null : json["watchers"],
+        watchers: json["watchers"] == null ? null : Watchers.fromJson(json["watchers"]),
         defaultBranch:
             json["default_branch"] == null ? null : json["default_branch"],
         permissions: json["permissions"] == null
@@ -325,7 +324,7 @@ class RepositoryModel {
         "size": size == null ? null : size,
         "stargazers_count": stargazersCount == null ? null : stargazersCount,
         "watchers_count": watchersCount == null ? null : watchersCount,
-        "language": language,
+        "language": primaryLanguage == null ? null : primaryLanguage.toJson(),
         "has_issues": hasIssues == null ? null : hasIssues,
         "has_projects": hasProjects == null ? null : hasProjects,
         "has_downloads": hasDownloads == null ? null : hasDownloads,
@@ -339,7 +338,7 @@ class RepositoryModel {
         "license": license,
         "forks": forks == null ? null : forks,
         "open_issues": openIssues == null ? null : openIssues,
-        "watchers": watchers == null ? null : watchers,
+        "watchers": watchers == null ? null : watchers.toJson(),
         "default_branch": defaultBranch == null ? null : defaultBranch,
         "permissions": permissions == null ? null : permissions.toJson(),
       };
@@ -471,6 +470,49 @@ class Permissions {
       };
 }
 
+class PrimaryLanguage {
+    PrimaryLanguage({
+        this.name,
+        this.color,
+    });
+
+    final String name;
+    final String color;
+
+    factory PrimaryLanguage.fromRawJson(String str) => PrimaryLanguage.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory PrimaryLanguage.fromJson(Map<String, dynamic> json) => PrimaryLanguage(
+        name: json["name"] == null ? null : json["name"],
+        color: json["color"] == null ? null : json["color"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "name": name == null ? null : name,
+        "color": color == null ? null : color,
+    };
+}
+
+class Watchers {
+    Watchers({
+        this.totalCount,
+    });
+
+    final int totalCount;
+
+    factory Watchers.fromRawJson(String str) => Watchers.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Watchers.fromJson(Map<String, dynamic> json) => Watchers(
+        totalCount: json["totalCount"] == null ? null : json["totalCount"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "totalCount": totalCount == null ? null : totalCount,
+    };
+}
 enum GithubSearchType {
   People,
   Issue,

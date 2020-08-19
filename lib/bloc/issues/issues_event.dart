@@ -17,14 +17,6 @@ abstract class IssuesEvent extends Equatable {
       IssuesRepository(apiGatway: GetIt.instance<ApiGateway>());
 }
 
-class UnIssuesEvent extends IssuesEvent {
-  @override
-  Stream<IssuesState> applyAsync(
-      {IssuesState currentState, IssuesBloc bloc}) async* {
-    yield LoadingUserState();
-  }
-}
-
 class LoadIssuesEvent extends IssuesEvent {
   @override
   Stream<IssuesState> applyAsync(

@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
+import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key, this.model, this.eventList, this.bloc}) : super(key: key);
+  const HomePage({Key key, this.model, this.eventList, this.bloc})
+      : super(key: key);
   final UserModel model;
   final List<EventModel> eventList;
   final UserBloc bloc;
@@ -89,8 +92,33 @@ class _UserPageState extends State<HomePage> {
               children: list.sublist(0, 4).map((model) {
                 return Column(
                   children: <Widget>[
-                    _getUtilRos(GIcons.issue_closed_16, model.name,
-                        color: GColors.green, user: model.owner),
+                    _getUtilRos(
+                      GIcons.issue_closed_16,
+                      model.name,
+                      color: GColors.green,
+                      user: model.owner,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return BlocProvider<RepoBloc>(
+                                create: (BuildContext context) => RepoBloc()
+                                  ..add(
+                                    LoadRepoEvent(
+                                      name: model.name,
+                                      owner: model.owner.login,
+                                    ),
+                                  ),
+                                child: RepoDetailPage(
+                                  name: model.name,
+                                  owner: model.owner.login,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
                     if (list.last != model) Divider(height: 0, indent: 50),
                   ],
                 );
@@ -150,11 +178,11 @@ class _UserPageState extends State<HomePage> {
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.git_pull_request_16, "Pull Request",
               color: GColors.blue, onPressed: () {
-                widget.bloc.add(OnPullRequestLoad());
+            widget.bloc.add(OnPullRequestLoad());
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PullRequestPage(bloc:  widget.bloc),
+                builder: (_) => PullRequestPage(bloc: widget.bloc),
               ),
             );
           }),

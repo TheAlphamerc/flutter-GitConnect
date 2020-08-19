@@ -2,6 +2,7 @@ import 'package:flutter_github_connect/resources/grapgqlApi/gist_api.dart';
 import 'package:flutter_github_connect/resources/grapgqlApi/issues_api.dart';
 import 'package:flutter_github_connect/resources/grapgqlApi/people_api.dart';
 import 'package:flutter_github_connect/resources/grapgqlApi/pull_request_api.dart';
+import 'package:flutter_github_connect/resources/grapgqlApi/repo_api.dart';
 
 class Apis  {
   static  String get issues => IssuesApis.issues;
@@ -9,6 +10,7 @@ class Apis  {
   static String get gist => GistGraphQl.gist;
   static String get followers => PeopleApi.followers;
   static String get following => PeopleApi.following;
+  static String get repository => RepoApi.repository;
   static const String user = r'''
    query userInfo($login: String!) {
       user(login: $login) {

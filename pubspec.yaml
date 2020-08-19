@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^6.0.0
   build_context: ^2.0.4
   url_launcher: ^5.4.10
+  flutter_markdown: ^0.4.3
   webview_flutter: ^0.3.22+1
   shared_preferences: ^0.5.7+3
   cached_network_image: ^2.2.0+1

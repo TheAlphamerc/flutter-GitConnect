@@ -14,6 +14,7 @@ import 'package:flutter_github_connect/resources/graphql_client.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/service/session_service.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
+import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 
 class ApiGatwayImpl implements ApiGateway {
   final DioClient _dioClient;
@@ -43,7 +44,7 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<RepositoryModel>> fetchRepositories() async {
+  Future<List<RepositoryModel2>> fetchRepositories() async {
     try {
       var accesstoken = await _sessionService.loadSession();
       var response = await _dioClient.get(
@@ -57,7 +58,7 @@ class ApiGatwayImpl implements ApiGateway {
       );
       final list = _dioClient
           .getJsonBodyList(response)
-          .map((e) => RepositoryModel.fromJson(e))
+          .map((e) => RepositoryModel2.fromJson(e))
           .toList();
       return list;
     } catch (error) {
@@ -198,7 +199,7 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<Gists> fetchGistList()async {
+  Future<Gists> fetchGistList() async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
@@ -211,8 +212,7 @@ class ApiGatwayImpl implements ApiGateway {
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list =
-          GistResponse.fromJson(result.data).user.gists;
+      final list = GistResponse.fromJson(result.data).user.gists;
 
       return list;
     } catch (error) {
@@ -221,8 +221,8 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<people.Followers> fetchFollowersList(String login)async {
-  try {
+  Future<people.Followers> fetchFollowersList(String login) async {
+    try {
       assert(login != null);
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
@@ -234,8 +234,7 @@ class ApiGatwayImpl implements ApiGateway {
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list =
-          people.User.fromJson(result.data["user"]).followers;
+      final list = people.User.fromJson(result.data["user"]).followers;
 
       return list;
     } catch (error) {
@@ -244,8 +243,8 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<people.Following> fetchFollowingList(String login)async {
-  try {
+  Future<people.Following> fetchFollowingList(String login) async {
+    try {
       assert(login != null);
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
@@ -257,10 +256,29 @@ class ApiGatwayImpl implements ApiGateway {
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list =
-          people.User.fromJson(result.data["user"]).following;
+      final list = people.User.fromJson(result.data["user"]).following;
 
       return list;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<RepositoryModel> fetchRepository({String name, String owner}) async {
+    try {
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      final result = await getRepository(name: name, owner: owner);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+
+      final map = result.data['repository'] as Map<String, dynamic>;
+      final repository = RepositoryModel.fromJson(map);
+
+      return repository;
     } catch (error) {
       throw error;
     }
