@@ -10,6 +10,7 @@ import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
+import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -43,9 +44,9 @@ class UserScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) {
           return BlocProvider<PeopleBloc>(
-            create: (BuildContext context) => PeopleBloc()
-              ..add(LoadFollowerEvent(model.login, type)),
-            child: ActorPage(type:type),
+            create: (BuildContext context) =>
+                PeopleBloc()..add(LoadFollowerEvent(model.login, type)),
+            child: ActorPage(type: type),
           );
         },
       ),
@@ -53,51 +54,62 @@ class UserScreen extends StatelessWidget {
   }
 
   Widget topRepoCard(context, TopRepositoriesNode repo) {
-    return GCard(
-      width: MediaQuery.of(context).size.width * .7,
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          UserAvatar(
-            name: repo.owner.login,
-            imagePath: repo.owner.avatarUrl,
-          ),
-          SizedBox(height: 16),
-          Text(
-            repo.name,
-          ),
-          SizedBox(height: 8),
-          Spacer(),
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: Icon(GIcons.star_fill_24,
-                    size: 16, color: Colors.yellowAccent[700]),
-              ),
-              SizedBox(width: 10),
-              Text(
-                "${repo.stargazers.totalCount}",
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-              SizedBox(width: 20),
-              Icon(
-                Icons.blur_circular,
-                color: repo.languages.nodes.first.color,
-                size: 15,
-              ),
-              SizedBox(width: 5),
-              Text(
-                "${repo.languages.nodes.first.name}",
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      child: GCard(
+        width: MediaQuery.of(context).size.width * .7,
+        // margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            UserAvatar(
+              name: repo.owner.login,
+              imagePath: repo.owner.avatarUrl,
+            ),
+            SizedBox(height: 16),
+            Text(
+              repo.name,
+            ),
+            SizedBox(height: 8),
+            Spacer(),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Icon(GIcons.star_fill_24,
+                      size: 16, color: Colors.yellowAccent[700]),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  "${repo.stargazers.totalCount}",
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+                SizedBox(width: 20),
+                if(repo.languages != null && repo.languages.nodes.isNotEmpty)
+                Icon(
+                  Icons.blur_circular,
+                  color: repo.languages.nodes.first.color,
+                  size: 15,
+                ),
+                SizedBox(width: 5),
+                if(repo.languages != null && repo.languages.nodes.isNotEmpty)
+                Text(
+                  "${repo.languages.nodes.first.name}",
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ).ripple(() {
+        Navigator.of(context).push(RepoDetailPage.getPageRoute(
+          context,
+          name: repo.name,
+          owner: repo.owner.login,
+        ));
+      }),
     );
   }
 

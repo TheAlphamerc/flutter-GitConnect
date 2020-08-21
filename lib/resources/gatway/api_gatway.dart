@@ -19,4 +19,5 @@ abstract class ApiGateway{
    Future<people.Followers> fetchFollowersList(String login);
    Future<people.Following> fetchFollowingList(String login);
    Future<RepositoryModel> fetchRepository({String name, String owner});
+   Future<String> fetchReadme({String name, String owner});
 }

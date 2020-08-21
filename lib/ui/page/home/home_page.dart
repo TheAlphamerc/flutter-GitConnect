@@ -98,25 +98,11 @@ class _UserPageState extends State<HomePage> {
                       color: GColors.green,
                       user: model.owner,
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return BlocProvider<RepoBloc>(
-                                create: (BuildContext context) => RepoBloc()
-                                  ..add(
-                                    LoadRepoEvent(
-                                      name: model.name,
-                                      owner: model.owner.login,
-                                    ),
-                                  ),
-                                child: RepoDetailPage(
-                                  name: model.name,
-                                  owner: model.owner.login,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                        Navigator.of(context).push(RepoDetailPage.getPageRoute(
+                          context,
+                          name: model.name,
+                          owner: model.owner.login,
+                        ));
                       },
                     ),
                     if (list.last != model) Divider(height: 0, indent: 50),

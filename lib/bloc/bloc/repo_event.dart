@@ -23,6 +23,9 @@ class LoadRepoEvent extends RepoEvent {
       final model =
           await _issuesRepository.getRepository(name: name, owner: owner);
       yield LoadedRepoState(model);
+
+      final readme = await _issuesRepository.getReadme(name: name, owner: owner);
+      yield LoadReadmeState(model,readme);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadIssuesEvent', error: _, stackTrace: stackTrace);

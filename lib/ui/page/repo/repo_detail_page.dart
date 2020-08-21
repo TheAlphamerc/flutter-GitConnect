@@ -8,6 +8,30 @@ class RepoDetailPage extends StatelessWidget {
   const RepoDetailPage({Key key, this.name, this.owner}) : super(key: key);
   final String name;
   final String owner;
+  static MaterialPageRoute getPageRoute(
+    BuildContext context, {
+    String name,
+    String owner,
+  }) {
+    return MaterialPageRoute(
+      builder: (context) {
+        return BlocProvider<RepoBloc>(
+          create: (BuildContext context) => RepoBloc()
+            ..add(
+              LoadRepoEvent(
+                name: name,
+                owner: owner,
+              ),
+            ),
+          child: RepoDetailPage(
+            name: name,
+            owner: owner,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

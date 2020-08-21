@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
@@ -60,7 +61,13 @@ class RepositoryListScreen extends StatelessWidget {
                 ),
         ],
       ),
-    ).ripple(() {});
+    ).ripple(() {
+      Navigator.of(context).push(RepoDetailPage.getPageRoute(
+        context,
+        name: repo.name,
+        owner: repo.owner.login,
+      ));
+    });
   }
 
   @override

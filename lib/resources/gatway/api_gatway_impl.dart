@@ -283,4 +283,28 @@ class ApiGatwayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<String> fetchReadme({String name, String owner})async {
+     try {
+      var accesstoken = await _sessionService.loadSession();
+      var login = await _sessionService.getUserName();
+      assert(login != null);
+      var response = await _dioClient.get(
+        null,
+        completeUrl:Config.getReadme(name:name, owner: owner),
+        options: Options(
+          headers: {
+            'Authorization': 'token $accesstoken',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+        ),
+      );
+
+      final String text  = response.data as String;
+      return text;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

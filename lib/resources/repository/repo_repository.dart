@@ -21,4 +21,9 @@ class RepoRepository {
     assert(name != null, owner != null);
     return await apiGatway.fetchRepository(name: name, owner: owner);
   }
+
+  Future<String> getReadme({String name, String owner}) async {
+    assert(name != null, owner != null);
+    return await apiGatway.fetchReadme(name: name, owner: owner);
+  }
 }

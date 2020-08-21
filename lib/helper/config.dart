@@ -12,4 +12,7 @@ class Config{
   static String getEvent(userName) {
     return "users/$userName/events";
   }
+  static String getReadme({String name, String owner}) {
+    return "https://raw.githubusercontent.com/$owner/$name/master/README.md";
+  }
 }
