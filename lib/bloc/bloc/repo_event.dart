@@ -22,14 +22,33 @@ class LoadRepoEvent extends RepoEvent {
       yield LoadingRepoState();
       final model =
           await _issuesRepository.getRepository(name: name, owner: owner);
-      yield LoadedRepoState(model);
+      yield LoadedRepoState(
+        model,
+      );
 
-      final readme = await _issuesRepository.getReadme(name: name, owner: owner);
-      yield LoadReadmeState(model,readme);
+      yield* getReadme(model);
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadIssuesEvent', error: _, stackTrace: stackTrace);
+          name: 'LoadRepoEvent', error: _, stackTrace: stackTrace);
       yield ErrorRepoState(_?.toString());
+    }
+  }
+
+  Stream<RepoState> getReadme(RepositoryModel model) async* {
+    try {
+      print("Step 1");
+
+      print("Step 2");
+      final readme =
+          await _issuesRepository.getReadme(name: name, owner: owner);
+      print("Step 3");
+      yield LoadReadmeState(model, readme);
+    } catch (_, stackTrace) {
+      print("Step 4");
+
+      developer.log('$_',
+          name: 'getReadmeEvent', error: _, stackTrace: stackTrace);
+      yield ErrorReadmeState(_?.toString(), model);
     }
   }
 }

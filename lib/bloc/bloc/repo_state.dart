@@ -17,11 +17,16 @@ class LoadedRepoState extends RepoState {
 class LoadReadmeState extends LoadedRepoState {
   final RepositoryModel model;
   final String readme;
-  LoadReadmeState(this.model,this.readme) : super(model);
+  LoadReadmeState(this.model, this.readme) : super(model);
 }
 
 class ErrorRepoState extends RepoState {
   final String errorMessage;
-
   ErrorRepoState(this.errorMessage);
+}
+
+class ErrorReadmeState extends LoadedRepoState {
+  final RepositoryModel model;
+  final String errorMessage;
+  ErrorReadmeState(this.errorMessage, this.model) : super(model);
 }

@@ -74,10 +74,12 @@ class RepoDetailPage extends StatelessWidget {
               ),
             );
           } else if (currentState is LoadedRepoState) {
-            return RepoDetailScreen(model:currentState.model);
+            return RepoDetailScreen(model: currentState.model);
           }
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(GColors.blue),
+            ),
           );
         },
       ),

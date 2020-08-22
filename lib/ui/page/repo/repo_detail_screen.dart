@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/markdown/markdown_viewer.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
-import "package:build_context/build_context.dart";
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class RepoDetailScreen extends StatelessWidget {
@@ -61,7 +62,6 @@ class RepoDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(model.owner.avatarUrl);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class RepoDetailScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  model.description,
+                  model.description ?? "",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 SizedBox(height: 8),
@@ -131,7 +131,8 @@ class RepoDetailScreen extends StatelessWidget {
                   value: "${model.pullRequests.totalCount}",
                 ),
                 _getUtilRos(context, "Language",
-                    value: "${model.primaryLanguage.name}", icon: null),
+                    value: "${model.primaryLanguage?.name ?? "N/A"}",
+                    icon: null),
                 _getUtilRos(context, "Default Branch",
                     value: model.defaultBranchRef.name, icon: null),
                 _getUtilRos(context, "Commits", icon: null),
@@ -139,8 +140,33 @@ class RepoDetailScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height:16),
-
+          SizedBox(height: 16),
+          BlocBuilder<RepoBloc, RepoState>(
+            builder: (context, state) {
+              if (state is LoadReadmeState)
+                return GCard(
+                  radius: 0,
+                  child: MarkdownViewer(
+                    markdownData: state.readme,
+                  ),
+                );
+              if (state is ErrorReadmeState) {
+                return SizedBox();
+              }
+              return Container(
+                alignment: Alignment.center,
+                height: 30,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1,
+                    valueColor: AlwaysStoppedAnimation(GColors.blue),
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
