@@ -491,7 +491,8 @@ class TopRepositoriesNode {
               : Languages.fromJson(json["languages"]),
           stargazers: json["stargazers"] == null
               ? null
-              : Followers.fromJson(json["stargazers"]));
+              : Followers.fromJson(json["stargazers"]),
+  );
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
@@ -632,12 +633,16 @@ class Node {
     this.name,
     this.url,
     this.owner,
+    this.languages,
+    this.stargazers
   });
 
   final String id;
   final String name;
   final String url;
   final Owner owner;
+  final Languages languages;
+  final Followers stargazers;
 
   factory Node.fromRawJson(String str) => Node.fromJson(json.decode(str));
 
@@ -648,6 +653,12 @@ class Node {
         name: json["name"] == null ? null : json["name"],
         url: json["url"] == null ? null : json["url"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        languages: json["languages"] == null
+              ? null
+              : Languages.fromJson(json["languages"]),
+          stargazers: json["stargazers"] == null
+              ? null
+              : Followers.fromJson(json["stargazers"])
       );
 
   Map<String, dynamic> toJson() => {
