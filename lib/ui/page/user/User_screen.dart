@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
-import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
-import 'package:flutter_github_connect/bloc/people/index.dart';
+import 'package:flutter_github_connect/bloc/people/index.dart' as people;
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
@@ -20,9 +19,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
-  final UserBloc bloc;
+  final people.PeopleBloc peopleBloc;
+  final bool isHideAppBar;
 
-  const UserScreen({Key key, this.model, this.bloc}) : super(key: key);
+  const UserScreen(
+      {Key key, this.model, this.peopleBloc, this.isHideAppBar = false})
+      : super(key: key);
 
   Widget _iconWithText(context, IconData icon, String text) {
     return Padding(
@@ -40,21 +42,7 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  void loadPeoples(context, PeopleType type) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return BlocProvider<PeopleBloc>(
-            create: (BuildContext context) =>
-                PeopleBloc()..add(LoadFollowerEvent(model.login, type)),
-            child: ActorPage(type: type),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget topRepoCard(context, TopRepositoriesNode repo) {
+  Widget _pinnedRepoCard(context, Node repo) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: GCard(
@@ -70,8 +58,12 @@ class UserScreen extends StatelessWidget {
               imagePath: repo.owner.avatarUrl,
             ),
             SizedBox(height: 16),
-            Text(
-              repo.name,
+            Container(
+              width: MediaQuery.of(context).size.width * .65,
+              child: Text(
+                repo.name,
+                maxLines: 2,
+              ),
             ),
             SizedBox(height: 8),
             Spacer(),
@@ -138,32 +130,48 @@ class UserScreen extends StatelessWidget {
     );
   }
 
+  void loadPeoples(context, people.PeopleType type) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return BlocProvider<people.PeopleBloc>(
+            create: (BuildContext context) => people.PeopleBloc()
+              ..add(people.LoadFollowerEvent(model.login, type)),
+            child: ActorPage(type: type),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(GIcons.share_android_24, color: GColors.blue),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(GIcons.settings_24, color: GColors.blue),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => SettingsPage(),
+      appBar: isHideAppBar
+          ? null
+          : AppBar(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              elevation: 0,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(GIcons.share_android_24, color: GColors.blue),
+                  onPressed: () {},
                 ),
-              );
-            },
-          ),
-        ],
-      ),
+                IconButton(
+                  icon: Icon(GIcons.settings_24, color: GColors.blue),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SettingsPage(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
@@ -190,11 +198,13 @@ class UserScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  Text(
-                    model.bio,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(height: 8),
+                  if (model.bio != null && model.bio.isNotEmpty)
+                    Text(
+                      model.bio,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  if (model.bio != null && model.bio.isNotEmpty)
+                    SizedBox(height: 8),
                   _iconWithText(context, GIcons.people_24, model.login),
                   _iconWithText(context, GIcons.link_24, model.websiteUrl),
                   _iconWithText(context, GIcons.gift_24,
@@ -211,7 +221,7 @@ class UserScreen extends StatelessWidget {
                         "Followers",
                         style: Theme.of(context).textTheme.subtitle1,
                       ).ripple(() {
-                        loadPeoples(context, PeopleType.Follower);
+                        loadPeoples(context, people.PeopleType.Follower);
                       }),
                       SizedBox(width: 20),
                       Text(
@@ -224,7 +234,7 @@ class UserScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.subtitle1,
                       ).ripple(
                         () {
-                          loadPeoples(context, PeopleType.Following);
+                          loadPeoples(context, people.PeopleType.Following);
                         },
                       ),
                     ],
@@ -251,11 +261,16 @@ class UserScreen extends StatelessWidget {
                   SizedBox(height: 8),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SvgPicture.network(
-                      "https://ghchart.rshah.org/${model.login}",
-                      height: 100,
-                      fit: BoxFit.fitHeight,
-                      allowDrawingOutsideViewBox: true,
+                    child: Row(
+                      children: [
+                        SizedBox(width: 16),
+                        SvgPicture.network(
+                          "https://ghchart.rshah.org/${model.login}",
+                          height: 100,
+                          fit: BoxFit.fitHeight,
+                          allowDrawingOutsideViewBox: true,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -270,27 +285,39 @@ class UserScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Top Repository",
-                          style: Theme.of(context).textTheme.headline6,
-                        ).hP16,
-                        SizedBox(height: 8),
-                        Container(
-                          height: 150,
-                          width: double.infinity,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: BouncingScrollPhysics(),
-                            itemCount: model.topRepositories.nodes.length,
-                            itemBuilder: (context, index) {
-                              final repo = model.topRepositories.nodes[index];
-                              return topRepoCard(context, repo);
-                            },
-                          ),
-                        )
-                      ]),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          SizedBox(width: 10),
+                          Icon(GIcons.pin_24,
+                              size: 20,
+                              color:
+                                  Theme.of(context).textTheme.headline6.color),
+                          Text(
+                            "Pinned",
+                            style: Theme.of(context).textTheme.headline6,
+                          ).hP16,
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        height: 150,
+                        width: double.infinity,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: model.itemShowcase.items.nodes.length,
+                          itemBuilder: (context, index) {
+                            final repo = model.itemShowcase.items.nodes[index];
+                            return _pinnedRepoCard(context, repo);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Divider(height: 1),
                   _keyValueTile(
                     context,
                     "Repository",
@@ -308,33 +335,30 @@ class UserScreen extends StatelessWidget {
                     },
                   ).hP16,
                   _keyValueTile(
-                      context,
-                      "Public Gist",
-                      model?.gists?.totalCount != null
-                          ? model.gists.totalCount.toString()
-                          : "N/A", onPressed: () {
-                    bloc.add(OnGistLoad());
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => GistlistPage(
-                          bloc: bloc,
+                    context,
+                    "Public Gist",
+                    model?.gists?.totalCount != null
+                        ? model.gists.totalCount.toString()
+                        : "N/A",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        GistlistPageProvider.getPageRoute(
+                          context,
+                          login: model.login,
                         ),
-                      ),
-                    );
-                  }).hP16,
+                      );
+                    },
+                  ).hP16,
                   _keyValueTile(
                     context,
                     "Pull Request",
                     model.pullRequests.totalCount.toString(),
                     onPressed: () {
-                      bloc.add(OnPullRequestLoad());
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PullRequestPage(bloc: bloc),
-                        ),
-                      );
+                          context,
+                          PullRequestPageProvider.getPageRoute(context,
+                              login: model.login));
                     },
                   ).hP16,
                   _keyValueTile(
@@ -342,7 +366,7 @@ class UserScreen extends StatelessWidget {
                     "Issues",
                     model.issues.totalCount.toString(),
                     onPressed: () {
-                      Navigator.push(context, IssuesPage.route());
+                      Navigator.push(context, IssuesPage.route(model.login));
                     },
                   ).hP16,
                 ],

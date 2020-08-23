@@ -26,13 +26,13 @@ class IssuesData {
 
   IssuesData.fromJson(Map<String, dynamic> json) {
     viewer =
-        json['viewer'] != null ? new Viewer.fromJson(json['viewer']) : null;
+        json['issues'] != null ? new Viewer.fromJson(json['issues']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.viewer != null) {
-      data['viewer'] = this.viewer.toJson();
+      data['issues'] = this.viewer.toJson();
     }
     return data;
   }

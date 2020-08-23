@@ -18,6 +18,9 @@ abstract class IssuesEvent extends Equatable {
 }
 
 class LoadIssuesEvent extends IssuesEvent {
+  final String login;
+
+  LoadIssuesEvent(this.login);
   @override
   Stream<IssuesState> applyAsync(
       {IssuesState currentState, IssuesBloc bloc}) async* {
@@ -26,7 +29,7 @@ class LoadIssuesEvent extends IssuesEvent {
         return;
       }
       yield LoadingUserState();
-      final list = await _issuesRepository.getIssues();
+      final list = await _issuesRepository.getIssues(login:login);
       yield LoadedIssuesState(list);
     } catch (_, stackTrace) {
       developer.log('$_',

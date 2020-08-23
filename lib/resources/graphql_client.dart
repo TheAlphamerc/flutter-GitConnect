@@ -62,9 +62,12 @@ Future<QueryResult> searchQueryAsync(String query, String type) async {
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getIssues() async {
+Future<QueryResult> getIssues(String login,) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.issues,
+       variables: <String, dynamic>{
+        'login': login,
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }

@@ -159,17 +159,14 @@ class _UserPageState extends State<HomePage> {
         children: <Widget>[
           _getUtilRos(GIcons.issue_opened_24, "Issues", color: GColors.green,
               onPressed: () {
-            Navigator.push(context, IssuesPage.route());
+            Navigator.push(context, IssuesPage.route(widget.model.login));
           }),
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.git_pull_request_16, "Pull Request",
               color: GColors.blue, onPressed: () {
-            widget.bloc.add(OnPullRequestLoad());
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => PullRequestPage(bloc: widget.bloc),
-              ),
+              PullRequestPageProvider.getPageRoute(context,login:widget.model.login)
             );
           }),
           Divider(height: 0, indent: 50),

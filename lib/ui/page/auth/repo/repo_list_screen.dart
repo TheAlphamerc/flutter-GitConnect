@@ -12,6 +12,7 @@ class RepositoryListScreen extends StatelessWidget {
       : super(key: key);
   Widget repoCard(context, RepositoriesNode repo) {
     return Container(
+      color: Theme.of(context).colorScheme.surface,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +74,7 @@ class RepositoryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      // backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: hideAppBar
           ? null
           : AppBar(

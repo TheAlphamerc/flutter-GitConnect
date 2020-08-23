@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
+import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
@@ -28,7 +29,9 @@ class UserListPage extends StatelessWidget {
           style: Theme.of(context).textTheme.subtitle2,
         ).pT(3),
       ),
-    );
+    ).ripple(() {
+      Navigator.of(context).push(UserPage.getPageRoute(context,login:user.login),);
+    });
   }
 
   @override

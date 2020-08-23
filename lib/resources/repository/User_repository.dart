@@ -7,18 +7,18 @@ class UserRepository {
   final ApiGateway apiGatway ;
   UserRepository({this.apiGatway}) : assert( apiGatway != null);
 
-  Future<UserModel> fetchUserProfile() async{
-    return await apiGatway.fetchUserProfile();
+  Future<UserModel> fetchUserProfile({String login}) async{
+    return await apiGatway.fetchUserProfile(login:login);
   }
   Future<List<EventModel>> fetchUserEvent() async{
     return await apiGatway.fetchUserEvent();
   }
 
-  Future<UserPullRequests> fetchPullRequest() async{
-    return await apiGatway.fetchPullRequest();
+  Future<UserPullRequests> fetchPullRequest({String login}) async{
+    return await apiGatway.fetchPullRequest(login:login);
   }
 
-  Future<Gists> fetchGistList() async{
-    return await apiGatway.fetchGistList();
+  Future<Gists> fetchGistList({String login}) async{
+    return await apiGatway.fetchGistList(login:login);
   }
 }

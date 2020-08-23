@@ -98,26 +98,27 @@ class IssueListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: hideAppBar
-            ? null
-            : AppBar(
-                elevation: 0,
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                title: Title(
-                  title: "People",
-                  color: Colors.black,
-                  child: Text("People",
-                      style: Theme.of(context).textTheme.headline6),
-                ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: hideAppBar
+          ? null
+          : AppBar(
+              elevation: 0,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              title: Title(
+                title: "People",
+                color: Colors.black,
+                child: Text("People",
+                    style: Theme.of(context).textTheme.headline6),
               ),
-        body: ListView.separated(
-          itemCount: list.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              Divider(height: 0),
-          itemBuilder: (BuildContext context, int index) {
-            return _issueTile(context, list[index]);
-          },
-        ));
+            ),
+      body: ListView.separated(
+        itemCount: list.length,
+        separatorBuilder: (BuildContext context, int index) =>
+            Divider(height: 0),
+        itemBuilder: (BuildContext context, int index) {
+          return _issueTile(context, list[index]);
+        },
+      ),
+    );
   }
 }

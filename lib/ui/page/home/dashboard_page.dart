@@ -71,7 +71,7 @@ class DashBoardPage extends StatelessWidget {
                         }
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => UserScreen(model: user, bloc:BlocProvider.of<UserBloc>(context),),
+                            builder: (_) => UserScreen(model: user),
                           ),
                         );
                       }),

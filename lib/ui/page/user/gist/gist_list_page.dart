@@ -1,63 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_github_connect/bloc/User/index.dart';
-import 'package:flutter_github_connect/ui/page/pullRequest/pull_request_screen.dart';
+import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
 
+class GistlistPageProvider extends StatelessWidget {
+  final String login;
+
+  const GistlistPageProvider({Key key, this.login}) : super(key: key);
+  static MaterialPageRoute getPageRoute(
+    BuildContext context, {
+    String login,
+  }) {
+    return MaterialPageRoute(
+      builder: (context) {
+        return BlocProvider<PeopleBloc>(
+          create: (BuildContext context) => PeopleBloc()..add(OnGistLoad(login)),
+          child: GistlistPageProvider(login:login),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GistlistPage(
+      bloc: BlocProvider.of<PeopleBloc>(context),
+      login:login
+    );
+  }
+}
+
 class GistlistPage extends StatelessWidget {
-  const GistlistPage({Key key, this.bloc}) : super(key: key);
-  final UserBloc bloc;
+  const GistlistPage({Key key, this.bloc,this.login}) : super(key: key);
+  final PeopleBloc bloc;
+  final String login;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Title(
-            title: "Gist",
-            color: Colors.black,
-            child: Text("Gist",
-                style: Theme.of(context).textTheme.headline6),
-          ),
+      appBar: AppBar(
+        title: Title(
+          title: "Gist",
+          color: Colors.black,
+          child: Text("Gist", style: Theme.of(context).textTheme.headline6),
         ),
-        body: Container(
-          color: Theme.of(context).colorScheme.surface,
-          child: BlocBuilder<UserBloc, UserState>(
-            cubit: bloc,
-            builder: (
-              BuildContext context,
-              UserState currentState,
-            ) {
-              if (currentState is ErrorGitState) {
-                return Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(currentState.errorMessage ?? 'Error'),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 32.0),
-                      child: RaisedButton(
-                        color: Colors.blue,
-                        child: Text('reload'),
-                        onPressed: () {
-                          bloc..add(OnGistLoad());
-                          print("Load Notification");
-                        },
-                      ),
-                    ),
-                  ],
-                ));
-              }
-              if (currentState is LoadedGitState) {
-                return GistListScreen(
-                    gist: currentState.gist);
-              }
-              if(currentState is OnPullRequestLoad){
-                return Center(child: Text("Loading"),);
-              }
+      ),
+      body: Container(
+        color: Theme.of(context).colorScheme.surface,
+        child: BlocBuilder<PeopleBloc, PeopleState>(
+          cubit: bloc,
+          builder: (
+            BuildContext context,
+            PeopleState currentState,
+          ) {
+            if (currentState is ErrorGitState) {
               return Center(
-                child: CircularProgressIndicator(),
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(currentState.errorMessage ?? 'Error'),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 32.0),
+                    child: RaisedButton(
+                      color: Colors.blue,
+                      child: Text('reload'),
+                      onPressed: () {
+                        bloc..add(OnGistLoad(login));
+                        print("Load Notification");
+                      },
+                    ),
+                  ),
+                ],
+              ));
+            }
+            if (currentState is LoadedGitState) {
+              if(currentState.gist != null && currentState.gist.totalCount > 0)
+              return GistListScreen(gist: currentState.gist);
+              return Center(child: Text("No gist available"));
+            }
+            if (currentState is OnPullRequestLoad) {
+              return Center(
+                child: Text("Loading"),
               );
-            },
-          ),
-        ));
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

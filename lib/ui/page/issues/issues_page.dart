@@ -4,11 +4,14 @@ import 'package:flutter_github_connect/bloc/issues/index.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 
 class IssuesPage extends StatefulWidget {
+  final String login;
   static const String routeName = '/issues';
-  static route() => MaterialPageRoute(
+
+  const IssuesPage({Key key, this.login}) : super(key: key);
+  static route(String login) => MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (BuildContext context) =>
-              IssuesBloc()..add(LoadIssuesEvent()),
+              IssuesBloc()..add(LoadIssuesEvent(login)),
           child: IssuesPage(),
         ),
       );
@@ -20,7 +23,7 @@ class _IssuesPageState extends State<IssuesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(title: Text("Issues")),
       body: BlocBuilder<IssuesBloc, IssuesState>(
         builder: (
@@ -45,7 +48,7 @@ class _IssuesPageState extends State<IssuesPage> {
                     child: Text('reload'),
                     onPressed: () {
                       BlocProvider.of<IssuesBloc>(context)
-                        ..add(LoadIssuesEvent());
+                        ..add(LoadIssuesEvent(widget.login));
                     },
                   ),
                 ),
@@ -53,9 +56,13 @@ class _IssuesPageState extends State<IssuesPage> {
             ));
           }
           if (currentState is LoadedIssuesState) {
+            if(currentState.list != null && currentState.list.isNotEmpty)
             return IssueListPage(
               list: currentState.list,
               hideAppBar: true,
+            );
+            return Center(
+              child:Text("No Issues Available")
             );
           }
           return Center(

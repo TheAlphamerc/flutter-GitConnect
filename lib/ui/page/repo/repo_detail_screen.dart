@@ -131,10 +131,10 @@ class RepoDetailScreen extends StatelessWidget {
                   value: "${model.pullRequests.totalCount}",
                 ),
                 _getUtilRos(context, "Language",
-                    value: "${model.primaryLanguage?.name ?? "N/A"}",
+                    value: "${model?.primaryLanguage?.name ?? "N/A"}",
                     icon: null),
                 _getUtilRos(context, "Default Branch",
-                    value: model.defaultBranchRef.name, icon: null),
+                    value: model.defaultBranchRef?.name ?? "N/A", icon: null),
                 _getUtilRos(context, "Commits", icon: null),
                 _getUtilRos(context, "Browse Code", icon: null),
               ],
@@ -146,8 +146,10 @@ class RepoDetailScreen extends StatelessWidget {
               if (state is LoadReadmeState)
                 return GCard(
                   radius: 0,
-                  child: MarkdownViewer(
-                    markdownData: state.readme,
+                  child: Center(
+                    child: MarkdownViewer(
+                      markdownData: state.readme,
+                    ),
                   ),
                 );
               if (state is ErrorReadmeState) {
