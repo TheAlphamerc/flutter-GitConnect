@@ -16,6 +16,7 @@ import 'package:flutter_github_connect/ui/page/user/gist/gist_list_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
@@ -87,18 +88,18 @@ class UserScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 SizedBox(width: 20),
-                if(repo.languages != null && repo.languages.nodes.isNotEmpty)
-                Icon(
-                  Icons.blur_circular,
-                  color: repo.languages.nodes.first.color,
-                  size: 15,
-                ),
+                if (repo.languages != null && repo.languages.nodes.isNotEmpty)
+                  Icon(
+                    Icons.blur_circular,
+                    color: repo.languages.nodes.first.color,
+                    size: 15,
+                  ),
                 SizedBox(width: 5),
-                if(repo.languages != null && repo.languages.nodes.isNotEmpty)
-                Text(
-                  "${repo.languages.nodes.first.name}",
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
+                if (repo.languages != null && repo.languages.nodes.isNotEmpty)
+                  Text(
+                    "${repo.languages.nodes.first.name}",
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
               ],
             ),
           ],
@@ -228,6 +229,35 @@ class UserScreen extends StatelessWidget {
                       ),
                     ],
                   )
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 154,
+              padding: EdgeInsets.symmetric(
+                vertical: 8,
+              ),
+              margin: EdgeInsets.only(top: 16),
+              color: theme.colorScheme.surface,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Github Contribution",
+                    style: Theme.of(context).textTheme.headline6,
+                  ).hP16,
+                  SizedBox(height: 8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SvgPicture.network(
+                      "https://ghchart.rshah.org/${model.login}",
+                      height: 100,
+                      fit: BoxFit.fitHeight,
+                      allowDrawingOutsideViewBox: true,
+                    ),
+                  ),
                 ],
               ),
             ),
