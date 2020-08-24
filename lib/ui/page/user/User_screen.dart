@@ -12,10 +12,11 @@ import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/page/settings/settings_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_page.dart';
+import 'package:flutter_github_connect/ui/page/user/widget/git_contribution_graph.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
@@ -40,6 +41,42 @@ class UserScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _pinnedRepoSection(BuildContext context) {
+    return model.itemShowcase.items.nodes.isNotEmpty
+        ? Container(
+            height: 150,
+            width: double.infinity,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              itemCount: model.itemShowcase.items.nodes.length,
+              itemBuilder: (context, index) {
+                final repo = model.itemShowcase.items.nodes[index];
+                return _pinnedRepoCard(context, repo);
+              },
+            ),
+          )
+        : GCard(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            color: Theme.of(context).colorScheme.surface,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Pin repositories to profile for quick access at any time, without having to search",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                SizedBox(height: 16),
+                GFlatButton(
+                  label: "PIN REPOSITORY",
+                  onPressed: (){},
+                ).ripple(() {})
+              ],
+            ),
+          );
   }
 
   Widget _pinnedRepoCard(context, Node repo) {
@@ -264,12 +301,9 @@ class UserScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(width: 16),
-                        SvgPicture.network(
-                          "https://ghchart.rshah.org/${model.login}",
-                          height: 100,
-                          fit: BoxFit.fitHeight,
-                          allowDrawingOutsideViewBox: true,
-                        ),
+                        GitContributionGraph(
+                          login: model.login,
+                        )
                       ],
                     ),
                   ),
@@ -301,19 +335,7 @@ class UserScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 8),
-                      Container(
-                        height: 150,
-                        width: double.infinity,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: BouncingScrollPhysics(),
-                          itemCount: model.itemShowcase.items.nodes.length,
-                          itemBuilder: (context, index) {
-                            final repo = model.itemShowcase.items.nodes[index];
-                            return _pinnedRepoCard(context, repo);
-                          },
-                        ),
-                      )
+                      _pinnedRepoSection(context)
                     ],
                   ),
                   SizedBox(height: 8),
