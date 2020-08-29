@@ -33,7 +33,7 @@ dependencies:
   get_it: ^4.0.2
   graphql: ^3.0.2
   equatable: ^1.2.0
-  flutter_svg: ^0.18.0
+  flutter_svg: ^0.17.4
   google_fonts: ^1.1.0
   flutter_bloc: ^6.0.0
   build_context: ^2.0.4

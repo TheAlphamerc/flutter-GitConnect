@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
 
 class GistlistPageProvider extends StatelessWidget {
@@ -37,6 +39,7 @@ class GistlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Title(
           title: "Gist",
@@ -75,7 +78,16 @@ class GistlistPage extends StatelessWidget {
             if (currentState is LoadedGitState) {
               if(currentState.gist != null && currentState.gist.totalCount > 0)
               return GistListScreen(gist: currentState.gist);
-              return Center(child: Text("No gist available"));
+              return Column(
+                children: <Widget>[
+                  NoDataPage(
+                    title: "No Gist Found",
+                    description:
+                        "No gist created yet,\n Once new gist are created, they will be displayed here",
+                    icon: GIcons.code_24,
+                  ),
+                ],
+              );
             }
             if (currentState is OnPullRequestLoad) {
               return Center(

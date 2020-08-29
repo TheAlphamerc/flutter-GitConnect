@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/issues/index.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 
 class IssuesPage extends StatefulWidget {
@@ -56,13 +58,16 @@ class _IssuesPageState extends State<IssuesPage> {
             ));
           }
           if (currentState is LoadedIssuesState) {
-            if(currentState.list != null && currentState.list.isNotEmpty)
-            return IssueListPage(
-              list: currentState.list,
-              hideAppBar: true,
-            );
-            return Center(
-              child:Text("No Issues Available")
+            if (currentState.list != null && currentState.list.isNotEmpty)
+              return IssueListPage(
+                list: currentState.list,
+                hideAppBar: true,
+              );
+            return NoDataPage(
+              title: "Empty issues",
+              description:
+                  "No issue created yet,\n Once new issues are created, they will be displayed here",
+              icon: GIcons.issue_opened_24,
             );
           }
           return Center(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
 
@@ -10,27 +11,6 @@ class SearchListProvider extends StatelessWidget {
   final GithubSearchType type;
 
   const SearchListProvider({Key key, this.type}) : super(key: key);
-  Widget _noContant(context) {
-    return Container(
-      alignment: Alignment.center,
-      height: MediaQuery.of(context).size.height - 280,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(GIcons.github_1, size: 120),
-          SizedBox(height: 16),
-          Text("No user found", style: Theme.of(context).textTheme.headline5),
-          SizedBox(height: 8),
-          Text(
-            "Try again with different username",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyText2,
-            ),
-        ],
-      ),
-    );
-  }
 
   String _getAppBarTitle() {
     switch (type) {
@@ -79,7 +59,15 @@ class SearchListProvider extends StatelessWidget {
           }
           if (currentState is LoadedSearchState) {
             if (!(currentState.list != null && currentState.list.isNotEmpty)) {
-              return _noContant(context);
+              return Column(
+                children: <Widget>[
+                  NoDataPage(
+                    title: "No ${_getAppBarTitle()} Found",
+                    description: "Try again with different keyword",
+                    icon: GIcons.github_1,
+                  ),
+                ],
+              );
             }
             switch (currentState.type) {
               case GithubSearchType.Repository:

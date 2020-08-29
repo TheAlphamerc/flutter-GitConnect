@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
 import "package:build_context/build_context.dart";
+import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
@@ -78,9 +80,15 @@ class PeoplePage extends StatelessWidget {
               followers: currentState.followers.nodes,
             );
           } else {
-            return Center(
-              child: Text("No Followers"),
-            );
+            return Column(
+                children: <Widget>[
+                  NoDataPage(
+                    title: "No Followers",
+                    description: "No followers found!!",
+                    icon: GIcons.github_1,
+                  ),
+                ],
+              );
           }
         } else if (currentState is LoadedFollowingState) {
           if (currentState.following != null &&
@@ -89,9 +97,15 @@ class PeoplePage extends StatelessWidget {
               followers: currentState.following.nodes,
             );
           } else {
-            return Center(
-              child: Text("No Following"),
-            );
+            return Column(
+                children: <Widget>[
+                  NoDataPage(
+                    title: "Following",
+                    description: "No Following user found!!",
+                    icon: GIcons.github_1,
+                  ),
+                ],
+              );
           }
         }
         return Center(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/search_event.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/search_list_provider.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
@@ -116,7 +117,7 @@ class SearchPage extends StatelessWidget {
                             _getUtilRos(
                                 context, "Repository with \"$searchText\"",
                                 color: GColors.green, onPressed: () async {
-                               searchGithub(context, searchText,
+                              searchGithub(context, searchText,
                                   GithubSearchType.Repository);
                             }, icon: GIcons.repo_24),
                             Divider(
@@ -124,7 +125,7 @@ class SearchPage extends StatelessWidget {
                             ),
                             _getUtilRos(context, "Issue with \"$searchText\"",
                                 color: GColors.green, onPressed: () async {
-                               searchGithub(
+                              searchGithub(
                                   context, searchText, GithubSearchType.Issue);
                             }, icon: GIcons.issue_opened_24),
                             Divider(
@@ -140,7 +141,7 @@ class SearchPage extends StatelessWidget {
                             ),
                             _getUtilRos(context, "People with \"$searchText\"",
                                 color: GColors.green, onPressed: () async {
-                               searchGithub(
+                              searchGithub(
                                   context, searchText, GithubSearchType.People);
                             }, icon: GIcons.people_24),
                             Divider(
@@ -148,39 +149,20 @@ class SearchPage extends StatelessWidget {
                             ),
                             _getUtilRos(
                                 context, "Orgnisation with \"$searchText\"",
-                                color: GColors.green,
-                                onPressed: () {
-                                  //  searchGithub(
-                                  // context, searchText, GithubSearchType.ORganisation);
-                                },
-                                icon: GIcons.organization_24),
+                                color: GColors.green, onPressed: () {
+                              //  searchGithub(
+                              // context, searchText, GithubSearchType.ORganisation);
+                            }, icon: GIcons.organization_24),
                             Divider(height: 0),
                           ],
                         ),
                       );
               },
-              child: Container(
-                alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height - 280,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    // Image.asset(GImages.githubMarkLight120, width:160),
-                    Icon(GIcons.github_1, size: 120),
-                    SizedBox(height: 16),
-                    Text(
-                      "Find your stuff.",
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
+              child: NoDataPage(
+                title: "Find your stuff.",
+                description:
+                    "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
+                icon: GIcons.github_1,
               ),
             )
           ],
