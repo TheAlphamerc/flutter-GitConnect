@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
+import 'package:flutter_github_connect/bloc/search/search_event.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
@@ -8,9 +9,18 @@ import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
 
 class SearchListProvider extends StatelessWidget {
-  final GithubSearchType type;
+  static MaterialPageRoute route({GithubSearchType type,String query}) {
+    return MaterialPageRoute(
+      builder: (context) => BlocProvider<SearchBloc>(
+        create: (BuildContext context) => SearchBloc()..add(SearchForEvent(query: query, type: type)),
+        child: SearchListProvider(query: query,type: type,),
+      ),
+    );
+  }
 
-  const SearchListProvider({Key key, this.type}) : super(key: key);
+  final GithubSearchType type;
+  final String query;
+  const SearchListProvider({Key key, this.type, this.query}) : super(key: key);
 
   String _getAppBarTitle() {
     switch (type) {
@@ -24,6 +34,13 @@ class SearchListProvider extends StatelessWidget {
       default:
         return "People";
     }
+  }
+
+  void searchGithub(
+    BuildContext context,
+  ) {
+    BlocProvider.of<SearchBloc>(context)
+        .add(SearchForEvent(query: query, type: type));
   }
 
   @override
@@ -74,6 +91,7 @@ class SearchListProvider extends StatelessWidget {
                 return RepositoryListScreen(
                   hideAppBar: true,
                   list: currentState.toRepositoryList(),
+                  onScollToBootom: () => searchGithub(context),
                 );
               case GithubSearchType.People:
                 return UserListPage(

@@ -46,8 +46,6 @@ class _AuthPageState extends State<AuthPage> {
                   BlocProvider<UserBloc>(
                     create: (BuildContext context) => UserBloc()..add(OnLoad()),
                   ),
-                  BlocProvider<SearchBloc>(
-                      create: (BuildContext context) => SearchBloc()),
                   BlocProvider<notif.NotificationBloc>(
                     create: (BuildContext context) =>
                         notif.NotificationBloc()..add(notif.OnLoad()),

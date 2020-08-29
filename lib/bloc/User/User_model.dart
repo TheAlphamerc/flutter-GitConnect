@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class UserApiResponse {
@@ -347,7 +348,7 @@ class Repositories {
       };
 }
 
-class RepositoriesNode {
+class RepositoriesNode extends Equatable{
   RepositoriesNode({
     this.name,
     this.description,
@@ -388,6 +389,9 @@ class RepositoriesNode {
         "owner": owner == null ? null : owner.toJson(),
         "stargazers": stargazers == null ? null : stargazers.toJson(),
       };
+
+  @override
+  List<Object> get props => [name];
 }
 
 class Status {

@@ -158,8 +158,11 @@ class Apis  {
   }
 ''';
 
-  static String search = r'''query userInfo($query: String!, $type:SearchType!) {
-    search(query: $query, first: 30, type: $type) {
+  static String search = r'''query userInfo($query: String!, $type:SearchType!,$endCursor: String) {
+    search(query: $query, first: 30, type: $type, after: $endCursor) {
+      pageInfo{
+         endCursor
+      }
       userCount
       nodes {
         ... on User {

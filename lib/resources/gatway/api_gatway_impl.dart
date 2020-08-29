@@ -5,8 +5,8 @@ import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart' as issues;
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
-import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
-    as model;
+  import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
+      as model;
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
@@ -88,7 +88,7 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<List> searchQuery({GithubSearchType type, String query}) async {
+  Future<model.Search> searchQuery({GithubSearchType type, String query, String endCursor}) async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
@@ -114,15 +114,15 @@ class ApiGatwayImpl implements ApiGateway {
           queryType = "USER";
           break;
       }
-      final result = await searchQueryAsync(query, queryType);
+      final result = await searchQueryAsync(query, queryType, endCursor);
       if (result.hasException) {
         print(result.exception.toString());
-        return null;
+        throw result.exception;
       }
       // final userMap = result.data['search'] as Map<String, dynamic>;
       final user = model.Data.fromJson(result.data, type: type);
 
-      return user.search.list;
+      return user.search;
     } catch (error) {
       throw error;
     }

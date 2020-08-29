@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/search/index.dart';
+import 'package:flutter_github_connect/bloc/search/search_event.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
+import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
-class RepositoryListScreen extends StatelessWidget {
+class RepositoryListScreen extends StatefulWidget {
   final List<RepositoriesNode> list;
   final bool hideAppBar;
+  final Function onScollToBootom;
 
-  const RepositoryListScreen({Key key, this.list, this.hideAppBar = false})
+  const RepositoryListScreen(
+      {Key key, this.list, this.hideAppBar = false, this.onScollToBootom})
       : super(key: key);
+
+  @override
+  _RepositoryListScreenState createState() => _RepositoryListScreenState();
+}
+
+class _RepositoryListScreenState extends State<RepositoryListScreen> {
+  ScrollController _controller;
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      widget.onScollToBootom();
+    }
+  }
+
   Widget repoCard(context, RepositoriesNode repo) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -75,19 +100,41 @@ class RepositoryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: hideAppBar
+      appBar: widget.hideAppBar
           ? null
           : AppBar(
               title: Text("Repositories"),
             ),
-      body: list == null
+      body: widget.list == null
           ? SizedBox()
           : ListView.separated(
-              itemCount: list.length,
+              controller: _controller,
+              itemCount: widget.list.length + 1,
               separatorBuilder: (BuildContext context, int index) =>
                   Divider(height: 0),
               itemBuilder: (BuildContext context, int index) {
-                final repo = list[index];
+                if (index >= widget.list.length) {
+                  return BlocBuilder<SearchBloc, SearchState>(
+                    builder: (context, state) {
+                      if (state is LoadingNextSearchState)
+                        return Container(
+                          alignment: Alignment.center,
+                          height: 30,
+                          child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1,
+                              valueColor: AlwaysStoppedAnimation(GColors.blue),
+                            ),
+                          ),
+                        );
+                      ;
+                      return SizedBox.shrink();
+                    },
+                  );
+                }
+                final repo = widget.list[index];
                 return repoCard(context, repo);
               },
             ),

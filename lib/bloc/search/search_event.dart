@@ -14,7 +14,8 @@ abstract class SearchEvent extends Equatable {
   List<Object> get props => [];
 
   Stream<SearchState> searchQuery({SearchState currentState, SearchBloc bloc});
-  final SearchRepository _repoRepository = SearchRepository(apiGatway: GetIt.instance<ApiGateway>());
+  final SearchRepository _repoRepository =
+      SearchRepository(apiGatway: GetIt.instance<ApiGateway>());
 }
 
 class SearchForEvent extends SearchEvent {
@@ -29,10 +30,40 @@ class SearchForEvent extends SearchEvent {
   Stream<SearchState> searchQuery(
       {SearchState currentState, SearchBloc bloc}) async* {
     try {
+      String endCursor;
+      if (currentState is LoadedSearchState) {
+        endCursor = currentState.endCursor;
+      }
       assert(this.type != null, this.query != null);
-      yield LoadingSearchState();
-      final list = await _repoRepository.searchQuery(query: this.query,type:this.type);
-      yield LoadedSearchState(list, type);
+      if (!(currentState is LoadedSearchState)) {
+        yield LoadingSearchState();
+      } else if (currentState is LoadedSearchState) {
+        yield LoadingNextSearchState(
+            endCursor: currentState.endCursor,
+            type: type,
+            list: currentState.list,
+            hasNextPage: currentState.hasNextPage);
+        print("CAliing API to get data");
+      }
+      final search = await _repoRepository.searchQuery(
+          query: this.query, type: this.type, endCursor: endCursor);
+      // List<dynamic> list = [];
+      if (currentState is LoadedSearchState) {
+        // list.add(currentState.list);
+        // list.addAll(search.list);
+        yield LoadedSearchState.next(
+            list: search.list,
+            dynamicList: currentState.list,
+            type: type,
+            endCursor: search?.pageInfo?.endCursor,
+            hasNextPage: search?.pageInfo?.hasNextPage);
+      } else {
+        yield LoadedSearchState(
+            list: search.list,
+            type: type,
+            endCursor: search?.pageInfo?.endCursor,
+            hasNextPage: search?.pageInfo?.hasNextPage);
+      }
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadRepoEvent', error: _, stackTrace: stackTrace);

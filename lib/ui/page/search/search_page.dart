@@ -83,17 +83,7 @@ class SearchPage extends StatelessWidget {
   }
 
   void searchGithub(context, String text, GithubSearchType type) {
-    BlocProvider.of<SearchBloc>(context)
-        .add(SearchForEvent(query: text, type: type));
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: BlocProvider.of<SearchBloc>(context),
-          child: SearchListProvider(type: type),
-        ),
-      ),
-    );
+    Navigator.push(context, SearchListProvider.route(type: type, query: text));
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/search/repo_model.dart';
+import 'package:flutter_github_connect/model/page_info_model.dart';
 
 class SearchModel {
   Data data;
@@ -46,13 +47,14 @@ class Data {
 class Search {
   int userCount;
   List<dynamic> list;
-
-  Search({this.userCount, this.list});
+  PageInfo pageInfo;
+  Search({this.userCount, this.list, this.pageInfo});
 
   Search.fromJson(Map<String, dynamic> json, {GithubSearchType type}) {
     userCount = json['userCount'];
     if (json['nodes'] != null) {
       list = new List<dynamic>();
+      pageInfo= json["pageInfo"] == null ? null : PageInfo.fromJson(json["pageInfo"]);
       json['nodes'].forEach((v) {
         switch (type) {
           case GithubSearchType.People:
@@ -78,6 +80,7 @@ class Search {
     if (this.list != null) {
       data['nodes'] = this.list.map((v) => v.toJson()).toList();
     }
+    data["pageInfo"] = pageInfo == null ? null : pageInfo.toJson();
     return data;
   }
 }
