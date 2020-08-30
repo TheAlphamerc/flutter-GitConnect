@@ -9,11 +9,15 @@ import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
 
 class SearchListProvider extends StatelessWidget {
-  static MaterialPageRoute route({GithubSearchType type,String query}) {
+  static MaterialPageRoute route({GithubSearchType type, String query}) {
     return MaterialPageRoute(
       builder: (context) => BlocProvider<SearchBloc>(
-        create: (BuildContext context) => SearchBloc()..add(SearchForEvent(query: query, type: type)),
-        child: SearchListProvider(query: query,type: type,),
+        create: (BuildContext context) =>
+            SearchBloc()..add(SearchForEvent(query: query, type: type)),
+        child: SearchListProvider(
+          query: query,
+          type: type,
+        ),
       ),
     );
   }
@@ -89,7 +93,7 @@ class SearchListProvider extends StatelessWidget {
             switch (currentState.type) {
               case GithubSearchType.Repository:
                 return RepositoryListScreen(
-                  hideAppBar: true,
+                  isFromUserRepositoryListPage: true,
                   list: currentState.toRepositoryList(),
                   onScollToBootom: () => searchGithub(context),
                 );

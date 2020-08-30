@@ -9,10 +9,7 @@ abstract class SearchState extends Equatable {
   List<Object> get props => ([]);
 }
 
-class LoadingSearchState extends SearchState {
-
-}
-
+class LoadingSearchState extends SearchState {}
 
 /// Initialized
 class LoadedSearchState extends SearchState {
@@ -20,14 +17,24 @@ class LoadedSearchState extends SearchState {
   final GithubSearchType type;
   final String endCursor;
   final bool hasNextPage;
-  
+
   LoadedSearchState({this.list, this.type, this.endCursor, this.hasNextPage});
-  factory LoadedSearchState.next({List<dynamic> dynamicList, List<dynamic> list, GithubSearchType type, String endCursor,bool hasNextPage}){
+  factory LoadedSearchState.next(
+      {List<dynamic> dynamicList,
+      List<dynamic> list,
+      GithubSearchType type,
+      String endCursor,
+      bool hasNextPage}) {
     List<dynamic> returnlist = [];
-        returnlist.addAll(list);
-        returnlist.addAll(dynamicList);
-      print("List length: ${returnlist.length}");
-    return LoadedSearchState(list:returnlist, endCursor: endCursor, type: type, hasNextPage: hasNextPage, );
+    returnlist.addAll(dynamicList);
+    returnlist.addAll(list);
+    print("List length: ${returnlist.length}");
+    return LoadedSearchState(
+      list: returnlist,
+      endCursor: endCursor,
+      type: type,
+      hasNextPage: hasNextPage,
+    );
   }
   @override
   String toString() => 'LoadedRepositoriesState';
@@ -46,7 +53,7 @@ class LoadedSearchState extends SearchState {
     if (list != null) {
       list
         ..forEach((element) {
-          if(!(element is RepositoriesNode)){
+          if (!(element is RepositoriesNode)) {
             return;
           }
           if (element.type != "Repository") {
@@ -57,6 +64,7 @@ class LoadedSearchState extends SearchState {
     }
     return userList;
   }
+
   // Todo : Need to implement
   List<IssuesModel> toPullRequest() {
     List<IssuesModel> userList = [];
@@ -86,14 +94,22 @@ class LoadedSearchState extends SearchState {
     return userList;
   }
 }
+
 class LoadingNextSearchState extends LoadedSearchState {
   final List<dynamic> list;
   final GithubSearchType type;
   final String endCursor;
   final bool hasNextPage;
 
-  LoadingNextSearchState({this.list, this.type, this.endCursor, this.hasNextPage}):super(endCursor:endCursor, type: type, list:list, hasNextPage: hasNextPage);
+  LoadingNextSearchState(
+      {this.list, this.type, this.endCursor, this.hasNextPage})
+      : super(
+            endCursor: endCursor,
+            type: type,
+            list: list,
+            hasNextPage: hasNextPage);
 }
+
 class ErrorRepoState extends SearchState {
   final String errorMessage;
 

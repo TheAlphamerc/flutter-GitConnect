@@ -21,6 +21,7 @@ class LoadedUserState extends PeopleState {
 }
 
 class LoadingFollowersState extends PeopleState {}
+
 class LoadingPullRequestState extends PeopleState {}
 
 class LoadingFollowingState extends PeopleState {}
@@ -50,7 +51,7 @@ class LoadedEventsState extends LoadedUserState {
   final UserModel user;
   final List<EventModel> eventList;
 
-  LoadedEventsState({@required this.user,this.eventList}) : super(user:user);
+  LoadedEventsState({@required this.user, this.eventList}) : super(user: user);
 
   @override
   String toString() => 'LoadedUserState $user';
@@ -61,7 +62,8 @@ class LoadedPullRequestState extends LoadedEventsState {
   final List<EventModel> eventList;
   final UserPullRequests pullRequestsList;
 
-  LoadedPullRequestState({this.user,this.eventList,this.pullRequestsList}) : super(user:user,eventList:eventList);
+  LoadedPullRequestState({this.user, this.eventList, this.pullRequestsList})
+      : super(user: user, eventList: eventList);
 
   @override
   String toString() => 'LoadedUserState $user';
@@ -72,7 +74,7 @@ class LoadedGitState extends PeopleState {
   final List<EventModel> eventList;
   final Gists gist;
 
-  LoadedGitState({this.user,this.eventList,this.gist});
+  LoadedGitState({this.user, this.eventList, this.gist});
 
   @override
   String toString() => 'LoadedUserState $user';
@@ -91,7 +93,8 @@ class ErrorPullRequestState extends LoadedEventsState {
   final String errorMessage;
   final UserModel user;
   final List<EventModel> eventList;
-  ErrorPullRequestState(this.errorMessage,{ this.user, this.eventList}) : super(user:user,eventList:eventList) ;
+  ErrorPullRequestState(this.errorMessage, {this.user, this.eventList})
+      : super(user: user, eventList: eventList);
 
   @override
   String toString() => 'ErrorUserState';
@@ -101,7 +104,8 @@ class ErrorGitState extends LoadedEventsState {
   final String errorMessage;
   final UserModel user;
   final List<EventModel> eventList;
-  ErrorGitState(this.errorMessage,{ this.user, this.eventList}) : super(user:user,eventList:eventList) ;
+  ErrorGitState(this.errorMessage, {this.user, this.eventList})
+      : super(user: user, eventList: eventList);
 
   @override
   String toString() => 'ErrorUserState';

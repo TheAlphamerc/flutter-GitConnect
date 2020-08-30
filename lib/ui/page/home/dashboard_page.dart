@@ -71,7 +71,10 @@ class DashBoardPage extends StatelessWidget {
                         }
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => UserScreen(model: user),
+                            builder: (_) => UserScreen(
+                              model: user,
+                              bloc: BlocProvider.of<UserBloc>(context),
+                            ),
                           ),
                         );
                       }),
@@ -162,7 +165,7 @@ class HomePageScreen extends StatelessWidget {
           return HomePage(
             model: currentState.user,
             eventList: eventList,
-            bloc:  BlocProvider.of<UserBloc>(context),
+            bloc: BlocProvider.of<UserBloc>(context),
           );
         } else {
           return Center(

@@ -1,5 +1,6 @@
 class RepoApi {
-  static const String repository = r'''query userInfo($name: String!, $owner: String!) {
+  static const String repositoryDetail =
+      r'''query userInfo($name: String!, $owner: String!) {
     repository(name: $name, owner: $owner) {
       owner {
         login
@@ -39,6 +40,39 @@ class RepoApi {
       shortDescriptionHTML
       stargazers {
         totalCount
+      }
+    }
+  }
+''';
+
+  static const String repository = r'''
+  query userInfo($login: String!, $endCursor: String) {
+    user(login: $login) {
+      repositories(first: 10, orderBy: {field: CREATED_AT, direction: DESC}, after: $endCursor) {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        totalCount
+        totalDiskUsage
+        nodes {
+          name
+          description
+          owner {
+            avatarUrl
+            login
+          }
+          languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+            totalSize
+            nodes {
+              name
+              color
+            }
+          }
+          stargazers {
+            totalCount
+          }
+        }
       }
     }
   }

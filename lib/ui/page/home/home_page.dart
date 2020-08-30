@@ -165,9 +165,9 @@ class _UserPageState extends State<HomePage> {
           _getUtilRos(GIcons.git_pull_request_16, "Pull Request",
               color: GColors.blue, onPressed: () {
             Navigator.push(
-              context,
-              PullRequestPageProvider.getPageRoute(context,login:widget.model.login)
-            );
+                context,
+                PullRequestPageProvider.getPageRoute(context,
+                    login: widget.model.login));
           }),
           Divider(height: 0, indent: 50),
           _getUtilRos(GIcons.repo_clone_16, "Repository", color: GColors.purple,
@@ -190,7 +190,7 @@ class _UserPageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("User Page build");
+    print("Home Page build");
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart' as people;
+import 'package:flutter_github_connect/bloc/people/people_bloc.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
@@ -20,11 +21,16 @@ import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
-  final people.PeopleBloc peopleBloc;
+  final UserBloc bloc;
+  final PeopleBloc peopleBloc;
   final bool isHideAppBar;
 
   const UserScreen(
-      {Key key, this.model, this.peopleBloc, this.isHideAppBar = false})
+      {Key key,
+      this.model,
+      this.bloc,
+      this.peopleBloc,
+      this.isHideAppBar = false})
       : super(key: key);
 
   Widget _iconWithText(context, IconData icon, String text) {
@@ -72,7 +78,7 @@ class UserScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 GFlatButton(
                   label: "PIN REPOSITORY",
-                  onPressed: (){},
+                  onPressed: () {},
                 ).ripple(() {})
               ],
             ),
@@ -179,6 +185,10 @@ class UserScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void onScollToBottom(context) {
+    bloc..add(OnLoad(isLoadNextRepositories: true));
   }
 
   @override
@@ -351,6 +361,9 @@ class UserScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => RepositoryListScreen(
                             list: model.repositories.nodes,
+                            onScollToBootom: () => onScollToBottom(context),
+                            userBloc: bloc,
+                            peopleBloc: peopleBloc,
                           ),
                         ),
                       );

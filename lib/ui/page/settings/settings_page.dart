@@ -58,16 +58,8 @@ class SettingsPage extends StatelessWidget {
           Divider(height: 0),
           _getUtilRos(context, "Push Notifications",
               color: GColors.purple,
-              selectedText: "Direct mention", onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => RepositoryListScreen(
-            //       list1: widget.model.repositories.nodes,
-            //     ),
-            //   ),
-            // );
-          }),
+              selectedText: "Direct mention",
+              onPressed: () {}),
           Divider(height: 0),
           _getUtilRos(context, "Swipe Options", color: GColors.orange),
         ],

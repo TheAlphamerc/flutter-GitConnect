@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_github_connect/model/page_info_model.dart';
 
 class UserApiResponse {
   UserApiResponse({
@@ -49,7 +50,7 @@ class Data {
       };
 }
 
-class UserModel {
+class UserModel extends Equatable {
   UserModel(
       {this.name,
       this.avatarUrl,
@@ -136,7 +137,7 @@ class UserModel {
   final Followers repositoriesContributedTo;
   final Followers pullRequests;
   final Followers issues;
-  final Repositories repositories;
+  Repositories repositories;
   final ItemShowcaseClass itemShowcase;
 
   factory UserModel.fromRawJson(String str) =>
@@ -290,6 +291,10 @@ class UserModel {
         "repositories": repositories == null ? null : repositories.toJson(),
         "itemShowcase": itemShowcase == null ? null : itemShowcase.toJson(),
       };
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [name, url];
 }
 
 class Followers {
@@ -314,16 +319,13 @@ class Followers {
 }
 
 class Repositories {
-  Repositories({
-    this.totalCount,
-    this.totalDiskUsage,
-    this.nodes,
-  });
+  Repositories(
+      {this.totalCount, this.totalDiskUsage, this.nodes, this.pageInfo});
 
   final int totalCount;
   final int totalDiskUsage;
   final List<RepositoriesNode> nodes;
-
+  PageInfo pageInfo;
   factory Repositories.fromRawJson(String str) =>
       Repositories.fromJson(json.decode(str));
 
@@ -333,6 +335,9 @@ class Repositories {
         totalCount: json["totalCount"] == null ? null : json["totalCount"],
         totalDiskUsage:
             json["totalDiskUsage"] == null ? null : json["totalDiskUsage"],
+        pageInfo: json["pageInfo"] == null
+            ? null
+            : PageInfo.fromJson(json["pageInfo"]),
         nodes: json["nodes"] == null
             ? null
             : List<RepositoriesNode>.from(
@@ -345,18 +350,18 @@ class Repositories {
         "nodes": nodes == null
             ? null
             : List<dynamic>.from(nodes.map((x) => x.toJson())),
+        "pageInfo": pageInfo == null ? null : pageInfo.toJson()
       };
 }
 
-class RepositoriesNode extends Equatable{
-  RepositoriesNode({
-    this.name,
-    this.description,
-    this.owner,
-    this.languages,
-    this.stargazers,
-    this.type
-  });
+class RepositoriesNode extends Equatable {
+  RepositoriesNode(
+      {this.name,
+      this.description,
+      this.owner,
+      this.languages,
+      this.stargazers,
+      this.type});
 
   final String name;
   final String description;
@@ -375,7 +380,7 @@ class RepositoriesNode extends Equatable{
         name: json["name"] == null ? null : json["name"],
         description: json["description"] == null ? null : json["description"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-        type : json['__typename'],
+        type: json['__typename'],
         languages: json["languages"] == null
             ? null
             : Languages.fromJson(json["languages"]),
@@ -483,20 +488,20 @@ class TopRepositoriesNode {
 
   factory TopRepositoriesNode.fromJson(Map<String, dynamic> json) =>
       TopRepositoriesNode(
-          id: json["id"] == null ? null : json["id"],
-          name: json["name"] == null ? null : json["name"],
-          isFork: json["isFork"] == null ? null : json["isFork"],
-          isPrivate: json["isPrivate"] == null ? null : json["isPrivate"],
-          url: json["url"] == null ? null : json["url"],
-          forkCount: json["forkCount"] == null ? null : json["forkCount"],
-          owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-          languages: json["languages"] == null
-              ? null
-              : Languages.fromJson(json["languages"]),
-          stargazers: json["stargazers"] == null
-              ? null
-              : Followers.fromJson(json["stargazers"]),
-  );
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        isFork: json["isFork"] == null ? null : json["isFork"],
+        isPrivate: json["isPrivate"] == null ? null : json["isPrivate"],
+        url: json["url"] == null ? null : json["url"],
+        forkCount: json["forkCount"] == null ? null : json["forkCount"],
+        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        languages: json["languages"] == null
+            ? null
+            : Languages.fromJson(json["languages"]),
+        stargazers: json["stargazers"] == null
+            ? null
+            : Followers.fromJson(json["stargazers"]),
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
@@ -632,14 +637,13 @@ class Items {
 }
 
 class Node {
-  Node({
-    this.id,
-    this.name,
-    this.url,
-    this.owner,
-    this.languages,
-    this.stargazers
-  });
+  Node(
+      {this.id,
+      this.name,
+      this.url,
+      this.owner,
+      this.languages,
+      this.stargazers});
 
   final String id;
   final String name;
@@ -653,17 +657,16 @@ class Node {
   String toRawJson() => json.encode(toJson());
 
   factory Node.fromJson(Map<String, dynamic> json) => Node(
-        id: json["id"] == null ? null : json["id"],
-        name: json["name"] == null ? null : json["name"],
-        url: json["url"] == null ? null : json["url"],
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-        languages: json["languages"] == null
-              ? null
-              : Languages.fromJson(json["languages"]),
-          stargazers: json["stargazers"] == null
-              ? null
-              : Followers.fromJson(json["stargazers"])
-      );
+      id: json["id"] == null ? null : json["id"],
+      name: json["name"] == null ? null : json["name"],
+      url: json["url"] == null ? null : json["url"],
+      owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+      languages: json["languages"] == null
+          ? null
+          : Languages.fromJson(json["languages"]),
+      stargazers: json["stargazers"] == null
+          ? null
+          : Followers.fromJson(json["stargazers"]));
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,

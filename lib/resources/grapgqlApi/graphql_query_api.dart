@@ -4,12 +4,13 @@ import 'package:flutter_github_connect/resources/grapgqlApi/people_api.dart';
 import 'package:flutter_github_connect/resources/grapgqlApi/pull_request_api.dart';
 import 'package:flutter_github_connect/resources/grapgqlApi/repo_api.dart';
 
-class Apis  {
-  static  String get issues => IssuesApis.issues;
-  static  String get pullRequests => PullRequestQraphQl.pullRequests;
+class Apis {
+  static String get issues => IssuesApis.issues;
+  static String get pullRequests => PullRequestQraphQl.pullRequests;
   static String get gist => GistGraphQl.gist;
   static String get followers => PeopleApi.followers;
   static String get following => PeopleApi.following;
+  static String get repositoryDetail => RepoApi.repositoryDetail;
   static String get repository => RepoApi.repository;
   static const String user = r'''
    query userInfo($login: String!) {
@@ -104,7 +105,11 @@ class Apis  {
       issues(first: 100) {
         totalCount
       }
-      repositories(first: 100, orderBy: {field: CREATED_AT, direction: DESC}) {
+      repositories(first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
         totalCount
         totalDiskUsage
         nodes {
@@ -158,7 +163,8 @@ class Apis  {
   }
 ''';
 
-  static String search = r'''query userInfo($query: String!, $type:SearchType!,$endCursor: String) {
+  static String search =
+      r'''query userInfo($query: String!, $type:SearchType!,$endCursor: String) {
     search(query: $query, first: 30, type: $type, after: $endCursor) {
       pageInfo{
          endCursor

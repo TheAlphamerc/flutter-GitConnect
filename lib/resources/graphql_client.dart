@@ -30,9 +30,9 @@ releaseClient() {
   _innerClient = null;
 }
 
-Future<QueryResult> getRepository({String owner, String name}) async {
+Future<QueryResult> getRepositoryDetail({String owner, String name}) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repository,
+      document: Apis.repositoryDetail,
       variables: <String, dynamic>{
         'owner': owner,
         'name': name,
@@ -41,7 +41,21 @@ Future<QueryResult> getRepository({String owner, String name}) async {
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getUser(String login,) async {
+Future<QueryResult> getNextRepositoriesList(
+    {String login, String endCursor}) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.repository,
+      variables: <String, dynamic>{
+        'login': login,
+        'endCursor': endCursor,
+      },
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
+Future<QueryResult> getUser(
+  String login,
+) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.user,
       variables: <String, dynamic>{
@@ -51,22 +65,25 @@ Future<QueryResult> getUser(String login,) async {
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> searchQueryAsync(String query, String type, String endCursor) async {
+Future<QueryResult> searchQueryAsync(
+    String query, String type, String endCursor) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.search,
       variables: <String, dynamic>{
         'query': query,
-        "type": type, 
-        "endCursor":endCursor
+        "type": type,
+        "endCursor": endCursor
       },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getIssues(String login,) async {
+Future<QueryResult> getIssues(
+  String login,
+) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.issues,
-       variables: <String, dynamic>{
+      variables: <String, dynamic>{
         'login': login,
       },
       fetchPolicy: FetchPolicy.noCache);
@@ -75,12 +92,13 @@ Future<QueryResult> getIssues(String login,) async {
 
 Future<QueryResult> getAuthUserName() async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.userName,
-      fetchPolicy: FetchPolicy.cacheAndNetwork);
+      document: Apis.userName, fetchPolicy: FetchPolicy.cacheAndNetwork);
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getUserPullRequest(String login,) async {
+Future<QueryResult> getUserPullRequest(
+  String login,
+) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.pullRequests,
       variables: <String, dynamic>{
@@ -90,7 +108,9 @@ Future<QueryResult> getUserPullRequest(String login,) async {
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getUserGistList(String login,) async {
+Future<QueryResult> getUserGistList(
+  String login,
+) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.gist,
       variables: <String, dynamic>{
@@ -99,7 +119,10 @@ Future<QueryResult> getUserGistList(String login,) async {
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getFollowerList(String login,) async {
+
+Future<QueryResult> getFollowerList(
+  String login,
+) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.followers,
       variables: <String, dynamic>{
@@ -108,7 +131,10 @@ Future<QueryResult> getFollowerList(String login,) async {
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getFollowingList(String login,) async {
+
+Future<QueryResult> getFollowingList(
+  String login,
+) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.following,
       variables: <String, dynamic>{
@@ -117,6 +143,7 @@ Future<QueryResult> getFollowingList(String login,) async {
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
+
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null
       ? <String, dynamic>{
@@ -233,7 +260,6 @@ query getTrendUser($location: String!){
   }
 }
 ''';
-
 
 const String readTrendUserByCursor = r'''
 query getTrendUser($location: String!,  $after: String!){

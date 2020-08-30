@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/people/people_bloc.dart';
+import 'package:flutter_github_connect/bloc/people/people_state.dart' as people;
 import 'package:flutter_github_connect/bloc/search/index.dart';
-import 'package:flutter_github_connect/bloc/search/search_event.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
@@ -10,11 +12,19 @@ import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class RepositoryListScreen extends StatefulWidget {
   final List<RepositoriesNode> list;
-  final bool hideAppBar;
+  final bool isFromUserRepositoryListPage;
+  final UserBloc userBloc;
+  final PeopleBloc peopleBloc;
   final Function onScollToBootom;
 
+  /// `isFromUserRepositoryListPage` will be set to true if this screen is used as widget
   const RepositoryListScreen(
-      {Key key, this.list, this.hideAppBar = false, this.onScollToBootom})
+      {Key key,
+      this.list,
+      this.isFromUserRepositoryListPage = false,
+      this.onScollToBootom,
+      this.userBloc,
+      this.peopleBloc})
       : super(key: key);
 
   @override
@@ -96,48 +106,96 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
     });
   }
 
+  Widget _repoList(List<RepositoriesNode> list, {bool displayLoader = false}) {
+    return ListView.separated(
+      controller: _controller,
+      itemCount: list.length + 1,
+      separatorBuilder: (BuildContext context, int index) => Divider(height: 0),
+      itemBuilder: (BuildContext context, int index) {
+        if ((index >= list.length && !widget.isFromUserRepositoryListPage) &&
+            (widget.peopleBloc != null || widget.userBloc != null)) {
+          print("Display Loader1");
+          return displayLoader ? _loader() : SizedBox.shrink();
+        } else if (index >= list.length &&
+            widget.isFromUserRepositoryListPage) {
+          print("Display Loader2s");
+          return BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) {
+              if (state is LoadingNextSearchState) return _loader();
+
+              return SizedBox.shrink();
+            },
+          );
+        }
+        final repo = list[index];
+        print("Display List");
+        return repoCard(context, repo);
+      },
+    );
+  }
+
+  Widget _loader() {
+    return Container(
+      alignment: Alignment.center,
+      height: 60,
+      child: SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 1,
+          valueColor: AlwaysStoppedAnimation(GColors.blue),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: widget.hideAppBar
+      appBar: widget.isFromUserRepositoryListPage
           ? null
           : AppBar(
               title: Text("Repositories"),
             ),
       body: widget.list == null
           ? SizedBox()
-          : ListView.separated(
-              controller: _controller,
-              itemCount: widget.list.length + 1,
-              separatorBuilder: (BuildContext context, int index) =>
-                  Divider(height: 0),
-              itemBuilder: (BuildContext context, int index) {
-                if (index >= widget.list.length) {
-                  return BlocBuilder<SearchBloc, SearchState>(
-                    builder: (context, state) {
-                      if (state is LoadingNextSearchState)
-                        return Container(
-                          alignment: Alignment.center,
-                          height: 30,
-                          child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1,
-                              valueColor: AlwaysStoppedAnimation(GColors.blue),
-                            ),
-                          ),
-                        );
-                      ;
-                      return SizedBox.shrink();
-                    },
-                  );
-                }
-                final repo = widget.list[index];
-                return repoCard(context, repo);
-              },
-            ),
+          : !widget.isFromUserRepositoryListPage
+              ? widget.peopleBloc != null
+                  ? BlocBuilder<PeopleBloc, people.PeopleState>(
+                      cubit: widget.peopleBloc,
+                      buildWhen: (old, newState) {
+                        return (old != newState);
+                      },
+                      builder: (context, state) {
+                        bool displayLoader = false;
+                        if (state is LoadingNextRepositoriesState)
+                          displayLoader = true;
+                        if (state is people.LoadedUserState) {
+                          return _repoList(state.user.repositories.nodes,
+                              displayLoader: displayLoader);
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    )
+                  : BlocBuilder<UserBloc, UserState>(
+                      cubit: widget.userBloc,
+                      buildWhen: (old, newState) {
+                        return (old != newState);
+                      },
+                      builder: (context, state) {
+                        bool displayLoader = false;
+                        if (state is LoadingNextRepositoriesState)
+                          displayLoader = true;
+                        if (state is LoadedUserState) {
+                          return _repoList(state.user.repositories.nodes,
+                              displayLoader: displayLoader);
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    )
+              : _repoList(widget.list),
     );
   }
 }

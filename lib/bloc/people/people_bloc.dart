@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
 
@@ -14,14 +13,11 @@ class PeopleBloc extends Bloc<PeopleEvent, PeopleState> {
     try {
       if (event is LoadFollowerEvent) {
         yield* event.fetchFollowersList(currentState: state, bloc: this);
-      }
-      else if(event is LoadUserEvent){
+      } else if (event is LoadUserEvent) {
         yield* event.getUser(currentState: state, bloc: this);
-      }
-      else if(event is OnPullRequestLoad){
+      } else if (event is OnPullRequestLoad) {
         yield* event.getPullRequest(currentState: state, bloc: this);
-      }
-      else if(event is OnGistLoad){
+      } else if (event is OnGistLoad) {
         yield* event.getGist(currentState: state, bloc: this);
       }
     } catch (_, stackTrace) {

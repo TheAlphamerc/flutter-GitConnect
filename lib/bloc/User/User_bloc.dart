@@ -18,14 +18,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserEvent event,
   ) async* {
     try {
-      if (event is OnPullRequestLoad){
-        yield* event.getPullRequest(currentState: state, bloc: this);  
-      }
-      else if(event is OnLoad){
+      if (event is OnPullRequestLoad) {
+        yield* event.getPullRequest(currentState: state, bloc: this);
+      } else if (event is OnLoad) {
+        if (event.isLoadNextRepositories) {
+          yield* event.getNextRepositories(currentState: state, bloc: this);
+        } else {
           yield* event.getUser(currentState: state, bloc: this);
         }
-      else if(event is OnGistLoad){
-         yield* event.getGist(currentState: state, bloc: this);
+      } else if (event is OnGistLoad) {
+        yield* event.getGist(currentState: state, bloc: this);
       }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'UserBloc', error: _, stackTrace: stackTrace);

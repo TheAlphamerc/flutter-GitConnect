@@ -11,6 +11,7 @@ import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 abstract class ApiGateway{
    Future<UserModel> fetchUserProfile({String login});
+   Future<UserModel>fetchNextRepositorries({String login, String endCursor});
    Future<List<EventModel>> fetchUserEvent();
    Future<List<RepositoryModel2>> fetchRepositories();
    Future<List<NotificationModel>>  fetchNotificationList();

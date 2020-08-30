@@ -20,6 +20,10 @@ abstract class UserEvent extends Equatable {
 }
 
 class OnLoad extends UserEvent {
+  final bool isLoadNextRepositories;
+
+  OnLoad({this.isLoadNextRepositories = false});
+
   @override
   Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {
     try {
@@ -43,6 +47,29 @@ class OnLoad extends UserEvent {
   Stream<LoadedPullRequestState> getPullRequest(
       {UserState currentState, UserBloc bloc}) {
     return null;
+  }
+
+  Stream<UserState> getNextRepositories(
+      {UserState currentState, UserBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedUserState;
+      if (!state.user.repositories.pageInfo.hasNextPage) {
+        print("No repository left");
+        return;
+      }
+      yield LoadingNextRepositoriesState(state.user);
+      final userModel = await _userRepository.fetchNextRepositorries(
+          login: state.user.login,
+          endCursor: state.user.repositories.pageInfo.endCursor);
+      yield LoadedUserState.getNextRepositories(
+          currentUserModel: state.user, userModel: userModel);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedUserState;
+      yield ErrorNextRepositoryState(
+          errorMessage: _?.toString(), user: state.user);
+    }
   }
 
   @override
@@ -100,9 +127,7 @@ class OnGistLoad extends UserEvent {
       final pullRequestsList = await _userRepository.fetchGistList();
       print("Loading End");
       yield LoadedGitState(
-          user: state.user,
-          eventList: state.eventList,
-          gist: pullRequestsList);
+          user: state.user, eventList: state.eventList, gist: pullRequestsList);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
