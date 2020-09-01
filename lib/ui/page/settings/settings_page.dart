@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
-import 'package:flutter_github_connect/ui/page/home/dashboard_page.dart';
 import 'package:flutter_github_connect/ui/page/splash.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';

@@ -25,6 +25,15 @@ class UserScreen extends StatelessWidget {
   final PeopleBloc peopleBloc;
   final bool isHideAppBar;
 
+  static MaterialPageRoute getPageRoute(BuildContext context, UserModel user) {
+    return MaterialPageRoute(
+      builder: (_) => UserScreen(
+        model: user,
+        bloc: BlocProvider.of<UserBloc>(context),
+      ),
+    );
+  }
+
   const UserScreen(
       {Key key,
       this.model,
@@ -357,16 +366,24 @@ class UserScreen extends StatelessWidget {
                     onPressed: () {
                       print("Get user Repository");
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => RepositoryListScreen(
+                          context,
+                          RepositoryListScreen.getPageRoute(
                             list: model.repositories.nodes,
-                            onScollToBootom: () => onScollToBottom(context),
+                            onScollToBottom: () {
+                              onScollToBottom(context);
+                            },
                             userBloc: bloc,
                             peopleBloc: peopleBloc,
-                          ),
-                        ),
-                      );
+                          )
+                          // MaterialPageRoute(
+                          //   builder: (_) => RepositoryListScreen(
+                          //     list: model.repositories.nodes,
+                          //     onScollToBootom: () => onScollToBottom(context),
+                          //     userBloc: bloc,
+                          //     peopleBloc: peopleBloc,
+                          //   ),
+                          // ),
+                          );
                     },
                   ).hP16,
                   _keyValueTile(

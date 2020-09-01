@@ -32,10 +32,10 @@ class OnLoad extends UserEvent {
       }
       yield LoadingUserState();
       final userModel = await _userRepository.fetchUserProfile();
-      yield LoadedUserState(userModel);
-
+      yield LoadedUserState(userModel,null);
+      yield LoadingEventState(userModel,null);
       final eventList = await _userRepository.fetchUserEvent();
-      yield LoadedEventsState(user: userModel, eventList: eventList);
+      yield LoadedUserState(userModel, eventList);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
@@ -62,7 +62,7 @@ class OnLoad extends UserEvent {
           login: state.user.login,
           endCursor: state.user.repositories.pageInfo.endCursor);
       yield LoadedUserState.getNextRepositories(
-          currentUserModel: state.user, userModel: userModel);
+          currentUserModel: state.user, userModel: userModel, eventList: state.eventList);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
@@ -89,7 +89,7 @@ class OnPullRequestLoad extends UserEvent {
     if (currentState is LoadedPullRequestState) {
       return;
     }
-    final state = currentState as LoadedEventsState;
+    final state = currentState as LoadedUserState;
     try {
       yield LoadingUserState();
       print("Loading UserState");
@@ -120,7 +120,7 @@ class OnGistLoad extends UserEvent {
     if (currentState is LoadedGitState) {
       return;
     }
-    final state = currentState as LoadedEventsState;
+    final state = currentState as LoadedUserState;
     try {
       yield LoadingUserState();
       print("Loading Gist state");

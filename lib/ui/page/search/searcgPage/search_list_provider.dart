@@ -95,7 +95,7 @@ class SearchListProvider extends StatelessWidget {
                 return RepositoryListScreen(
                   isFromUserRepositoryListPage: true,
                   list: currentState.toRepositoryList(),
-                  onScollToBootom: () => searchGithub(context),
+                  onScollToBottom: () => searchGithub(context),
                 );
               case GithubSearchType.People:
                 return UserListPage(

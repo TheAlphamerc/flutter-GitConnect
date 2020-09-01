@@ -15,14 +15,26 @@ class RepositoryListScreen extends StatefulWidget {
   final bool isFromUserRepositoryListPage;
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
-  final Function onScollToBootom;
+  final Function onScollToBottom;
 
-  /// `isFromUserRepositoryListPage` will be set to true if this screen is used as widget
+  static MaterialPageRoute getPageRoute({VoidCallback onScollToBottom,
+      List<RepositoriesNode> list, UserBloc userBloc, PeopleBloc peopleBloc}) {
+    return MaterialPageRoute(
+      builder: (_) => RepositoryListScreen(
+        list: list,
+        onScollToBottom: onScollToBottom,
+        userBloc: userBloc,
+        peopleBloc: peopleBloc,
+      ),
+    );
+  }
+
+  /// `isFromUserRepositoryListPage` should be set to true if this screen is used as widget
   const RepositoryListScreen(
       {Key key,
       this.list,
       this.isFromUserRepositoryListPage = false,
-      this.onScollToBootom,
+      this.onScollToBottom,
       this.userBloc,
       this.peopleBloc})
       : super(key: key);
@@ -41,7 +53,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
 
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      widget.onScollToBootom();
+      widget.onScollToBottom();
     }
   }
 
@@ -114,11 +126,11 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
       itemBuilder: (BuildContext context, int index) {
         if ((index >= list.length && !widget.isFromUserRepositoryListPage) &&
             (widget.peopleBloc != null || widget.userBloc != null)) {
-          print("Display Loader1");
+          print("Fetching user's repositories");
           return displayLoader ? _loader() : SizedBox.shrink();
         } else if (index >= list.length &&
             widget.isFromUserRepositoryListPage) {
-          print("Display Loader2s");
+          print("Fetching more repositories");
           return BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               if (state is LoadingNextSearchState) return _loader();
@@ -128,7 +140,6 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
           );
         }
         final repo = list[index];
-        print("Display List");
         return repoCard(context, repo);
       },
     );
