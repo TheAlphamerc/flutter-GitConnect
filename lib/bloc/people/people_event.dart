@@ -30,8 +30,9 @@ abstract class PeopleEvent extends Equatable {
 
 class LoadUserEvent extends PeopleEvent {
   final String login;
+  final bool isLoadNextRepositories;
 
-  LoadUserEvent({this.login});
+  LoadUserEvent({this.login,this.isLoadNextRepositories = false});
   @override
   Stream<PeopleState> getUser(
       {PeopleState currentState, PeopleBloc bloc}) async* {
@@ -46,6 +47,29 @@ class LoadUserEvent extends PeopleEvent {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
       yield ErrorPeopleState(_?.toString());
+    }
+  }
+ 
+ Stream<PeopleState> getNextRepositories(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedUserState;
+      if (!state.user.repositories.pageInfo.hasNextPage) {
+        print("No repository left");
+        return;
+      }
+      yield LoadingNextRepositoriesState(state.user);
+      final userModel = await _userRepository.fetchNextRepositorries(
+          login: state.user.login,
+          endCursor: state.user.repositories.pageInfo.endCursor);
+      yield LoadedUserState.getNextRepositories(
+          currentUserModel: state.user, userModel: userModel,);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedUserState;
+      yield ErrorNextRepositoryState(
+          errorMessage: _?.toString(), user: state.user);
     }
   }
 

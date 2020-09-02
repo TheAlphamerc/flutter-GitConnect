@@ -18,6 +18,20 @@ class LoadedUserState extends PeopleState {
 
   @override
   String toString() => 'LoadedUserState $user';
+
+  factory LoadedUserState.getNextRepositories(
+      {UserModel userModel, UserModel currentUserModel}) {
+    currentUserModel.repositories.nodes.addAll(userModel.repositories.nodes);
+    currentUserModel.repositories.pageInfo = userModel.repositories.pageInfo;
+    return LoadedUserState(user: currentUserModel);
+  }
+}
+
+class LoadingNextRepositoriesState extends LoadedUserState {
+  final UserModel user;
+  LoadingNextRepositoriesState(
+    this.user,
+  ) : super(user: user);
 }
 
 class LoadingFollowersState extends PeopleState {}
@@ -106,6 +120,15 @@ class ErrorGitState extends LoadedEventsState {
   final List<EventModel> eventList;
   ErrorGitState(this.errorMessage, {this.user, this.eventList})
       : super(user: user, eventList: eventList);
+
+  @override
+  String toString() => 'ErrorUserState';
+}
+
+class ErrorNextRepositoryState extends LoadedUserState {
+  final String errorMessage;
+  ErrorNextRepositoryState({UserModel user, this.errorMessage})
+      : super(user: user);
 
   @override
   String toString() => 'ErrorUserState';

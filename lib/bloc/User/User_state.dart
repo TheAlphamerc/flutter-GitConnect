@@ -40,16 +40,6 @@ class LoadingNextRepositoriesState extends LoadedUserState {
   LoadingNextRepositoriesState(this.user,{List<EventModel> eventList}) : super(user,eventList);
 }
 
-// class LoadedEventsState extends LoadedUserState {
-//   final UserModel user;
-//   final List<EventModel> eventList;
-
-//   LoadedEventsState({@required this.user, this.eventList}) : super(user,eventList);
-
-//   @override
-//   String toString() => 'LoadedUserState $user';
-// }
-
 class LoadedPullRequestState extends LoadedUserState {
   final UserModel user;
   final List<EventModel> eventList;

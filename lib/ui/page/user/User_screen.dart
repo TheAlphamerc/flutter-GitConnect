@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart' as people;
 import 'package:flutter_github_connect/bloc/people/people_bloc.dart';
+import 'package:flutter_github_connect/bloc/people/people_event.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
@@ -21,7 +22,7 @@ import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class UserScreen extends StatelessWidget {
   final UserModel model;
-  final UserBloc bloc;
+  final UserBloc userBloc;
   final PeopleBloc peopleBloc;
   final bool isHideAppBar;
 
@@ -29,7 +30,7 @@ class UserScreen extends StatelessWidget {
     return MaterialPageRoute(
       builder: (_) => UserScreen(
         model: user,
-        bloc: BlocProvider.of<UserBloc>(context),
+        userBloc: BlocProvider.of<UserBloc>(context),
       ),
     );
   }
@@ -37,7 +38,7 @@ class UserScreen extends StatelessWidget {
   const UserScreen(
       {Key key,
       this.model,
-      this.bloc,
+      this.userBloc,
       this.peopleBloc,
       this.isHideAppBar = false})
       : super(key: key);
@@ -197,7 +198,13 @@ class UserScreen extends StatelessWidget {
   }
 
   void onScollToBottom(context) {
-    bloc..add(OnLoad(isLoadNextRepositories: true));
+    if (peopleBloc != null) {
+      /// Getting next 10 repositories for the use whoose profile is open
+      peopleBloc..add(LoadUserEvent(login:model.login,isLoadNextRepositories: true));
+    } else if (userBloc != null) {
+      /// Getting next 10 repositories for logged in user
+      userBloc..add(OnLoad(isLoadNextRepositories: true));
+    }
   }
 
   @override
@@ -372,7 +379,7 @@ class UserScreen extends StatelessWidget {
                             onScollToBottom: () {
                               onScollToBottom(context);
                             },
-                            userBloc: bloc,
+                            userBloc: userBloc,
                             peopleBloc: peopleBloc,
                           )
                           // MaterialPageRoute(

@@ -179,7 +179,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
                       },
                       builder: (context, state) {
                         bool displayLoader = false;
-                        if (state is LoadingNextRepositoriesState)
+                        if (state is people.LoadingNextRepositoriesState)
                           displayLoader = true;
                         if (state is people.LoadedUserState) {
                           return _repoList(state.user.repositories.nodes,
