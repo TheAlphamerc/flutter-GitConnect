@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class RepoDetailPage extends StatelessWidget {
   const RepoDetailPage({Key key, this.name, this.owner}) : super(key: key);
@@ -68,19 +69,11 @@ class RepoDetailPage extends StatelessWidget {
             );
           }
           if (currentState is LoadingRepoState) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(GColors.blue),
-              ),
-            );
+            return GLoader();
           } else if (currentState is LoadedRepoState) {
             return RepoDetailScreen(model: currentState.model);
           }
-          return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(GColors.blue),
-            ),
-          );
+          return GLoader();
         },
       ),
     );

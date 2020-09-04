@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class RepositoryListScreen extends StatefulWidget {
@@ -17,8 +18,11 @@ class RepositoryListScreen extends StatefulWidget {
   final PeopleBloc peopleBloc;
   final Function onScollToBottom;
 
-  static MaterialPageRoute getPageRoute({VoidCallback onScollToBottom,
-      List<RepositoriesNode> list, UserBloc userBloc, PeopleBloc peopleBloc}) {
+  static MaterialPageRoute getPageRoute(
+      {VoidCallback onScollToBottom,
+      List<RepositoriesNode> list,
+      UserBloc userBloc,
+      PeopleBloc peopleBloc}) {
     return MaterialPageRoute(
       builder: (_) => RepositoryListScreen(
         list: list,
@@ -152,10 +156,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
       child: SizedBox(
         height: 20,
         width: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 1,
-          valueColor: AlwaysStoppedAnimation(GColors.blue),
-        ),
+        child: GLoader(stroke: 1),
       ),
     );
   }
@@ -185,7 +186,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
                           return _repoList(state.user.repositories.nodes,
                               displayLoader: displayLoader);
                         } else {
-                          return CircularProgressIndicator();
+                          return GLoader();
                         }
                       },
                     )
@@ -202,7 +203,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
                           return _repoList(state.user.repositories.nodes,
                               displayLoader: displayLoader);
                         } else {
-                          return CircularProgressIndicator();
+                          return GLoader();
                         }
                       },
                     )

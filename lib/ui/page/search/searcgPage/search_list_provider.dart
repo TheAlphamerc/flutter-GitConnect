@@ -7,6 +7,7 @@ import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class SearchListProvider extends StatelessWidget {
   static MaterialPageRoute route({GithubSearchType type, String query}) {
@@ -111,9 +112,7 @@ class SearchListProvider extends StatelessWidget {
               default:
             }
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return GLoader();
         },
       ),
     );

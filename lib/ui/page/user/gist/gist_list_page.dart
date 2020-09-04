@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class GistlistPageProvider extends StatelessWidget {
   final String login;
@@ -94,9 +95,7 @@ class GistlistPage extends StatelessWidget {
                 child: Text("Loading"),
               );
             }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return GLoader();
           },
         ),
       ),

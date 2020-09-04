@@ -5,6 +5,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class UserPage extends StatefulWidget {
   static MaterialPageRoute getPageRoute(
@@ -72,9 +73,7 @@ class _UserPageState extends State<UserPage> {
               peopleBloc: BlocProvider.of<PeopleBloc>(context)
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return GLoader();
           }
         },
       ),

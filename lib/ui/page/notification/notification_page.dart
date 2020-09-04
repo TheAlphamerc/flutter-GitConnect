@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/notification/notification_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class NotificationPage extends StatelessWidget {
 
@@ -53,9 +54,7 @@ class NotificationPage extends StatelessWidget {
                 ],
               );
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return GLoader();
         },
       ),
     );

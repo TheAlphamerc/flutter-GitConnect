@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class PullRequestPageProvider extends StatelessWidget {
   final String login;
@@ -94,9 +95,7 @@ class PullRequestPage extends StatelessWidget {
               );
             }
             if (currentState is LoadingPullRequestState) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return GLoader();
             }
             return Center(
               child: Text("Unknown State"),

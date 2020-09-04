@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
-import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/home_page_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -66,9 +66,7 @@ class HomePage extends StatelessWidget {
             bloc: BlocProvider.of<UserBloc>(context),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return GLoader(stroke: 4);
         }
       },
     );

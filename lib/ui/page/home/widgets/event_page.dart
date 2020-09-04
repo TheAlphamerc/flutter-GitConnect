@@ -7,6 +7,7 @@ import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:get_it/get_it.dart';
 
@@ -331,10 +332,7 @@ class EventsPage extends StatelessWidget {
       child: SizedBox(
         height: 20,
         width: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 1,
-          valueColor: AlwaysStoppedAnimation(GColors.blue),
-        ),
+        child: GLoader(stroke: 1),
       ),
     );
   }

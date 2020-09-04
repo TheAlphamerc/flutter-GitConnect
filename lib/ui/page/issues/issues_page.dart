@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/issues/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class IssuesPage extends StatefulWidget {
   final String login;
@@ -33,9 +34,7 @@ class _IssuesPageState extends State<IssuesPage> {
           IssuesState currentState,
         ) {
           if (currentState is LoadingUserState) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return GLoader();
           }
           if (currentState is ErrorIssuesState) {
             return Center(
@@ -70,9 +69,7 @@ class _IssuesPageState extends State<IssuesPage> {
               icon: GIcons.issue_opened_24,
             );
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return GLoader();
         },
       ),
     );

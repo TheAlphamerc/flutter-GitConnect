@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/bloc/navigation/index.dart';
 import 'package:flutter_github_connect/ui/page/auth/web_view.dart';
 import 'package:flutter_github_connect/ui/page/common/dashboard_page.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart' as notif;
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class AuthPage extends StatefulWidget {
   static const String routeName = '/auth';
@@ -91,9 +92,7 @@ class _AuthPageState extends State<AuthPage> {
             ],
           ));
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return GLoader(stroke: 4);
       }),
     );
   }

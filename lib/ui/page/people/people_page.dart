@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class ActorPage extends StatelessWidget {
   const ActorPage({Key key,@required this.type}) : super(key: key);
@@ -68,11 +69,7 @@ class PeoplePage extends StatelessWidget {
           );
         }
         if (currentState is LoadingFollowersState) {
-          return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(GColors.blue),
-            ),
-          );
+          return GLoader();
         } else if (currentState is LoadedFollowersState) {
           if (currentState.followers != null &&
               currentState.followers.nodes.isNotEmpty) {
@@ -108,9 +105,7 @@ class PeoplePage extends StatelessWidget {
               );
           }
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return GLoader();
       },
     );
   }
