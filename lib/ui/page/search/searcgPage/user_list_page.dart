@@ -5,10 +5,11 @@ import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class UserListPage extends StatelessWidget {
-  const UserListPage({Key key, this.hideAppBar = false, this.list})
+  const UserListPage({Key key, this.hideAppBar = false, this.list,this.controller})
       : super(key: key);
   final bool hideAppBar;
   final List<SearchUser> list;
+  final ScrollController controller;
   Widget userTile(context, SearchUser user) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -51,6 +52,7 @@ class UserListPage extends StatelessWidget {
               ),
             ),
       body: ListView.separated(
+        controller:controller ?? ScrollController(),
         itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) =>
             Divider(height: 0),

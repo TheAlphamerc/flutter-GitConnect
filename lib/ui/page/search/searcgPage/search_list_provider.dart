@@ -9,7 +9,7 @@ import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
-class SearchListProvider extends StatelessWidget {
+class SearchListProvider extends StatefulWidget {
   static MaterialPageRoute route({GithubSearchType type, String query}) {
     return MaterialPageRoute(
       builder: (context) => BlocProvider<SearchBloc>(
@@ -27,8 +27,27 @@ class SearchListProvider extends StatelessWidget {
   final String query;
   const SearchListProvider({Key key, this.type, this.query}) : super(key: key);
 
+  @override
+  _SearchListProviderState createState() => _SearchListProviderState();
+}
+
+class _SearchListProviderState extends State<SearchListProvider> {
+  ScrollController _controller;
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      BlocProvider.of<SearchBloc>(context)
+          .add(SearchForEvent(query: widget.query, type: widget.type));
+    }
+  }
+
   String _getAppBarTitle() {
-    switch (type) {
+    switch (widget.type) {
       case GithubSearchType.People:
         return "People";
       case GithubSearchType.Repository:
@@ -45,7 +64,7 @@ class SearchListProvider extends StatelessWidget {
     BuildContext context,
   ) {
     BlocProvider.of<SearchBloc>(context)
-        .add(SearchForEvent(query: query, type: type));
+        .add(SearchForEvent(query: widget.query, type: widget.type));
   }
 
   @override
@@ -102,12 +121,14 @@ class SearchListProvider extends StatelessWidget {
                 return UserListPage(
                   hideAppBar: true,
                   list: currentState.toUSerList(),
+                  controller: _controller
                 );
 
               case GithubSearchType.Issue:
                 return IssueListPage(
                   hideAppBar: true,
                   list: currentState.toIssueList(),
+                  controller: _controller,
                 );
               default:
             }
