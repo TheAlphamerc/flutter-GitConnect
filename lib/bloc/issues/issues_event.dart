@@ -19,9 +19,9 @@ abstract class IssuesEvent extends Equatable {
 
 class LoadIssuesEvent extends IssuesEvent {
   final String login;
-  final bool isLoadNextRepositories;
+  final bool isLoadNextIssues;
 
-  LoadIssuesEvent(this.login, {this.isLoadNextRepositories = false});
+  LoadIssuesEvent(this.login, {this.isLoadNextIssues = false});
   @override
   Stream<IssuesState> applyAsync(
       {IssuesState currentState, IssuesBloc bloc}) async* {

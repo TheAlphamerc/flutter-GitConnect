@@ -13,7 +13,7 @@ class IssuesBloc extends Bloc<IssuesEvent, IssuesState> {
   ) async* {
     try {
       if(event is LoadIssuesEvent){
-        if(event.isLoadNextRepositories){
+        if(event.isLoadNextIssues){
           yield* event.getNextIssues(currentState: state, bloc: this);
         }else{
           yield* event.applyAsync(currentState: state, bloc: this);

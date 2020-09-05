@@ -79,8 +79,45 @@ class LoadedPullRequestState extends LoadedEventsState {
   LoadedPullRequestState({this.user, this.eventList, this.pullRequestsList})
       : super(user: user, eventList: eventList);
 
+  factory LoadedPullRequestState.getNextRepositories(
+      {UserModel userModel,
+      List<EventModel> eventList,
+      UserPullRequests currentpullRequestsList,
+      UserPullRequests pullRequestsList}) {
+    currentpullRequestsList.nodes.addAll(pullRequestsList.nodes);
+    currentpullRequestsList.pageInfo = pullRequestsList.pageInfo;
+    return LoadedPullRequestState(
+        user: userModel,
+        eventList: eventList,
+        pullRequestsList: currentpullRequestsList);
+  }
+
   @override
   String toString() => 'LoadedUserState $user';
+}
+
+class LoadingNextPullRequestState extends LoadedPullRequestState {
+  final UserModel user;
+  LoadingNextPullRequestState(
+      this.user, List<EventModel> eventList, UserPullRequests pullRequestsList)
+      : super(
+            user: user,
+            eventList: eventList,
+            pullRequestsList: pullRequestsList);
+}
+
+class ErrorNextPullRequestState extends LoadedPullRequestState {
+  final UserModel user;
+  final String errorMessage;
+  ErrorNextPullRequestState(
+    {this.errorMessage,
+    this.user,
+    List<EventModel> eventList,
+    UserPullRequests pullRequestsList,
+  }) : super(
+            user: user,
+            eventList: eventList,
+            pullRequestsList: pullRequestsList);
 }
 
 class LoadedGitState extends PeopleState {

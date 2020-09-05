@@ -10,7 +10,8 @@ import 'package:get_it/get_it.dart';
 
 class PullRequestScreen extends StatelessWidget {
   final UserPullRequests pullRequest;
-  const PullRequestScreen({Key key, this.pullRequest}) : super(key: key);
+  final ScrollController controller;
+  const PullRequestScreen({Key key, this.pullRequest, this.controller}) : super(key: key);
   Widget _pullRequestTile(context, Node model, String username,
       {bool isCommented = false}) {
     final double widthOffset = 58.0;
@@ -119,6 +120,7 @@ class PullRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: controller ?? ScrollController(),
       child: FutureBuilder(
         initialData: "",
         future: GetIt.instance<SharedPrefrenceHelper>().getUserName(),

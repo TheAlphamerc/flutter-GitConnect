@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_github_connect/model/page_info_model.dart';
+
 class UserPullRequestResponse {
   UserPullRequestResponse({
     this.user,
@@ -52,11 +54,12 @@ class UserPullRequests {
   UserPullRequests({
     this.nodes,
     this.totalCount,
+    this.pageInfo
   });
 
   final List<Node> nodes;
   final int totalCount;
-
+  PageInfo pageInfo;
   factory UserPullRequests.fromRawJson(String str) =>
       UserPullRequests.fromJson(json.decode(str));
 
@@ -68,6 +71,7 @@ class UserPullRequests {
             ? null
             : List<Node>.from(json["nodes"].map((x) => Node.fromJson(x))),
         totalCount: json["totalCount"] == null ? null : json["totalCount"],
+        pageInfo:PageInfo.fromJson(json["pageInfo"])
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,6 +79,7 @@ class UserPullRequests {
             ? null
             : List<dynamic>.from(nodes.map((x) => x.toJson())),
         "totalCount": totalCount == null ? null : totalCount,
+        "pageInfo":pageInfo == null ? null : pageInfo.toJson()
       };
 }
 

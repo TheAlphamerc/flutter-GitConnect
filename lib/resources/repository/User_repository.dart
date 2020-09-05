@@ -17,8 +17,8 @@ class UserRepository {
     return await apiGatway.fetchUserEvent();
   }
 
-  Future<UserPullRequests> fetchPullRequest({String login}) async{
-    return await apiGatway.fetchPullRequest(login:login);
+  Future<UserPullRequests> fetchPullRequest({String login, String endCursor}) async{
+    return await apiGatway.fetchPullRequest(login:login,endCursor: endCursor);
   }
 
   Future<Gists> fetchGistList({String login}) async{

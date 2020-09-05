@@ -18,7 +18,7 @@ abstract class ApiGateway{
    Future<List<NotificationModel>>  fetchNotificationList();
    Future<model.Search> searchQuery({GithubSearchType type, String query,String endCursor});
    Future<issues.Issues> fetchIssues({String login,String endCursor});
-   Future<UserPullRequests> fetchPullRequest({String login});
+   Future<UserPullRequests> fetchPullRequest({String login,endCursor});
    Future<Gists> fetchGistList({String login});
    Future<people.Followers> fetchFollowersList(String login);
    Future<people.Following> fetchFollowingList(String login);

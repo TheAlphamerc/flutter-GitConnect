@@ -5,10 +5,9 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request_screen.dart';
-import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
-class PullRequestPageProvider extends StatelessWidget {
+class PullRequestPageProvider extends StatefulWidget {
   final String login;
 
   const PullRequestPageProvider({Key key, this.login}) : super(key: key);
@@ -28,16 +27,51 @@ class PullRequestPageProvider extends StatelessWidget {
   }
 
   @override
+  _PullRequestPageProviderState createState() =>
+      _PullRequestPageProviderState();
+}
+
+class _PullRequestPageProviderState extends State<PullRequestPageProvider> {
+  ScrollController _controller;
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      BlocProvider.of<PeopleBloc>(context).add(OnPullRequestLoad(widget.login,isLoadNextIssues: true));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PullRequestPageBody(
+      controller: _controller,
+      login: widget.login,
+    );
+  }
+}
+
+class PullRequestPageBody extends StatelessWidget {
+  final ScrollController controller;
+  final String login;
+
+  const PullRequestPageBody({Key key, this.controller, this.login})
+      : super(key: key);
+
+  @override
   Widget build(BuildContext context) {
     return PullRequestPage(
-        bloc: BlocProvider.of<PeopleBloc>(context), login: login);
+        bloc: BlocProvider.of<PeopleBloc>(context), login: login,controller:controller);
   }
 }
 
 class PullRequestPage extends StatelessWidget {
-  const PullRequestPage({Key key, this.bloc, this.login}) : super(key: key);
+  const PullRequestPage({Key key, this.bloc, this.login, this.controller}) : super(key: key);
   final PeopleBloc bloc;
   final String login;
+  final ScrollController controller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +116,8 @@ class PullRequestPage extends StatelessWidget {
               if (currentState.pullRequestsList != null &&
                   currentState.pullRequestsList.totalCount > 0)
                 return PullRequestScreen(
-                    pullRequest: currentState.pullRequestsList);
+                    pullRequest: currentState.pullRequestsList,
+                    controller: controller,);
               return Column(
                 children: <Widget>[
                   NoDataPage(

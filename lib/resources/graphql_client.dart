@@ -100,11 +100,13 @@ Future<QueryResult> getAuthUserName() async {
 
 Future<QueryResult> getUserPullRequest(
   String login,
+  String endCursor
 ) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.pullRequests,
       variables: <String, dynamic>{
         'login': login,
+        "endCursor": endCursor
       },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);

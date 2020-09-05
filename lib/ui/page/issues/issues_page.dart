@@ -36,7 +36,7 @@ class _IssuesPageState extends State<IssuesPage> {
       BlocProvider.of<IssuesBloc>(context).add(
         LoadIssuesEvent(
           widget.login,
-          isLoadNextRepositories: true,
+          isLoadNextIssues: true,
         ),
       );
     }

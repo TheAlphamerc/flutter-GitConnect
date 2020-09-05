@@ -176,7 +176,7 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<UserPullRequests> fetchPullRequest({String login}) async {
+  Future<UserPullRequests> fetchPullRequest({String login,endCursor}) async {
     try {
       print("fetchPullRequest Init");
       var accesstoken = await _sessionService.loadSession();
@@ -184,7 +184,7 @@ class ApiGatwayImpl implements ApiGateway {
       print("fetchPullRequest");
       var username = login ?? await _sessionService.getUserName();
       assert(login != null);
-      final result = await getUserPullRequest(username);
+      final result = await getUserPullRequest(username,endCursor);
       if (result.hasException) {
         print(result.exception.toString());
         return null;

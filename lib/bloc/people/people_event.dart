@@ -32,7 +32,7 @@ class LoadUserEvent extends PeopleEvent {
   final String login;
   final bool isLoadNextRepositories;
 
-  LoadUserEvent({this.login,this.isLoadNextRepositories = false});
+  LoadUserEvent({this.login, this.isLoadNextRepositories = false});
   @override
   Stream<PeopleState> getUser(
       {PeopleState currentState, PeopleBloc bloc}) async* {
@@ -49,8 +49,8 @@ class LoadUserEvent extends PeopleEvent {
       yield ErrorPeopleState(_?.toString());
     }
   }
- 
- Stream<PeopleState> getNextRepositories(
+
+  Stream<PeopleState> getNextRepositories(
       {PeopleState currentState, PeopleBloc bloc}) async* {
     try {
       final state = currentState as LoadedUserState;
@@ -63,7 +63,9 @@ class LoadUserEvent extends PeopleEvent {
           login: state.user.login,
           endCursor: state.user.repositories.pageInfo.endCursor);
       yield LoadedUserState.getNextRepositories(
-          currentUserModel: state.user, userModel: userModel,);
+        currentUserModel: state.user,
+        userModel: userModel,
+      );
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
@@ -129,8 +131,9 @@ class LoadFollowerEvent extends PeopleEvent {
 
 class OnPullRequestLoad extends PeopleEvent {
   final String login;
+  final bool isLoadNextIssues;
 
-  OnPullRequestLoad(this.login);
+  OnPullRequestLoad(this.login, {this.isLoadNextIssues = false});
   @override
   Stream<PeopleState> getGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {}
@@ -145,7 +148,8 @@ class OnPullRequestLoad extends PeopleEvent {
     try {
       yield LoadingPullRequestState();
       print("Loading PeopleState");
-      final pullRequestsList = await _userRepository.fetchPullRequest(login:login);
+      final pullRequestsList =
+          await _userRepository.fetchPullRequest(login: login);
       print("Loading End");
       yield LoadedPullRequestState(pullRequestsList: pullRequestsList);
     } catch (_, stackTrace) {
@@ -153,6 +157,36 @@ class OnPullRequestLoad extends PeopleEvent {
           name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
       yield ErrorPullRequestState(
         _?.toString(),
+      );
+    }
+  }
+
+  Stream<PeopleState> getNextPullRequest(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedPullRequestState;
+      if (!state.pullRequestsList.pageInfo.hasNextPage) {
+        print("No pull request left");
+        return;
+      }
+      yield LoadingNextPullRequestState(
+          state.user, state.eventList, state.pullRequestsList);
+      final newPullRequestList = await _userRepository.fetchPullRequest(
+          login: login, endCursor: state.pullRequestsList.pageInfo.endCursor);
+      yield LoadedPullRequestState.getNextRepositories(
+          currentpullRequestsList: state.pullRequestsList,
+          userModel: state.user,
+          eventList: state.eventList,
+          pullRequestsList: newPullRequestList);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedPullRequestState;
+      yield ErrorNextPullRequestState(
+        errorMessage: _?.toString(),
+        eventList: state.eventList,
+        pullRequestsList: state.pullRequestsList,
+        user: state.user,
       );
     }
   }
