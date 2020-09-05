@@ -11,22 +11,23 @@ import 'package:flutter_github_connect/ui/theme/extentions.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
-class RepositoryListScreen extends StatefulWidget {
+class RepositoryListScreen extends StatelessWidget {
   final List<RepositoriesNode> list;
   final bool isFromUserRepositoryListPage;
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
-  final Function onScollToBottom;
+  final ScrollController controller;
+  // final Function onScollToBottom;
 
   static MaterialPageRoute getPageRoute(
-      {VoidCallback onScollToBottom,
+      {ScrollController controller,
       List<RepositoriesNode> list,
       UserBloc userBloc,
       PeopleBloc peopleBloc}) {
     return MaterialPageRoute(
       builder: (_) => RepositoryListScreen(
         list: list,
-        onScollToBottom: onScollToBottom,
+        controller: controller,
         userBloc: userBloc,
         peopleBloc: peopleBloc,
       ),
@@ -38,28 +39,22 @@ class RepositoryListScreen extends StatefulWidget {
       {Key key,
       this.list,
       this.isFromUserRepositoryListPage = false,
-      this.onScollToBottom,
+      this.controller,
       this.userBloc,
       this.peopleBloc})
       : super(key: key);
+  // ScrollController _controller;
+  // @override
+  // void initState() {
+  //   _controller = ScrollController()..addListener(listener);
+  //   super.initState();
+  // }
 
-  @override
-  _RepositoryListScreenState createState() => _RepositoryListScreenState();
-}
-
-class _RepositoryListScreenState extends State<RepositoryListScreen> {
-  ScrollController _controller;
-  @override
-  void initState() {
-    _controller = ScrollController()..addListener(listener);
-    super.initState();
-  }
-
-  void listener() {
-    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      widget.onScollToBottom();
-    }
-  }
+  // void listener() {
+  //   if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+  //     onScollToBottom();
+  //   }
+  // }
 
   Widget repoCard(context, RepositoriesNode repo) {
     return Container(
@@ -124,16 +119,16 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
 
   Widget _repoList(List<RepositoriesNode> list, {bool displayLoader = false}) {
     return ListView.separated(
-      controller: _controller,
+      controller: controller ?? ScrollController(),
       itemCount: list.length + 1,
       separatorBuilder: (BuildContext context, int index) => Divider(height: 0),
       itemBuilder: (BuildContext context, int index) {
-        if ((index >= list.length && !widget.isFromUserRepositoryListPage) &&
-            (widget.peopleBloc != null || widget.userBloc != null)) {
+        if ((index >= list.length && !isFromUserRepositoryListPage) &&
+            (peopleBloc != null || userBloc != null)) {
           print("Fetching user's repositories");
           return displayLoader ? _loader() : SizedBox.shrink();
         } else if (index >= list.length &&
-            widget.isFromUserRepositoryListPage) {
+            isFromUserRepositoryListPage) {
           print("Fetching more repositories");
           return BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
@@ -164,17 +159,17 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.isFromUserRepositoryListPage
+      appBar: isFromUserRepositoryListPage
           ? null
           : AppBar(
               title: Text("Repositories"),
             ),
-      body: widget.list == null
+      body: list == null
           ? SizedBox()
-          : !widget.isFromUserRepositoryListPage
-              ? widget.peopleBloc != null
+          : !isFromUserRepositoryListPage
+              ? peopleBloc != null
                   ? BlocBuilder<PeopleBloc, people.PeopleState>(
-                      cubit: widget.peopleBloc,
+                      cubit: peopleBloc,
                       buildWhen: (old, newState) {
                         return (old != newState);
                       },
@@ -191,7 +186,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
                       },
                     )
                   : BlocBuilder<UserBloc, UserState>(
-                      cubit: widget.userBloc,
+                      cubit: userBloc,
                       buildWhen: (old, newState) {
                         return (old != newState);
                       },
@@ -207,7 +202,7 @@ class _RepositoryListScreenState extends State<RepositoryListScreen> {
                         }
                       },
                     )
-              : _repoList(widget.list),
+              : _repoList(list),
     );
   }
 }

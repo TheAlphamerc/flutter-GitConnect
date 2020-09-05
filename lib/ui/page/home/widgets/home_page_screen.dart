@@ -12,10 +12,44 @@ import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key key, this.model, this.bloc}) : super(key: key);
   final UserModel model;
   final UserBloc bloc;
+
+  @override
+  _HomePageScreenState createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
+  ScrollController _controller;
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      widget.bloc..add(OnLoad(isLoadNextRepositories: true));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HomePageScreenBody(
+      controller: _controller,
+      model: widget.model,
+      bloc: widget.bloc,
+    );
+  }
+}
+
+class HomePageScreenBody extends StatelessWidget {
+  final ScrollController controller;
+  final UserModel model;
+  final UserBloc bloc;
+  const HomePageScreenBody({Key key, this.controller, this.model, this.bloc})
+      : super(key: key);
 
   Widget _getUtilRos(BuildContext context, IconData icon, String text,
       {Function onPressed, Color color, Owner user}) {
@@ -161,10 +195,7 @@ class HomePageScreen extends StatelessWidget {
               context,
               RepositoryListScreen.getPageRoute(
                 list: [],
-                onScollToBottom: () {
-                  /// Load next 10 repositories from Github if available
-                  bloc..add(OnLoad(isLoadNextRepositories: true));
-                },
+                controller: controller,
                 userBloc: bloc,
                 peopleBloc: null,
               ),

@@ -60,13 +60,6 @@ class _SearchListProviderState extends State<SearchListProvider> {
     }
   }
 
-  void searchGithub(
-    BuildContext context,
-  ) {
-    BlocProvider.of<SearchBloc>(context)
-        .add(SearchForEvent(query: widget.query, type: widget.type));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,14 +108,13 @@ class _SearchListProviderState extends State<SearchListProvider> {
                 return RepositoryListScreen(
                   isFromUserRepositoryListPage: true,
                   list: currentState.toRepositoryList(),
-                  onScollToBottom: () => searchGithub(context),
+                  controller: _controller,
                 );
               case GithubSearchType.People:
                 return UserListPage(
-                  hideAppBar: true,
-                  list: currentState.toUSerList(),
-                  controller: _controller
-                );
+                    hideAppBar: true,
+                    list: currentState.toUSerList(),
+                    controller: _controller);
 
               case GithubSearchType.Issue:
                 return IssueListPage(

@@ -20,7 +20,7 @@ import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
   final UserModel model;
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
@@ -43,6 +43,58 @@ class UserScreen extends StatelessWidget {
       this.isHideAppBar = false})
       : super(key: key);
 
+  @override
+  _UserScreenState createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
+  ScrollController _controller;
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      if (widget.peopleBloc != null) {
+        /// Getting next 10 repositories for the use whoose profile is open
+        widget.peopleBloc
+          ..add(LoadUserEvent(
+              login: widget.model.login, isLoadNextRepositories: true));
+      } else if (widget.userBloc != null) {
+        /// Getting next 10 repositories for logged in user
+        widget.userBloc..add(OnLoad(isLoadNextRepositories: true));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return UserScreenBody(
+      model: widget.model,
+      isHideAppBar: widget.isHideAppBar,
+      controller: _controller,
+      peopleBloc: widget.peopleBloc,
+      userBloc: widget.userBloc,
+    );
+  }
+}
+
+class UserScreenBody extends StatelessWidget {
+  final UserModel model;
+  final UserBloc userBloc;
+  final PeopleBloc peopleBloc;
+  final bool isHideAppBar;
+  final ScrollController controller;
+  const UserScreenBody(
+      {Key key,
+      this.model,
+      this.userBloc,
+      this.peopleBloc,
+      this.isHideAppBar,
+      this.controller})
+      : super(key: key);
   Widget _iconWithText(context, IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -195,16 +247,6 @@ class UserScreen extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void onScollToBottom(context) {
-    if (peopleBloc != null) {
-      /// Getting next 10 repositories for the use whoose profile is open
-      peopleBloc..add(LoadUserEvent(login:model.login,isLoadNextRepositories: true));
-    } else if (userBloc != null) {
-      /// Getting next 10 repositories for logged in user
-      userBloc..add(OnLoad(isLoadNextRepositories: true));
-    }
   }
 
   @override
@@ -373,24 +415,14 @@ class UserScreen extends StatelessWidget {
                     onPressed: () {
                       print("Get user Repository");
                       Navigator.push(
-                          context,
-                          RepositoryListScreen.getPageRoute(
-                            list: model.repositories.nodes,
-                            onScollToBottom: () {
-                              onScollToBottom(context);
-                            },
-                            userBloc: userBloc,
-                            peopleBloc: peopleBloc,
-                          )
-                          // MaterialPageRoute(
-                          //   builder: (_) => RepositoryListScreen(
-                          //     list: model.repositories.nodes,
-                          //     onScollToBootom: () => onScollToBottom(context),
-                          //     userBloc: bloc,
-                          //     peopleBloc: peopleBloc,
-                          //   ),
-                          // ),
-                          );
+                        context,
+                        RepositoryListScreen.getPageRoute(
+                          list: model.repositories.nodes,
+                          controller: controller,
+                          userBloc: userBloc,
+                          peopleBloc: peopleBloc,
+                        ),
+                      );
                     },
                   ).hP16,
                   _keyValueTile(
