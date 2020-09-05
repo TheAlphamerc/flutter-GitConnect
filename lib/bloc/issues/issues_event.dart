@@ -19,8 +19,9 @@ abstract class IssuesEvent extends Equatable {
 
 class LoadIssuesEvent extends IssuesEvent {
   final String login;
+  final bool isLoadNextRepositories;
 
-  LoadIssuesEvent(this.login);
+  LoadIssuesEvent(this.login, {this.isLoadNextRepositories = false});
   @override
   Stream<IssuesState> applyAsync(
       {IssuesState currentState, IssuesBloc bloc}) async* {
@@ -29,12 +30,36 @@ class LoadIssuesEvent extends IssuesEvent {
         return;
       }
       yield LoadingUserState();
-      final list = await _issuesRepository.getIssues(login:login);
-      yield LoadedIssuesState(list);
+      final issues = await _issuesRepository.getIssues(login: login);
+      yield LoadedIssuesState(issues);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadIssuesEvent', error: _, stackTrace: stackTrace);
       yield ErrorIssuesState(_?.toString());
+    }
+  }
+
+  Stream<IssuesState> getNextIssues(
+      {IssuesState currentState, IssuesBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedIssuesState;
+      if (!state.issues.pageInfo.hasNextPage) {
+        print("No repository left");
+        return;
+      }
+      yield LoadingNextIssuessState(state.issues);
+      final issuesModel = await _issuesRepository.getIssues(
+          login: login, endCursor: state.issues.pageInfo.endCursor);
+      yield LoadedIssuesState.getNextIssues(
+        currentIssueModel: state.issues,
+        issuesModel: issuesModel,
+      );
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedIssuesState;
+      yield ErrorNextIssuessState(
+          errorMessage: _?.toString(), issues: state.issues);
     }
   }
 }

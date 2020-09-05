@@ -12,7 +12,13 @@ class IssuesBloc extends Bloc<IssuesEvent, IssuesState> {
     IssuesEvent event,
   ) async* {
     try {
-      yield* event.applyAsync(currentState: state, bloc: this);
+      if(event is LoadIssuesEvent){
+        if(event.isLoadNextRepositories){
+          yield* event.getNextIssues(currentState: state, bloc: this);
+        }else{
+          yield* event.applyAsync(currentState: state, bloc: this);
+        }
+      }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'IssuesBloc', error: _, stackTrace: stackTrace);
       yield state;

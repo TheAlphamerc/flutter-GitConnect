@@ -10,7 +10,8 @@ class IssuesPage extends StatefulWidget {
   final String login;
   static const String routeName = '/issues';
 
-  const IssuesPage({Key key, this.login}) : super(key: key);
+  const IssuesPage({Key key, this.login,})
+      : super(key: key);
   static route(String login) => MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (BuildContext context) =>
@@ -23,6 +24,24 @@ class IssuesPage extends StatefulWidget {
 }
 
 class _IssuesPageState extends State<IssuesPage> {
+  ScrollController _controller;
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      BlocProvider.of<IssuesBloc>(context).add(
+        LoadIssuesEvent(
+          widget.login,
+          isLoadNextRepositories: true,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,11 +76,12 @@ class _IssuesPageState extends State<IssuesPage> {
             ));
           }
           if (currentState is LoadedIssuesState) {
-            if (currentState.list != null && currentState.list.isNotEmpty)
+            if (currentState.issues.list != null &&
+                currentState.issues.list.isNotEmpty)
               return IssueListPage(
-                list: currentState.list,
-                hideAppBar: true,
-              );
+                  list: currentState.issues.list,
+                  hideAppBar: true,
+                  controller: _controller);
             return NoDataPage(
               title: "Empty issues",
               description:

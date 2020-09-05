@@ -1,5 +1,6 @@
 import 'package:flutter_github_connect/bloc/notification/notification_model.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
+import 'package:flutter_github_connect/model/page_info_model.dart';
 
 class IssuesReponseModel {
   IssuesData data;
@@ -60,11 +61,12 @@ class Viewer {
 class Issues {
   int totalCount;
   List<IssuesModel> list;
-
-  Issues({this.totalCount, this.list});
+  PageInfo pageInfo;
+  Issues({this.totalCount, this.list,this.pageInfo});
 
   Issues.fromJson(Map<String, dynamic> json) {
     totalCount = json['totalCount'];
+    pageInfo = PageInfo.fromJson(json["pageInfo"]);
     if (json['nodes'] != null) {
       list = new List<IssuesModel>();
       json['nodes'].forEach((v) {
@@ -76,6 +78,7 @@ class Issues {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['totalCount'] = this.totalCount;
+    data['pageInfo'] = this.pageInfo.toJson();
     if (this.list != null) {
       data['nodes'] = this.list.map((v) => v.toJson()).toList();
     }

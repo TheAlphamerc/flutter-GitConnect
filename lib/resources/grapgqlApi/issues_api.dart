@@ -39,10 +39,14 @@ class IssuesApis {
   }
 ''';
 
-  static const String issues= r'''query userInfo($login: String!) {
-    user(login: $login) {
-      issues(first: 30, orderBy: {field: CREATED_AT, direction: DESC}) {
+  static const String issues= r'''query userInfo($login: String!, $endCursor: String) {
+  user(login: $login) {
+    issues(first: 10, orderBy: {field: CREATED_AT, direction: DESC}, after:$endCursor) {
         totalCount
+        pageInfo{
+          endCursor
+          hasNextPage
+        }
         nodes {
           title
           createdAt

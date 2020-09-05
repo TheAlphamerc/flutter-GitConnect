@@ -10,12 +10,18 @@ class LoadingUserState extends IssuesState {}
 
 /// Initialized
 class LoadedIssuesState extends IssuesState {
-  final List<IssuesModel> list;
+  final Issues issues;
 
-  LoadedIssuesState(this.list);
+  LoadedIssuesState(this.issues);
 
   @override
   String toString() => 'LoadedIssuesState';
+
+  factory LoadedIssuesState.getNextIssues({Issues currentIssueModel, Issues issuesModel}) {
+      currentIssueModel.list.addAll(issuesModel.list);
+    currentIssueModel.pageInfo = issuesModel.pageInfo;
+    return LoadedIssuesState(currentIssueModel);
+  }
 }
 
 class ErrorIssuesState extends IssuesState {
@@ -25,4 +31,14 @@ class ErrorIssuesState extends IssuesState {
 
   @override
   String toString() => 'ErrorIssuesState';
+}
+
+class LoadingNextIssuessState extends LoadedIssuesState {
+  LoadingNextIssuessState(Issues issues) : super(issues);
+}
+
+class ErrorNextIssuessState extends LoadedIssuesState {
+  final String errorMessage;
+
+  ErrorNextIssuessState({this.errorMessage,Issues issues}) : super(issues);
 }

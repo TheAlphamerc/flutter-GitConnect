@@ -5,7 +5,7 @@ class IssuesRepository {
   IssuesRepository({this.apiGatway}) : assert(apiGatway != null);
   final ApiGateway apiGatway;
 
-  Future<List<IssuesModel>> getIssues({String login}) async {
-    return await apiGatway.fetchIssues(login:login);
+  Future<Issues> getIssues({String login,String endCursor}) async {
+    return await apiGatway.fetchIssues(login:login, endCursor: endCursor);
   }
 }

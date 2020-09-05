@@ -130,18 +130,18 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<issues.IssuesModel>> fetchIssues({String login}) async {
+  Future<issues.Issues> fetchIssues({String login,String endCursor}) async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
       var username = login ?? await _sessionService.getUserName();
-      final result = await getIssues(username);
+      final result = await getIssues(username,endCursor);
       if (result.hasException) {
         print(result.exception.toString());
         return null;
       }
       final issueMap = result.data['user'] as Map<String, dynamic>;
-      final list = issues.Issues.fromJson(issueMap["issues"]).list;
+      final list = issues.Issues.fromJson(issueMap["issues"]);
 
       return list;
     } catch (error) {

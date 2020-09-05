@@ -5,9 +5,10 @@ import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class IssueListPage extends StatelessWidget {
-  const IssueListPage({Key key, this.list, this.hideAppBar}) : super(key: key);
+  const IssueListPage({Key key, this.list, this.hideAppBar,this.controller}) : super(key: key);
   final List<IssuesModel> list;
   final bool hideAppBar;
+  final ScrollController controller;
 
   Widget _issueTile(context, IssuesModel model) {
     return Container(
@@ -112,6 +113,7 @@ class IssueListPage extends StatelessWidget {
               ),
             ),
       body: ListView.separated(
+        controller:controller ?? ScrollController(),
         itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) =>
             Divider(height: 0),
