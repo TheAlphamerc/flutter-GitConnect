@@ -12,7 +12,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   ) async* {
     try {
       if (event is OnLoad) {
-        yield* event.getNotificationList(currentState: state, bloc: this);
+        if(event.isLoadNextNotification){
+           yield* event.getNextNotifications(currentState: state, bloc: this);
+        }
+        else{
+          yield* event.getNotificationList(currentState: state, bloc: this);
+        }
       }
     } catch (_, stackTrace) {
       developer.log('$_',

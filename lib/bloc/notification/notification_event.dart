@@ -19,6 +19,9 @@ abstract class NotificationEvent extends Equatable {
 }
 
 class OnLoad extends NotificationEvent {
+  final bool isLoadNextNotification;
+
+  OnLoad({this.isLoadNextNotification = false});
   @override
   Stream<NotificationState> getNotificationList(
       {NotificationState currentState, NotificationBloc bloc}) async* {
@@ -27,12 +30,43 @@ class OnLoad extends NotificationEvent {
         return;
       }
       yield LoadingNotificationState();
-      final list = await _userRepository.getNotificationsList();
-      yield LoadedNotificationState(list: list);
+      final list = await _userRepository.getNotificationsList(pageNo: 1);
+      yield LoadedNotificationState(
+          list: list, pageNo: 2, hasNextPage: list.length == 10);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'Load Repository Event', error: _, stackTrace: stackTrace);
       yield ErrorNotificationState(_?.toString());
+    }
+  }
+
+  Stream<NotificationState> getNextNotifications(
+      {NotificationState currentState, NotificationBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedNotificationState;
+      if (!state.hasNextPage) {
+        print("No notification left");
+        return;
+      }
+      yield LoadingNextNotificationState(
+          state.list, state.pageNo, state.hasNextPage);
+      final list = await _userRepository.getNotificationsList(pageNo: state.pageNo);
+      yield LoadedNotificationState.next(
+        currentList: state.list,
+        notificationList: list,
+        hasNextPage: list.length == 10,
+        pageNo: state.pageNo + 1,
+      );
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedNotificationState;
+      yield ErrorNextNotificationState(
+        errorMessage: _?.toString(),
+        list: state.list,
+        hasNextPage: state.hasNextPage,
+        pageNo: state.pageNo,
+      );
     }
   }
 }

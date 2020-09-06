@@ -1,12 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-class NotificationScreen extends StatelessWidget {
+
+class NotificationScreen extends StatefulWidget {
   final List<NotificationModel> list;
 
   const NotificationScreen({Key key, this.list}) : super(key: key);
+
+  @override
+  _NotificationScreenState createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  ScrollController _controller;
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      BlocProvider.of<NotificationBloc>(context).add(
+        OnLoad(
+          isLoadNextNotification: true,
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationBody(list: widget.list,controller: _controller,);
+  }
+}
+
+class NotificationBody extends StatelessWidget {
+  const NotificationBody({Key key, this.list, this.controller})
+      : super(key: key);
+  final List<NotificationModel> list;
+  final ScrollController controller;
+
   Widget _notificationTile(context, NotificationModel model) {
     return Container(
         child: Row(
@@ -133,6 +170,7 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      controller: controller ?? ScrollController(),
       itemCount: list.length,
       separatorBuilder: (BuildContext context, int index) => Divider(),
       itemBuilder: (BuildContext context, int index) {

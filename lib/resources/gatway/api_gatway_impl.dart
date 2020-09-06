@@ -67,11 +67,13 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<NotificationModel>> fetchNotificationList() async {
+  Future<List<NotificationModel>> fetchNotificationList({int pageNo}) async {
     try {
+      assert(pageNo != null, "Please provice page no to get notifications");
       var accesstoken = await _sessionService.loadSession();
+      String since = DateTime.now().add(Duration(days: -(365 * 5))).toIso8601String();
       var response = await _dioClient.get(
-        Config.notificationsList,
+        Config.notificationsList(since: since, pageNo: pageNo),
         options: Options(
           headers: {'Authorization': 'token $accesstoken'},
         ),

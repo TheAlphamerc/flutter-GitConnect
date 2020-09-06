@@ -5,8 +5,8 @@ class NotificationRepository {
   final ApiGateway apiGatway;
   NotificationRepository({this.apiGatway}) : assert(apiGatway != null);
 
-  Future<List<NotificationModel>> getNotificationsList() async {
-    List<NotificationModel> list = await apiGatway.fetchNotificationList();
+  Future<List<NotificationModel>> getNotificationsList({int pageNo}) async {
+    List<NotificationModel> list = await apiGatway.fetchNotificationList(pageNo: pageNo);
     return list;
   }
 }
