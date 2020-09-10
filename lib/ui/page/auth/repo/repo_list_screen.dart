@@ -17,7 +17,6 @@ class RepositoryListScreen extends StatelessWidget {
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
   final ScrollController controller;
-  // final Function onScollToBottom;
 
   static MaterialPageRoute getPageRoute(
       {ScrollController controller,
@@ -43,18 +42,6 @@ class RepositoryListScreen extends StatelessWidget {
       this.userBloc,
       this.peopleBloc})
       : super(key: key);
-  // ScrollController _controller;
-  // @override
-  // void initState() {
-  //   _controller = ScrollController()..addListener(listener);
-  //   super.initState();
-  // }
-
-  // void listener() {
-  //   if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-  //     onScollToBottom();
-  //   }
-  // }
 
   Widget repoCard(context, RepositoriesNode repo) {
     return Container(
@@ -119,6 +106,7 @@ class RepositoryListScreen extends StatelessWidget {
 
   Widget _repoList(List<RepositoriesNode> list, {bool displayLoader = false}) {
     return ListView.separated(
+      physics: BouncingScrollPhysics(),
       controller: controller ?? ScrollController(),
       itemCount: list.length + 1,
       separatorBuilder: (BuildContext context, int index) => Divider(height: 0),
@@ -127,8 +115,7 @@ class RepositoryListScreen extends StatelessWidget {
             (peopleBloc != null || userBloc != null)) {
           print("Fetching user's repositories");
           return displayLoader ? _loader() : SizedBox.shrink();
-        } else if (index >= list.length &&
-            isFromUserRepositoryListPage) {
+        } else if (index >= list.length && isFromUserRepositoryListPage) {
           print("Fetching more repositories");
           return BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {

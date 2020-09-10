@@ -44,7 +44,7 @@ class LoadIssuesEvent extends IssuesEvent {
     try {
       final state = currentState as LoadedIssuesState;
       if (!state.issues.pageInfo.hasNextPage) {
-        print("No repository left");
+        print("No Issues left");
         return;
       }
       yield LoadingNextIssuessState(state.issues);

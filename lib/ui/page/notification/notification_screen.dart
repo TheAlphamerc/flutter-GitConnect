@@ -170,6 +170,7 @@ class NotificationBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      physics: BouncingScrollPhysics(),
       controller: controller ?? ScrollController(),
       itemCount: list.length,
       separatorBuilder: (BuildContext context, int index) => Divider(),

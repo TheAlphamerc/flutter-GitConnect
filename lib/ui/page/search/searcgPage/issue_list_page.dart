@@ -113,6 +113,7 @@ class IssueListPage extends StatelessWidget {
               ),
             ),
       body: ListView.separated(
+        physics: BouncingScrollPhysics(),
         controller:controller ?? ScrollController(),
         itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) =>
