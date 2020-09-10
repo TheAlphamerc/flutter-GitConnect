@@ -305,7 +305,7 @@ class UserScreenBody extends StatelessWidget {
                   ),
                   if (model.bio != null && model.bio.isNotEmpty)
                     Text(
-                      model.bio,
+                      model.bio.trim(),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   if (model.bio != null && model.bio.isNotEmpty)

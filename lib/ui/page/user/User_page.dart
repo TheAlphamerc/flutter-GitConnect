@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_github_connect/bloc/people/index.dart';
-import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class UserPage extends StatefulWidget {
+  final String login;
+
+  const UserPage({Key key, this.login}) : super(key: key);
   static MaterialPageRoute getPageRoute(
     BuildContext context, {
     String login,
@@ -19,7 +20,7 @@ class UserPage extends StatefulWidget {
               ..add(
                 LoadUserEvent(login: login),
               ),
-            child: UserPage());
+            child: UserPage(login: login));
       },
     );
   }
@@ -41,7 +42,7 @@ class _UserPageState extends State<UserPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text(widget.login ?? "Profile"),
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(
         // bloc: widget._userBloc,
@@ -68,10 +69,9 @@ class _UserPageState extends State<UserPage> {
             );
           } else if (currentState is LoadedUserState) {
             return UserScreen(
-              model: currentState.user,
-              isHideAppBar:true,
-              peopleBloc: BlocProvider.of<PeopleBloc>(context)
-            );
+                model: currentState.user,
+                isHideAppBar: true,
+                peopleBloc: BlocProvider.of<PeopleBloc>(context));
           } else {
             return GLoader();
           }

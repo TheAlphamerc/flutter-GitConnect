@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
+import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
@@ -35,17 +36,19 @@ class PeopleScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.subtitle2,
             ).pT(3),
           ),
-          if(user.bio != null)
+          if(user.bio != null && user.bio.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(left: 86, bottom: 8),
             child: Text(
-              user.bio ?? "N/A",
+              user.bio.trim() ?? "N/A",
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
           Divider(height: 0),
         ],
-      ),
+      ).ripple((){
+        Navigator.push(context, UserPage.getPageRoute(context, login: user.login));
+      }),
     );
   }
 
