@@ -27,7 +27,13 @@ class PeopleBloc extends Bloc<PeopleEvent, PeopleState> {
           yield* event.getPullRequest(currentState: state, bloc: this);
         }
       } else if (event is OnGistLoad) {
-        yield* event.getGist(currentState: state, bloc: this);
+         if(event.isLoadNextGist){
+          yield* event.getNextGist(currentState: state, bloc: this);
+        }
+        else{
+          yield* event.getGist(currentState: state, bloc: this);
+        }
+        
       }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'PeopleBloc', error: _, stackTrace: stackTrace);

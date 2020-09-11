@@ -6,7 +6,7 @@ import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
-class GistlistPageProvider extends StatelessWidget {
+class GistlistPageProvider extends StatefulWidget {
   final String login;
 
   const GistlistPageProvider({Key key, this.login}) : super(key: key);
@@ -25,18 +25,38 @@ class GistlistPageProvider extends StatelessWidget {
   }
 
   @override
+  _GistlistPageProviderState createState() => _GistlistPageProviderState();
+}
+
+class _GistlistPageProviderState extends State<GistlistPageProvider> {
+  ScrollController _controller;
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      BlocProvider.of<PeopleBloc>(context)
+          .add(OnGistLoad(widget.login, isLoadNextGist: true));
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return GistlistPage(
       bloc: BlocProvider.of<PeopleBloc>(context),
-      login:login
+      login:widget.login,
+      controller:_controller
     );
   }
 }
 
 class GistlistPage extends StatelessWidget {
-  const GistlistPage({Key key, this.bloc,this.login}) : super(key: key);
+  const GistlistPage({Key key, this.bloc,this.login, this.controller}) : super(key: key);
   final PeopleBloc bloc;
   final String login;
+  final ScrollController controller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +98,7 @@ class GistlistPage extends StatelessWidget {
             }
             if (currentState is LoadedGitState) {
               if(currentState.gist != null && currentState.gist.totalCount > 0)
-              return GistListScreen(gist: currentState.gist);
+              return GistListScreen(gist: currentState.gist,login: login,controller:controller);
               return Column(
                 children: <Widget>[
                   NoDataPage(

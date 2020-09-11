@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
-import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:get_it/get_it.dart';
 
 class GistListScreen extends StatelessWidget {
   final Gists gist;
-  const GistListScreen({Key key, this.gist}) : super(key: key);
+  final String login;
+  final ScrollController controller;
+  const GistListScreen({Key key, this.gist, this.login, this.controller})
+      : super(key: key);
   Widget _pullRequestTile(context, Node model, String username,
       {bool isCommented = false}) {
     final double widthOffset = 58.0;
@@ -51,7 +52,7 @@ class GistListScreen extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Icon(GIcons.star_fill_24,
-                          size: 16, color: Colors.yellowAccent[700]),
+                        size: 16, color: Colors.yellowAccent[700]),
                     SizedBox(width: 10),
                     Text(
                       "${model.stargazers.totalCount}",
@@ -82,7 +83,6 @@ class GistListScreen extends StatelessWidget {
                       ),
                   ],
                 ),
-
                 if (model.createdAt != null)
                   Container(
                     width: MediaQuery.of(context).size.width - widthOffset,
@@ -100,44 +100,21 @@ class GistListScreen extends StatelessWidget {
         ).vP16);
   }
 
-  Widget _noActivity(context) {
-    return GCard(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      color: Theme.of(context).colorScheme.surface,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Text("No recent activity detected at your github account yet.",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: FutureBuilder(
-        initialData: "",
-        future: GetIt.instance<SharedPrefrenceHelper>().getUserName(),
-        builder: (context, AsyncSnapshot<String> snapshot) {
-          return GCard(
-            color: Theme.of(context).colorScheme.surface,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ...gist.nodes.map(
-                  (model) {
-                    return Column(
-                      children: <Widget>[
-                        // Text(model.type.toString()),
-                        _pullRequestTile(context, model, snapshot.data ?? "",
-                            isCommented: true),
-                        if (gist.nodes.last != model)
-                          Divider(height: 1, indent: 50),
-                      ],
-                    );
-                  },
-                ).toList(),
-              ],
-            ),
+    return GCard(
+      color: Theme.of(context).colorScheme.surface,
+      child: ListView.separated(
+        controller: controller,
+        itemCount: gist.nodes.length,
+        separatorBuilder: (BuildContext context, int index) =>
+            Divider(indent: 50),
+        itemBuilder: (BuildContext context, int index) {
+          return _pullRequestTile(
+            context,
+            gist.nodes[index],
+            login ?? "",
+            isCommented: true,
           );
         },
       ),

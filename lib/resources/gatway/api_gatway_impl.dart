@@ -203,13 +203,13 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<Gists> fetchGistList({String login}) async {
+  Future<Gists> fetchGistList({String login,String endCursor}) async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
       var username = login ?? await _sessionService.getUserName();
       assert(username != null);
-      final result = await getUserGistList(username);
+      final result = await getUserGistList(username,endCursor);
       if (result.hasException) {
         print(result.exception.toString());
         return null;

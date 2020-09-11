@@ -114,11 +114,13 @@ Future<QueryResult> getUserPullRequest(
 
 Future<QueryResult> getUserGistList(
   String login,
+  String endCursor
 ) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.gist,
       variables: <String, dynamic>{
         'login': login,
+         "endCursor": endCursor
       },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);

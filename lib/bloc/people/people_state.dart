@@ -109,8 +109,8 @@ class LoadingNextPullRequestState extends LoadedPullRequestState {
 class ErrorNextPullRequestState extends LoadedPullRequestState {
   final UserModel user;
   final String errorMessage;
-  ErrorNextPullRequestState(
-    {this.errorMessage,
+  ErrorNextPullRequestState({
+    this.errorMessage,
     this.user,
     List<EventModel> eventList,
     UserPullRequests pullRequestsList,
@@ -129,6 +129,33 @@ class LoadedGitState extends PeopleState {
 
   @override
   String toString() => 'LoadedUserState $user';
+
+  factory LoadedGitState.next({Gists currenctGistModel, UserModel userModel, List<EventModel> eventList, Gists gistModel}) {
+    currenctGistModel.nodes.addAll(gistModel.nodes);
+    currenctGistModel.pageInfo = gistModel.pageInfo;
+    print("New cursor is ${gistModel.pageInfo.endCursor}");
+    return LoadedGitState(
+        user: userModel,
+        eventList: eventList,
+        gist: currenctGistModel,);
+  }
+}
+
+class LoadingNextGistState extends LoadedGitState {
+  final Gists gist;
+
+  LoadingNextGistState({this.gist, UserModel user, List<EventModel> eventList})
+      : super(user: user, eventList: eventList, gist: gist);
+}
+
+class ErrorNextGistState extends LoadedGitState {
+  final String errorMessage;
+  ErrorNextGistState(
+      {this.errorMessage,
+      UserModel user,
+      List<EventModel> eventList,
+      Gists gist})
+      : super(user: user, eventList: eventList, gist: gist);
 }
 
 class ErrorUserState extends PeopleState {

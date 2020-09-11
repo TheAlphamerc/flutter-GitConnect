@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter_github_connect/model/page_info_model.dart';
+
 // class GistResponse {
 //     GistResponse({
 //         this.data,
@@ -68,11 +70,12 @@ class Gists {
     Gists({
         this.totalCount,
         this.nodes,
+        this.pageInfo
     });
 
     final int totalCount;
     final List<Node> nodes;
-
+    PageInfo pageInfo;
     factory Gists.fromRawJson(String str) => Gists.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
@@ -80,11 +83,13 @@ class Gists {
     factory Gists.fromJson(Map<String, dynamic> json) => Gists(
         totalCount: json["totalCount"] == null ? null : json["totalCount"],
         nodes: json["nodes"] == null ? null : List<Node>.from(json["nodes"].map((x) => Node.fromJson(x))),
+        pageInfo : json["pageInfo"] == null ? null : PageInfo.fromJson(json["pageInfo"]),
     );
 
     Map<String, dynamic> toJson() => {
         "totalCount": totalCount == null ? null : totalCount,
         "nodes": nodes == null ? null : List<dynamic>.from(nodes.map((x) => x.toJson())),
+        "pageInfo": pageInfo == null ? null : pageInfo.toJson()
     };
 }
 

@@ -1,8 +1,12 @@
 class GistGraphQl {
-  static const String gist = r'''query user($login: String!) {
+  static const String gist = r'''query user($login: String!, $endCursor: String) {
     user(login: $login) {
-      gists(first: 30, orderBy: {field: CREATED_AT, direction: DESC}) {
+      gists(first: 10, orderBy: {field: CREATED_AT, direction: DESC}, after: $endCursor) {
         totalCount
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
         nodes {
           ... on Gist {
             owner {

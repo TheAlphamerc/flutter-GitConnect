@@ -112,7 +112,7 @@ class LoadFollowerEvent extends PeopleEvent {
       }
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadPeopleEvent', error: _, stackTrace: stackTrace);
+          name: 'LoadFollowerEvent', error: _, stackTrace: stackTrace);
       yield ErrorPeopleState(_?.toString());
     }
   }
@@ -147,14 +147,12 @@ class OnPullRequestLoad extends PeopleEvent {
     // final state = currentState as LoadedEventsState;
     try {
       yield LoadingPullRequestState();
-      print("Loading PeopleState");
       final pullRequestsList =
           await _userRepository.fetchPullRequest(login: login);
-      print("Loading End");
       yield LoadedPullRequestState(pullRequestsList: pullRequestsList);
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+          name: 'OnPullRequestLoad', error: _, stackTrace: stackTrace);
       yield ErrorPullRequestState(
         _?.toString(),
       );
@@ -180,7 +178,7 @@ class OnPullRequestLoad extends PeopleEvent {
           pullRequestsList: newPullRequestList);
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+          name: 'OnPullRequestLoad', error: _, stackTrace: stackTrace);
       final state = currentState as LoadedPullRequestState;
       yield ErrorNextPullRequestState(
         errorMessage: _?.toString(),
@@ -205,8 +203,8 @@ class OnPullRequestLoad extends PeopleEvent {
 
 class OnGistLoad extends PeopleEvent {
   final String login;
-
-  OnGistLoad(this.login);
+  final bool isLoadNextGist;
+  OnGistLoad(this.login, {this.isLoadNextGist = false});
 
   @override
   Stream<PeopleState> getGist(
@@ -216,15 +214,49 @@ class OnGistLoad extends PeopleEvent {
     }
     try {
       // yield LoadingUserState();
-      print("Loading Gist state");
-      final pullRequestsList =
-          await _userRepository.fetchGistList(login: login);
-      print("Loading End");
-      yield LoadedGitState(gist: pullRequestsList);
+
+      final gistModel = await _userRepository.fetchGistList(login: login);
+
+      yield LoadedGitState(gist: gistModel);
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+          name: 'OnGistLoad', error: _, stackTrace: stackTrace);
       yield ErrorGitState(_?.toString());
+    }
+  }
+
+  Stream<PeopleState> getNextGist(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedGitState;
+      if (!state.gist.pageInfo.hasNextPage) {
+        print("No Gist left");
+        return;
+      }
+      yield LoadingNextGistState(
+        gist: state.gist,
+        user: state.user,
+        eventList: state.eventList,
+      );
+      print(state.gist.pageInfo.endCursor);
+      final gistModel = await _userRepository.fetchGistList(
+          login: login, endCursor: state.gist.pageInfo.endCursor);
+      yield LoadedGitState.next(
+        currenctGistModel: state.gist,
+        userModel: state.user,
+        eventList: state.eventList,
+        gistModel: gistModel,
+      );
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'OnGistLoadt', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedGitState;
+      yield ErrorNextGistState(
+        errorMessage: _?.toString(),
+        eventList: state.eventList,
+        gist: state.gist,
+        user: state.user,
+      );
     }
   }
 
