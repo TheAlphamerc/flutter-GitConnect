@@ -5,6 +5,10 @@ class PeopleApi {
     user(login: $login) {
       followers(first: 30,after: $endCursor) {
         totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         nodes {
           avatarUrl
           login

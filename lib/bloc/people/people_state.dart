@@ -39,9 +39,18 @@ class LoadingFollowState extends PeopleState {}
 class LoadingPullRequestState extends PeopleState {}
 
 class LoadedFollowState extends PeopleState {
-  final people.FollowModel followers;
+  final people.FollowModel followModel;
 
-  LoadedFollowState(this.followers);
+  LoadedFollowState(this.followModel);
+
+  factory LoadedFollowState.next({people.FollowModel model, people.FollowModel currentFollowModel}) {
+    currentFollowModel.nodes.addAll(model.nodes);
+    currentFollowModel.pageInfo = model.pageInfo;
+    return LoadedFollowState(currentFollowModel);
+  }
+}
+class LoadingNextFollowState extends LoadedFollowState{
+  LoadingNextFollowState(people.FollowModel followers) : super(followers);
 }
 
 class ErrorPeopleState extends PeopleState {

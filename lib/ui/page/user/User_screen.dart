@@ -104,8 +104,7 @@ class UserScreenBody extends StatelessWidget {
           SizedBox(width: 10),
           Container(
             constraints: BoxConstraints(
-              minWidth: 0, maxWidth: MediaQuery.of(context).size.width - 60
-            ),
+                minWidth: 0, maxWidth: MediaQuery.of(context).size.width - 60),
             child: Text(
               text ?? "N/A",
               style: Theme.of(context).textTheme.bodyText1,
@@ -155,6 +154,9 @@ class UserScreenBody extends StatelessWidget {
   }
 
   Widget _pinnedRepoCard(context, Node repo) {
+    if (repo.owner == null) {
+      return SizedBox.shrink();
+    }
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: GCard(
@@ -166,8 +168,8 @@ class UserScreenBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             UserAvatar(
-              name: repo.owner.login,
-              imagePath: repo.owner.avatarUrl,
+              name: repo?.owner?.login ?? "N/A",
+              imagePath: repo?.owner?.avatarUrl,
             ),
             SizedBox(height: 16),
             Container(
@@ -243,9 +245,7 @@ class UserScreenBody extends StatelessWidget {
   }
 
   void loadPeoples(context, people.PeopleType type) {
-    Navigator.of(context).push(
-      ActorPage.getPageRoute(model.login, type)
-    );
+    Navigator.of(context).push(ActorPage.getPageRoute(model.login, type));
   }
 
   @override
@@ -312,7 +312,8 @@ class UserScreenBody extends StatelessWidget {
                   if (model.bio != null && model.bio.isNotEmpty)
                     SizedBox(height: 8),
                   _iconWithText(context, GIcons.people_24, model.login),
-                  _iconWithText(context, GIcons.link_24, model.websiteUrl).ripple((){
+                  _iconWithText(context, GIcons.link_24, model.websiteUrl)
+                      .ripple(() {
                     Utility.launchTo(model.websiteUrl);
                   }),
                   _iconWithText(context, GIcons.gift_24,

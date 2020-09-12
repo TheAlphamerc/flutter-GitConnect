@@ -8,22 +8,43 @@ import 'package:flutter_github_connect/ui/page/people/people_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
-class ActorPage extends StatelessWidget {
+class ActorPage extends StatefulWidget {
   static MaterialPageRoute getPageRoute(String login, PeopleType type) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
           create: (BuildContext context) =>
               PeopleBloc()..add(LoadFollowEvent(login, type)),
-          child: ActorPage(type: type),
+          child: ActorPage(type: type,login: login),
         );
       },
     );
   }
 
-  const ActorPage({Key key, @required this.type}) : super(key: key);
+  const ActorPage({Key key, @required this.type, this.login}) : super(key: key);
   final PeopleType type;
+  final String login;
 
+  @override
+  _ActorPageState createState() => _ActorPageState();
+}
+
+class _ActorPageState extends State<ActorPage> {
+  
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      BlocProvider.of<PeopleBloc>(context)
+          .add(LoadFollowEvent(widget.login, widget.type,isLoadNextFollow: true));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,9 +53,9 @@ class ActorPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Title(
-          title: type.asString(),
+          title: widget.type.asString(),
           color: Colors.black,
-          child: Text(type.asString(),
+          child: Text(widget.type.asString(),
               style: Theme.of(context).textTheme.headline6),
         ),
       ),
@@ -44,7 +65,8 @@ class ActorPage extends StatelessWidget {
           PeopleState currentState,
         ) {
           return PeoplePage(
-              peopleBloc: BlocProvider.of<PeopleBloc>(context), type: type);
+              peopleBloc: BlocProvider.of<PeopleBloc>(context), type: widget.type,controller: _controller);
+
         },
       ),
     );
@@ -55,8 +77,9 @@ class PeoplePage extends StatelessWidget {
   static const String routeName = '/people';
   final PeopleBloc peopleBloc;
   final PeopleType type;
+  final ScrollController controller;
 
-  const PeoplePage({Key key, this.peopleBloc, this.type}) : super(key: key);
+  const PeoplePage({Key key, this.peopleBloc, this.type,this.controller}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PeopleBloc, PeopleState>(
@@ -86,10 +109,11 @@ class PeoplePage extends StatelessWidget {
         if (currentState is LoadingFollowState) {
           return GLoader();
         } else if (currentState is LoadedFollowState) {
-          if (currentState.followers != null &&
-              currentState.followers.nodes.isNotEmpty) {
+          if (currentState.followModel != null &&
+              currentState.followModel.nodes.isNotEmpty) {
             return PeopleScreen(
-              followers: currentState.followers.nodes,
+              followers: currentState.followModel.nodes,
+              controller:controller
             );
           } else {
             return Column(

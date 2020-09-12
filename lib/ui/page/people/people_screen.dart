@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
+import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class PeopleScreen extends StatelessWidget {
   const PeopleScreen({
     Key key,
-    @required List<Node> followers,
+    @required List<Node> followers, this.controller,
   })  : _followers = followers,
         super(key: key);
 
   final List<Node> _followers;
+  final ScrollController controller;
 
   Widget userTile(context, Node user) {
-    return Container(
+     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
             leading: SizedBox(
-              width: 50,
+              width: 51,
               child: UserAvatar(
                 height: 50,
                 imagePath: user.avatarUrl,
@@ -51,17 +54,41 @@ class PeopleScreen extends StatelessWidget {
       }),
     );
   }
-
+ Widget _loader() {
+    return Container(
+      alignment: Alignment.center,
+      height: 60,
+      child: SizedBox(
+        height: 30,
+        width: 30,
+        child: GLoader(stroke: 1),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.separated(
+        controller: controller,
         physics: BouncingScrollPhysics(),
-        itemCount: _followers.length,
+        itemCount: _followers.length + 1,
         separatorBuilder: (BuildContext context, int index) =>
             SizedBox(),// Divider(height: 0),
         itemBuilder: (BuildContext context, int index) {
+          if(index >= _followers.length){
+            return BlocBuilder<PeopleBloc, PeopleState>(
+              buildWhen: (oldState, newState) {
+                return oldState != newState;
+              },
+              builder: (context, state) {
+                if(state is LoadingNextFollowState){
+                  return _loader();
+                }
+                return SizedBox.shrink();
+              },
+            );
+          }
           return userTile(context, _followers[index]);
         },
       ),

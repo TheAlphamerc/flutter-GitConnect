@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class GitApp extends StatefulWidget {
   final Widget home;

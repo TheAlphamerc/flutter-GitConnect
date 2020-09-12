@@ -7,32 +7,50 @@ import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/repository/User_repository.dart';
 import 'package:flutter_github_connect/resources/repository/people_repository.dart';
 import 'package:get_it/get_it.dart';
+import 'package:graphql/client.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 abstract class PeopleEvent extends Equatable {
+  final PeopleRepository _peopleRepository =
+      PeopleRepository(apiGatway: GetIt.instance<ApiGateway>());
+
+  final UserRepository _userRepository =
+      UserRepository(apiGatway: GetIt.instance<ApiGateway>());
+
   @override
   List<Object> get props => [];
+
   Stream<PeopleState> fetchFollowersList(
       {PeopleState currentState, PeopleBloc bloc});
+
   Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc});
 
   Stream<PeopleState> getGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {}
+
   Stream<PeopleState> getPullRequest(
       {PeopleState currentState, PeopleBloc bloc});
-
-  final PeopleRepository _peopleRepository =
-      PeopleRepository(apiGatway: GetIt.instance<ApiGateway>());
-  final UserRepository _userRepository =
-      UserRepository(apiGatway: GetIt.instance<ApiGateway>());
 }
 
 class LoadUserEvent extends PeopleEvent {
-  final String login;
-  final bool isLoadNextRepositories;
-
   LoadUserEvent({this.login, this.isLoadNextRepositories = false});
+
+  final bool isLoadNextRepositories;
+  final String login;
+
+  @override
+  Stream<PeopleState> fetchFollowersList(
+      {PeopleState currentState, PeopleBloc bloc}) {
+    return null;
+  }
+
+  @override
+  Stream<PeopleState> getPullRequest(
+      {PeopleState currentState, PeopleBloc bloc}) {
+    return null;
+  }
+
   @override
   Stream<PeopleState> getUser(
       {PeopleState currentState, PeopleBloc bloc}) async* {
@@ -74,33 +92,40 @@ class LoadUserEvent extends PeopleEvent {
           errorMessage: _?.toString(), user: state.user);
     }
   }
-
-  @override
-  Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
-
-  @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
 }
 
 class LoadFollowEvent extends PeopleEvent {
+  LoadFollowEvent(this.login, this.type, {this.isLoadNextFollow = false});
+
   final String login;
   final PeopleType type;
+  final bool isLoadNextFollow;
 
-  LoadFollowEvent(this.login, this.type);
   @override
   Stream<PeopleState> fetchFollowersList(
       {PeopleState currentState, PeopleBloc bloc}) async* {
     try {
-      yield LoadingFollowState();
-      final followers =
-          await _peopleRepository.fetchFollowersList(login, type: type);
-      yield LoadedFollowState(followers);
+      if (!isLoadNextFollow) {
+        yield LoadingFollowState();
+        final followers =
+            await _peopleRepository.fetchFollowersList(login, type: type);
+        yield LoadedFollowState(followers);
+      } else {
+        final state = currentState as LoadedFollowState;
+        if (!state.followModel.pageInfo.hasNextPage) {
+          print("No ${type.asString()} list left");
+          return;
+        }
+        yield LoadingNextFollowState(state.followModel);
+        final followModel = await _peopleRepository.fetchFollowersList(login,
+            type: type, endCursor: state.followModel.pageInfo.endCursor);
+        yield LoadedFollowState.next(
+            model: followModel, currentFollowModel: state.followModel);
+      }
+    } on OperationException catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadFollowEvent', error: _, stackTrace: stackTrace);
+      yield ErrorPeopleState("Please check your internet connection");
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadFollowEvent', error: _, stackTrace: stackTrace);
@@ -109,22 +134,29 @@ class LoadFollowEvent extends PeopleEvent {
   }
 
   @override
-  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) {
+  Stream<PeopleState> getPullRequest(
+      {PeopleState currentState, PeopleBloc bloc}) {
     return null;
   }
 
   @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) {
+  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) {
     return null;
   }
 }
 
 class OnPullRequestLoad extends PeopleEvent {
-  final String login;
-  final bool isLoadNextIssues;
-
   OnPullRequestLoad(this.login, {this.isLoadNextIssues = false});
+
+  final bool isLoadNextIssues;
+  final String login;
+
+  @override
+  Stream<PeopleState> fetchFollowersList(
+      {PeopleState currentState, PeopleBloc bloc}) {
+    return null;
+  }
+
   @override
   Stream<PeopleState> getGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {}
@@ -148,6 +180,11 @@ class OnPullRequestLoad extends PeopleEvent {
         _?.toString(),
       );
     }
+  }
+
+  @override
+  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) {
+    return null;
   }
 
   Stream<PeopleState> getNextPullRequest(
@@ -179,23 +216,19 @@ class OnPullRequestLoad extends PeopleEvent {
       );
     }
   }
+}
+
+class OnGistLoad extends PeopleEvent {
+  OnGistLoad(this.login, {this.isLoadNextGist = false});
+
+  final bool isLoadNextGist;
+  final String login;
 
   @override
   Stream<PeopleState> fetchFollowersList(
       {PeopleState currentState, PeopleBloc bloc}) {
     return null;
   }
-
-  @override
-  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
-}
-
-class OnGistLoad extends PeopleEvent {
-  final String login;
-  final bool isLoadNextGist;
-  OnGistLoad(this.login, {this.isLoadNextGist = false});
 
   @override
   Stream<PeopleState> getGist(
@@ -214,6 +247,14 @@ class OnGistLoad extends PeopleEvent {
       yield ErrorGitState(_?.toString());
     }
   }
+
+  @override
+  Stream<PeopleState> getPullRequest(
+      {PeopleState currentState, PeopleBloc bloc}) async* {}
+
+  @override
+  Stream<PeopleState> getUser(
+      {PeopleState currentState, PeopleBloc bloc}) async* {}
 
   Stream<PeopleState> getNextGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {
@@ -248,18 +289,5 @@ class OnGistLoad extends PeopleEvent {
         user: state.user,
       );
     }
-  }
-
-  @override
-  Stream<PeopleState> getUser(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
-
-  @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
-  @override
-  Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
   }
 }
