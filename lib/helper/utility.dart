@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utility {
@@ -17,6 +18,10 @@ class Utility {
     if (isOK) {
       launch(link);
     }
+  }
+
+  static share(String message){
+    Share.share(message,);
   }
   static String getPassedTime(String date) {
     if (date == null || date.isEmpty) {

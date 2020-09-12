@@ -9,6 +9,18 @@ import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class ActorPage extends StatelessWidget {
+
+  static MaterialPageRoute getPageRoute(String login, PeopleType type){
+    return MaterialPageRoute(
+        builder: (context) {
+          return BlocProvider<PeopleBloc>(
+            create: (BuildContext context) => PeopleBloc()
+              ..add(LoadFollowerEvent(login, type)),
+            child: ActorPage(type: type),
+          );
+        },
+      );
+  }
   const ActorPage({Key key,@required this.type}) : super(key: key);
   final PeopleType type;
 
@@ -20,9 +32,9 @@ class ActorPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Title(
-          title: type == PeopleType.Follower ? "Followers" : "Following",
+          title: type.asString(),
           color: Colors.black,
-          child: Text(type == PeopleType.Follower ? "Followers" : "Following", style: Theme.of(context).textTheme.headline6),
+          child: Text(type.asString(), style: Theme.of(context).textTheme.headline6),
         ),
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(

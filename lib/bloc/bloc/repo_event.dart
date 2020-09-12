@@ -36,18 +36,18 @@ class LoadRepoEvent extends RepoEvent {
 
   Stream<RepoState> getReadme(RepositoryModel model) async* {
     try {
-      print("Step 1");
-
-      print("Step 2");
       final readme =
           await _issuesRepository.getReadme(name: name, owner: owner);
-      print("Step 3");
       yield LoadReadmeState(model, readme);
+    } on ApiDataNotFoundException catch (_) {
+      developer.log(
+        "Readme file not available for $name reposotory",
+        name: "LoadRepoEvent",
+      );
+       yield ErrorReadmeState(_?.toString(), model);
     } catch (_, stackTrace) {
-      print("Step 4");
-
       developer.log('$_',
-          name: 'getReadmeEvent', error: _, stackTrace: stackTrace);
+          name: "LoadRepoEvent", error: _, stackTrace: stackTrace);
       yield ErrorReadmeState(_?.toString(), model);
     }
   }

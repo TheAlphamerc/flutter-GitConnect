@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
+import 'package:flutter_github_connect/exceptions/exceptions.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/repository/repo_repository.dart';
 import 'package:get_it/get_it.dart';

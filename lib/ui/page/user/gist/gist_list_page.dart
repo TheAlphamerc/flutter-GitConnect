@@ -69,7 +69,6 @@ class GistlistPage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Theme.of(context).colorScheme.surface,
         child: BlocBuilder<PeopleBloc, PeopleState>(
           cubit: bloc,
           builder: (

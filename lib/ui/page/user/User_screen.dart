@@ -102,9 +102,16 @@ class UserScreenBody extends StatelessWidget {
         children: <Widget>[
           Icon(icon, color: Theme.of(context).colorScheme.onSurface, size: 18),
           SizedBox(width: 10),
-          Text(
-            text ?? "N/A",
-            style: Theme.of(context).textTheme.bodyText1,
+          Container(
+            constraints: BoxConstraints(
+              minWidth: 0, maxWidth: MediaQuery.of(context).size.width - 60
+            ),
+            child: Text(
+              text ?? "N/A",
+              style: Theme.of(context).textTheme.bodyText1,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           )
         ],
       ),
@@ -237,15 +244,7 @@ class UserScreenBody extends StatelessWidget {
 
   void loadPeoples(context, people.PeopleType type) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return BlocProvider<people.PeopleBloc>(
-            create: (BuildContext context) => people.PeopleBloc()
-              ..add(people.LoadFollowerEvent(model.login, type)),
-            child: ActorPage(type: type),
-          );
-        },
-      ),
+      ActorPage.getPageRoute(model.login, type)
     );
   }
 
@@ -262,7 +261,9 @@ class UserScreenBody extends StatelessWidget {
               actions: <Widget>[
                 IconButton(
                   icon: Icon(GIcons.share_android_24, color: GColors.blue),
-                  onPressed: () {},
+                  onPressed: () {
+                    Utility.share(model.url);
+                  },
                 ),
                 IconButton(
                   icon: Icon(GIcons.settings_24, color: GColors.blue),
@@ -311,7 +312,9 @@ class UserScreenBody extends StatelessWidget {
                   if (model.bio != null && model.bio.isNotEmpty)
                     SizedBox(height: 8),
                   _iconWithText(context, GIcons.people_24, model.login),
-                  _iconWithText(context, GIcons.link_24, model.websiteUrl),
+                  _iconWithText(context, GIcons.link_24, model.websiteUrl).ripple((){
+                    Utility.launchTo(model.websiteUrl);
+                  }),
                   _iconWithText(context, GIcons.gift_24,
                       Utility.toDMYformate(model.createdAt)),
                   _iconWithText(context, Icons.location_city, model.location),
@@ -337,11 +340,9 @@ class UserScreenBody extends StatelessWidget {
                       Text(
                         "Following",
                         style: Theme.of(context).textTheme.subtitle1,
-                      ).ripple(
-                        () {
-                          loadPeoples(context, people.PeopleType.Following);
-                        },
-                      ),
+                      ).ripple(() {
+                        loadPeoples(context, people.PeopleType.Following);
+                      }),
                     ],
                   )
                 ],

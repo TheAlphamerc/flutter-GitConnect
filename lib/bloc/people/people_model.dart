@@ -164,3 +164,15 @@ enum PeopleType{
   Follower,
   Following
 }
+
+extension TypeOfPeople on PeopleType {
+  String asString() => {
+    PeopleType.Follower : "Followers",
+    PeopleType.Following : "Following"
+  }[this];
+
+  static PeopleType fromString(String value) => {
+    'Followers': PeopleType.Follower,
+    'Following': PeopleType.Following,
+  }[value];
+}

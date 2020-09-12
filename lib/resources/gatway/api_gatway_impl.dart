@@ -140,7 +140,7 @@ class ApiGatwayImpl implements ApiGateway {
       final result = await getIssues(username,endCursor);
       if (result.hasException) {
         print(result.exception.toString());
-        return null;
+        throw result.exception;
       }
       final issueMap = result.data['user'] as Map<String, dynamic>;
       final list = issues.Issues.fromJson(issueMap["issues"]);
@@ -189,7 +189,7 @@ class ApiGatwayImpl implements ApiGateway {
       final result = await getUserPullRequest(username,endCursor);
       if (result.hasException) {
         print(result.exception.toString());
-        return null;
+        throw result.exception;
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
@@ -212,12 +212,11 @@ class ApiGatwayImpl implements ApiGateway {
       final result = await getUserGistList(username,endCursor);
       if (result.hasException) {
         print(result.exception.toString());
-        return null;
+        throw result.exception;
       }
       print(result.data);
       // final userMap = result.data['search'] as Map<String, dynamic>;
       final list = GistResponse.fromJson(result.data).user.gists;
-
       return list;
     } catch (error) {
       throw error;

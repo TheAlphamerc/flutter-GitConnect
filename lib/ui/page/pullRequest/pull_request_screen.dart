@@ -120,6 +120,7 @@ class PullRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       controller: controller ?? ScrollController(),
       child: FutureBuilder(
         initialData: "",
