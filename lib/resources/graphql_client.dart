@@ -1,3 +1,4 @@
+import 'package:flutter_github_connect/bloc/people/people_model.dart';
 import 'package:flutter_github_connect/resources/grapgqlApi/graphql_query_api.dart';
 import 'package:graphql/client.dart';
 
@@ -78,16 +79,10 @@ Future<QueryResult> searchQueryAsync(
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getIssues(
-  String login,
-  String endCursor
-) async {
+Future<QueryResult> getIssues(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.issues,
-      variables: <String, dynamic>{
-        'login': login,
-        "endCursor": endCursor
-      },
+      variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
@@ -98,12 +93,26 @@ Future<QueryResult> getAuthUserName() async {
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getUserPullRequest(
-  String login,
-  String endCursor
-) async {
+Future<QueryResult> getUserPullRequest(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.pullRequests,
+      variables: <String, dynamic>{'login': login, "endCursor": endCursor},
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
+Future<QueryResult> getUserGistList(String login, String endCursor) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.gist,
+      variables: <String, dynamic>{'login': login, "endCursor": endCursor},
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
+Future<QueryResult> getFollowerList(String login,
+    {PeopleType type, String endCursor}) async {
+  final QueryOptions _options = QueryOptions(
+      document: type == PeopleType.Follower ? Apis.followers : Apis.following,
       variables: <String, dynamic>{
         'login': login,
         "endCursor": endCursor
@@ -112,43 +121,17 @@ Future<QueryResult> getUserPullRequest(
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getUserGistList(
-  String login,
-  String endCursor
-) async {
-  final QueryOptions _options = QueryOptions(
-      document: Apis.gist,
-      variables: <String, dynamic>{
-        'login': login,
-         "endCursor": endCursor
-      },
-      fetchPolicy: FetchPolicy.noCache);
-  return await _innerClient.query(_options);
-}
-
-Future<QueryResult> getFollowerList(
-  String login,
-) async {
-  final QueryOptions _options = QueryOptions(
-      document: Apis.followers,
-      variables: <String, dynamic>{
-        'login': login,
-      },
-      fetchPolicy: FetchPolicy.noCache);
-  return await _innerClient.query(_options);
-}
-
-Future<QueryResult> getFollowingList(
-  String login,
-) async {
-  final QueryOptions _options = QueryOptions(
-      document: Apis.following,
-      variables: <String, dynamic>{
-        'login': login,
-      },
-      fetchPolicy: FetchPolicy.noCache);
-  return await _innerClient.query(_options);
-}
+// Future<QueryResult> getFollowingList(
+//   String login,
+// ) async {
+//   final QueryOptions _options = QueryOptions(
+//       document: Apis.following,
+//       variables: <String, dynamic>{
+//         'login': login,
+//       },
+//       fetchPolicy: FetchPolicy.noCache);
+//   return await _innerClient.query(_options);
+// }
 
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null

@@ -19,7 +19,7 @@ class LoadedUserState extends PeopleState {
   @override
   String toString() => 'LoadedUserState $user';
 
-  factory LoadedUserState.getNextRepositories(
+  factory LoadedUserState.next(
       {UserModel userModel, UserModel currentUserModel}) {
     currentUserModel.repositories.nodes.addAll(userModel.repositories.nodes);
     currentUserModel.repositories.pageInfo = userModel.repositories.pageInfo;
@@ -34,22 +34,14 @@ class LoadingNextRepositoriesState extends LoadedUserState {
   ) : super(user: user);
 }
 
-class LoadingFollowersState extends PeopleState {}
+class LoadingFollowState extends PeopleState {}
 
 class LoadingPullRequestState extends PeopleState {}
 
-class LoadingFollowingState extends PeopleState {}
+class LoadedFollowState extends PeopleState {
+  final people.FollowModel followers;
 
-class LoadedFollowersState extends PeopleState {
-  final people.Followers followers;
-
-  LoadedFollowersState(this.followers);
-}
-
-class LoadedFollowingState extends PeopleState {
-  final people.Following following;
-
-  LoadedFollowingState(this.following);
+  LoadedFollowState(this.followers);
 }
 
 class ErrorPeopleState extends PeopleState {

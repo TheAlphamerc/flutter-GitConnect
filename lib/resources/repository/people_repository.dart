@@ -6,10 +6,7 @@ class PeopleRepository {
 
   PeopleRepository({this.apiGatway}) : assert(apiGatway != null);
 
-  Future<Followers> fetchFollowersList(String login)async{
-    return await  apiGatway.fetchFollowersList(login);
-  }
-  Future<Following> fetchFollowingList(String login)async{
-    return await  apiGatway.fetchFollowingList(login);
+  Future<FollowModel> fetchFollowersList(String login,{PeopleType type, String endCursor})async{
+    return await  apiGatway.fetchFollowUserList(login:login,endCursor: endCursor,type: type);
   }
 }

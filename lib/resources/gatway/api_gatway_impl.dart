@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart' as issues;
 import 'package:flutter_github_connect/bloc/notification/index.dart';
+import 'package:flutter_github_connect/bloc/people/people_model.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
     as model;
@@ -71,7 +72,8 @@ class ApiGatwayImpl implements ApiGateway {
     try {
       assert(pageNo != null, "Please provice page no to get notifications");
       var accesstoken = await _sessionService.loadSession();
-      String since = DateTime.now().add(Duration(days: -(365 * 5))).toIso8601String();
+      String since =
+          DateTime.now().add(Duration(days: -(365 * 5))).toIso8601String();
       var response = await _dioClient.get(
         Config.notificationsList(since: since, pageNo: pageNo),
         options: Options(
@@ -132,12 +134,12 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<issues.Issues> fetchIssues({String login,String endCursor}) async {
+  Future<issues.Issues> fetchIssues({String login, String endCursor}) async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
       var username = login ?? await _sessionService.getUserName();
-      final result = await getIssues(username,endCursor);
+      final result = await getIssues(username, endCursor);
       if (result.hasException) {
         print(result.exception.toString());
         throw result.exception;
@@ -178,7 +180,7 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<UserPullRequests> fetchPullRequest({String login,endCursor}) async {
+  Future<UserPullRequests> fetchPullRequest({String login, endCursor}) async {
     try {
       print("fetchPullRequest Init");
       var accesstoken = await _sessionService.loadSession();
@@ -186,13 +188,12 @@ class ApiGatwayImpl implements ApiGateway {
       print("fetchPullRequest");
       var username = login ?? await _sessionService.getUserName();
       assert(login != null);
-      final result = await getUserPullRequest(username,endCursor);
+      final result = await getUserPullRequest(username, endCursor);
       if (result.hasException) {
         print(result.exception.toString());
         throw result.exception;
       }
       print(result.data);
-      // final userMap = result.data['search'] as Map<String, dynamic>;
       final list =
           UserPullRequestResponse.fromJson(result.data).user.pullRequests;
 
@@ -203,19 +204,18 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<Gists> fetchGistList({String login,String endCursor}) async {
+  Future<Gists> fetchGistList({String login, String endCursor}) async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
       var username = login ?? await _sessionService.getUserName();
       assert(username != null);
-      final result = await getUserGistList(username,endCursor);
+      final result = await getUserGistList(username, endCursor);
       if (result.hasException) {
         print(result.exception.toString());
         throw result.exception;
       }
       print(result.data);
-      // final userMap = result.data['search'] as Map<String, dynamic>;
       final list = GistResponse.fromJson(result.data).user.gists;
       return list;
     } catch (error) {
@@ -224,42 +224,21 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<people.Followers> fetchFollowersList(String login) async {
+  Future<people.FollowModel> fetchFollowUserList(
+      {String login, PeopleType type, String endCursor}) async {
     try {
       assert(login != null);
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
-      print("Get Followers list");
-      final result = await getFollowerList(login);
+      print("Get ${type.asString()} list");
+      final result =
+          await getFollowerList(login, endCursor: endCursor, type: type);
       if (result.hasException) {
         print(result.exception.toString());
         throw result.exception;
       }
       print(result.data);
-      // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list = people.User.fromJson(result.data["user"]).followers;
-
-      return list;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  @override
-  Future<people.Following> fetchFollowingList(String login) async {
-    try {
-      assert(login != null);
-      var accesstoken = await _sessionService.loadSession();
-      initClient(accesstoken);
-      print("Get Following list");
-      final result = await getFollowingList(login);
-      if (result.hasException) {
-        print(result.exception.toString());
-        throw result.exception;
-      }
-      print(result.data);
-      // final userMap = result.data['search'] as Map<String, dynamic>;
-      final list = people.User.fromJson(result.data["user"]).following;
+      final list = people.User.fromJson(result.data["user"]).followModel;
 
       return list;
     } catch (error) {

@@ -1,9 +1,9 @@
 // part of 'graphql_query_api.dart';
 
 class PeopleApi {
-  static const String followers = r'''query userInfo($login: String!) {
+  static const String followers = r'''query userInfo($login: String!,$endCursor: String) {
     user(login: $login) {
-      followers(first: 30) {
+      followers(first: 30,after: $endCursor) {
         totalCount
         nodes {
           avatarUrl
@@ -17,10 +17,14 @@ class PeopleApi {
   }
   ''';
 
-  static const String following = r'''query userInfo($login: String!) {
+  static const String following = r'''query userInfo($login: String!,$endCursor: String) {
     user(login: $login) {
-      following(first: 30) {
+      following(first: 30, after: $endCursor) {
         totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         nodes {
           avatarUrl
           login
@@ -31,6 +35,5 @@ class PeopleApi {
       }
     }
   }
-
 ''';
 }

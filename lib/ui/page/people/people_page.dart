@@ -9,19 +9,19 @@ import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class ActorPage extends StatelessWidget {
-
-  static MaterialPageRoute getPageRoute(String login, PeopleType type){
+  static MaterialPageRoute getPageRoute(String login, PeopleType type) {
     return MaterialPageRoute(
-        builder: (context) {
-          return BlocProvider<PeopleBloc>(
-            create: (BuildContext context) => PeopleBloc()
-              ..add(LoadFollowerEvent(login, type)),
-            child: ActorPage(type: type),
-          );
-        },
-      );
+      builder: (context) {
+        return BlocProvider<PeopleBloc>(
+          create: (BuildContext context) =>
+              PeopleBloc()..add(LoadFollowEvent(login, type)),
+          child: ActorPage(type: type),
+        );
+      },
+    );
   }
-  const ActorPage({Key key,@required this.type}) : super(key: key);
+
+  const ActorPage({Key key, @required this.type}) : super(key: key);
   final PeopleType type;
 
   @override
@@ -34,7 +34,8 @@ class ActorPage extends StatelessWidget {
         title: Title(
           title: type.asString(),
           color: Colors.black,
-          child: Text(type.asString(), style: Theme.of(context).textTheme.headline6),
+          child: Text(type.asString(),
+              style: Theme.of(context).textTheme.headline6),
         ),
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(
@@ -42,7 +43,8 @@ class ActorPage extends StatelessWidget {
           BuildContext context,
           PeopleState currentState,
         ) {
-          return PeoplePage(peopleBloc: BlocProvider.of<PeopleBloc>(context));
+          return PeoplePage(
+              peopleBloc: BlocProvider.of<PeopleBloc>(context), type: type);
         },
       ),
     );
@@ -52,8 +54,9 @@ class ActorPage extends StatelessWidget {
 class PeoplePage extends StatelessWidget {
   static const String routeName = '/people';
   final PeopleBloc peopleBloc;
+  final PeopleType type;
 
-  const PeoplePage({Key key, this.peopleBloc}) : super(key: key);
+  const PeoplePage({Key key, this.peopleBloc, this.type}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PeopleBloc, PeopleState>(
@@ -80,9 +83,9 @@ class PeoplePage extends StatelessWidget {
             ),
           );
         }
-        if (currentState is LoadingFollowersState) {
+        if (currentState is LoadingFollowState) {
           return GLoader();
-        } else if (currentState is LoadedFollowersState) {
+        } else if (currentState is LoadedFollowState) {
           if (currentState.followers != null &&
               currentState.followers.nodes.isNotEmpty) {
             return PeopleScreen(
@@ -90,33 +93,17 @@ class PeoplePage extends StatelessWidget {
             );
           } else {
             return Column(
-                children: <Widget>[
-                  NoDataPage(
-                    title: "No Followers",
-                    description: "No followers found!!",
-                    icon: GIcons.github_1,
-                  ),
-                ],
-              );
-          }
-        } else if (currentState is LoadedFollowingState) {
-          if (currentState.following != null &&
-              currentState.following.nodes.isNotEmpty) {
-            return PeopleScreen(
-              followers: currentState.following.nodes,
+              children: <Widget>[
+                NoDataPage(
+                  title: "No ${type.asString().toLowerCase()}",
+                  description: "No ${type.asString().toLowerCase()} found!!",
+                  icon: GIcons.github_1,
+                ),
+              ],
             );
-          } else {
-            return Column(
-                children: <Widget>[
-                  NoDataPage(
-                    title: "Following",
-                    description: "No Following user found!!",
-                    icon: GIcons.github_1,
-                  ),
-                ],
-              );
           }
         }
+
         return GLoader();
       },
     );

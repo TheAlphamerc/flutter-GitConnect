@@ -62,7 +62,7 @@ class LoadUserEvent extends PeopleEvent {
       final userModel = await _userRepository.fetchNextRepositorries(
           login: state.user.login,
           endCursor: state.user.repositories.pageInfo.endCursor);
-      yield LoadedUserState.getNextRepositories(
+      yield LoadedUserState.next(
         currentUserModel: state.user,
         userModel: userModel,
       );
@@ -88,31 +88,22 @@ class LoadUserEvent extends PeopleEvent {
   }
 }
 
-class LoadFollowerEvent extends PeopleEvent {
+class LoadFollowEvent extends PeopleEvent {
   final String login;
   final PeopleType type;
 
-  LoadFollowerEvent(this.login, this.type);
+  LoadFollowEvent(this.login, this.type);
   @override
   Stream<PeopleState> fetchFollowersList(
       {PeopleState currentState, PeopleBloc bloc}) async* {
     try {
-      yield LoadingFollowersState();
-      switch (type) {
-        case PeopleType.Follower:
-          final followers = await _peopleRepository.fetchFollowersList(login);
-          yield LoadedFollowersState(followers);
-          break;
-        case PeopleType.Following:
-          final following = await _peopleRepository.fetchFollowingList(login);
-          yield LoadedFollowingState(following);
-          break;
-        default:
-          ErrorPeopleState("Unknown People type");
-      }
+      yield LoadingFollowState();
+      final followers =
+          await _peopleRepository.fetchFollowersList(login, type: type);
+      yield LoadedFollowState(followers);
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadFollowerEvent', error: _, stackTrace: stackTrace);
+          name: 'LoadFollowEvent', error: _, stackTrace: stackTrace);
       yield ErrorPeopleState(_?.toString());
     }
   }
@@ -219,8 +210,7 @@ class OnGistLoad extends PeopleEvent {
 
       yield LoadedGitState(gist: gistModel);
     } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'OnGistLoad', error: _, stackTrace: stackTrace);
+      developer.log('$_', name: 'OnGistLoad', error: _, stackTrace: stackTrace);
       yield ErrorGitState(_?.toString());
     }
   }
