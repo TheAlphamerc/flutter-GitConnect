@@ -43,7 +43,7 @@ class CustomThemeState extends State<CustomTheme> {
 
   void changeTheme(ThemeType themeKey) {
     setState(() {
-      _themeType = themeKey == ThemeType.DARK ? ThemeType.DARK : ThemeType.LIGHT;
+      _themeType = themeKey;
       _theme = AppTheme.getThemeFromKey(themeKey);
     });
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -43,6 +45,14 @@ class _UserPageState extends State<UserPage> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(widget.login ?? "Profile"),
+        actions: <Widget>[
+          IconButton(
+                  icon: Icon(GIcons.share_android_24, color: GColors.blue),
+                  onPressed: () {
+                    Utility.share("https://www.github.com/${widget.login}");
+                  },
+                ),
+        ],
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(
         // bloc: widget._userBloc,
