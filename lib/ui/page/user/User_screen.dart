@@ -24,7 +24,7 @@ class UserScreen extends StatefulWidget {
   final UserModel model;
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
-  final bool isHideAppBar;
+  final bool isOtheruserProfile;
 
   static MaterialPageRoute getPageRoute(BuildContext context, UserModel user) {
     return MaterialPageRoute(
@@ -40,7 +40,7 @@ class UserScreen extends StatefulWidget {
       this.model,
       this.userBloc,
       this.peopleBloc,
-      this.isHideAppBar = false})
+      this.isOtheruserProfile = false})
       : super(key: key);
 
   @override
@@ -73,7 +73,7 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     return UserScreenBody(
       model: widget.model,
-      isHideAppBar: widget.isHideAppBar,
+      isOtheruserProfile: widget.isOtheruserProfile,
       controller: _controller,
       peopleBloc: widget.peopleBloc,
       userBloc: widget.userBloc,
@@ -85,14 +85,14 @@ class UserScreenBody extends StatelessWidget {
   final UserModel model;
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
-  final bool isHideAppBar;
+  final bool isOtheruserProfile;
   final ScrollController controller;
   const UserScreenBody(
       {Key key,
       this.model,
       this.userBloc,
       this.peopleBloc,
-      this.isHideAppBar,
+      this.isOtheruserProfile,
       this.controller})
       : super(key: key);
   Widget _iconWithText(context, IconData icon, String text) {
@@ -139,11 +139,14 @@ class UserScreenBody extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  "Pin repositories to profile for quick access at any time, without having to search",
+                  isOtheruserProfile ? 'No pinned reposiitory available'
+                  : "Pin repositories to profile for quick access at any time, without having to search",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
+                if(!isOtheruserProfile)
                 SizedBox(height: 16),
+                if(!isOtheruserProfile)
                 GFlatButton(
                   label: "PIN REPOSITORY",
                   onPressed: () {},
@@ -253,7 +256,7 @@ class UserScreenBody extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: isHideAppBar
+      appBar: isOtheruserProfile
           ? null
           : AppBar(
               backgroundColor: Theme.of(context).colorScheme.surface,

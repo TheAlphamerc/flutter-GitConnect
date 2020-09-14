@@ -2,75 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
 class IssueListPage extends StatelessWidget {
-  const IssueListPage({Key key, this.list, this.hideAppBar,this.controller}) : super(key: key);
+  const IssueListPage({Key key, this.list, this.hideAppBar, this.controller})
+      : super(key: key);
   final List<IssuesModel> list;
   final bool hideAppBar;
   final ScrollController controller;
 
   Widget _issueTile(context, IssuesModel model) {
     return Container(
-        color: Theme.of(context).colorScheme.surface,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: 50,
-              child: Icon(
-                getIcon(model.state),
-                color: getColor(model.state),
-                size: 20,
-              ),
-            ),
-            Column(
+            color: Theme.of(context).colorScheme.surface,
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width - 66,
-                  child: Text(
-                    '${model.author.login}/${model.repository.name} #${model.number}',
-                    style: Theme.of(context).textTheme.subtitle1,
-                    maxLines: 1,
+                SizedBox(
+                  width: 50,
+                  child: Icon(
+                    getIcon(model.state),
+                    color: getColor(model.state),
+                    size: 20,
                   ),
                 ),
-                SizedBox(height: 8),
-                Container(
-                  width: MediaQuery.of(context).size.width - 66,
-                  child: Text(
-                    '${model.title}',
-                    style: Theme.of(context).textTheme.bodyText1,
-                    maxLines: 1,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 66,
+                      child: Text(
+                        '${model.author.login}/${model.repository.name} #${model.number}',
+                        style: Theme.of(context).textTheme.subtitle1,
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 66,
+                      child: Text(
+                        '${model.title}',
+                        style: Theme.of(context).textTheme.bodyText1,
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    if (model.labels != null && model.labels.nodes.isNotEmpty)
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: getColor(model.state).withAlpha(200),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            border: Border.all(color: getColor(model.state))),
+                        child: Text(
+                          '${model.labels?.nodes?.first?.name ?? ""}',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ),
+                    if (model.closedAt != null)
+                      Container(
+                        width: MediaQuery.of(context).size.width - 66,
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          Utility.getPassedTime(model.closedAt) + " ago",
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
+                      )
+                  ],
                 ),
-                SizedBox(height: 8),
-                if (model.labels != null && model.labels.nodes.isNotEmpty)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                    decoration: BoxDecoration(
-                        color: getColor(model.state).withAlpha(200),
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(color: getColor(model.state))),
-                    child: Text(
-                      '${model.labels?.nodes?.first?.name ?? ""}',
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ),
-                if (model.closedAt != null)
-                  Container(
-                    width: MediaQuery.of(context).size.width - 66,
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      Utility.getPassedTime(model.closedAt) + " ago",
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                  )
               ],
-            ),
-          ],
-        ).vP16);
+            ).vP16)
+        .ripple(() {
+      Underdevelopment.displaySnackbar(context,msg: "Issue detail feature is under development");
+    });
   }
 
   IconData getIcon(String type) {
@@ -114,7 +120,7 @@ class IssueListPage extends StatelessWidget {
             ),
       body: ListView.separated(
         physics: BouncingScrollPhysics(),
-        controller:controller ?? ScrollController(),
+        controller: controller ?? ScrollController(),
         itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) =>
             Divider(height: 0),

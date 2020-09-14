@@ -80,7 +80,7 @@ class _UserPageState extends State<UserPage> {
           } else if (currentState is LoadedUserState) {
             return UserScreen(
                 model: currentState.user,
-                isHideAppBar: true,
+                isOtheruserProfile: true,
                 peopleBloc: BlocProvider.of<PeopleBloc>(context));
           } else {
             return GLoader();

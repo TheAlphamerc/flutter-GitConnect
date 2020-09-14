@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/search_event.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/search_list_provider.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
@@ -123,9 +124,9 @@ class SearchPage extends StatelessWidget {
                             ),
                             _getUtilRos(
                                 context, "Pull Request with \"$searchText\"",
-                                color: GColors.green,
-                                onPressed: () {},
-                                icon: GIcons.git_pull_request_24),
+                                color: GColors.green, onPressed: () {
+                              Underdevelopment.displaySnackbar(context);
+                            }, icon: GIcons.git_pull_request_24),
                             Divider(
                               height: 0,
                             ),
@@ -140,8 +141,9 @@ class SearchPage extends StatelessWidget {
                             _getUtilRos(
                                 context, "Orgnisation with \"$searchText\"",
                                 color: GColors.green, onPressed: () {
-                              //  searchGithub(
-                              // context, searchText, GithubSearchType.ORganisation);
+                              Underdevelopment.displaySnackbar(
+                                context,
+                              );
                             }, icon: GIcons.organization_24),
                             Divider(height: 0),
                           ],

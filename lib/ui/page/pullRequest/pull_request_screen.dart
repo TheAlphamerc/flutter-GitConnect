@@ -3,6 +3,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -11,67 +12,72 @@ import 'package:get_it/get_it.dart';
 class PullRequestScreen extends StatelessWidget {
   final UserPullRequests pullRequest;
   final ScrollController controller;
-  const PullRequestScreen({Key key, this.pullRequest, this.controller}) : super(key: key);
+  const PullRequestScreen({Key key, this.pullRequest, this.controller})
+      : super(key: key);
   Widget _pullRequestTile(context, Node model, String username,
       {bool isCommented = false}) {
     final double widthOffset = 58.0;
     return GCard(
-        color: Theme.of(context).colorScheme.surface,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: 50,
-              child: Icon(
-                getIcon(model.state),
-                color: getColor(model.state),
-                size: 20,
-              ),
-            ),
-            Column(
+            color: Theme.of(context).colorScheme.surface,
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width - widthOffset,
-                  child: Text(
-                    '${model.repository.nameWithOwner}',
-                    style: Theme.of(context).textTheme.subtitle1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  width: MediaQuery.of(context).size.width - widthOffset,
-                  child: Text(
-                    '${model.title ?? "N/A"}',
-                    style: Theme.of(context).textTheme.bodyText1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                SizedBox(height: 8),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width - widthOffset,
-                  child: Text(
-                    "#${model.number} by ${model.author.login} was ${model.getPullRequestState()} " ,
-                    style: Theme.of(context).textTheme.subtitle2,
+                  width: 50,
+                  child: Icon(
+                    getIcon(model.state),
+                    color: getColor(model.state),
+                    size: 20,
                   ),
                 ),
-                if (model.createdAt != null)
-                  Container(
-                    width: MediaQuery.of(context).size.width - widthOffset,
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      Utility.getPassedTime(model.createdAt.toString()) +
-                          " ago",
-                      style: Theme.of(context).textTheme.subtitle2,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - widthOffset,
+                      child: Text(
+                        '${model.repository.nameWithOwner}',
+                        style: Theme.of(context).textTheme.subtitle1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  )
+                    SizedBox(height: 8),
+                    Container(
+                      width: MediaQuery.of(context).size.width - widthOffset,
+                      child: Text(
+                        '${model.title ?? "N/A"}',
+                        style: Theme.of(context).textTheme.bodyText1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - widthOffset,
+                      child: Text(
+                        "#${model.number} by ${model.author.login} was ${model.getPullRequestState()} ",
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ),
+                    if (model.createdAt != null)
+                      Container(
+                        width: MediaQuery.of(context).size.width - widthOffset,
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          Utility.getPassedTime(model.createdAt.toString()) +
+                              " ago",
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
+                      )
+                  ],
+                ),
+                // Spacer(),
               ],
-            ),
-            // Spacer(),
-          ],
-        ).vP16);
+            ).vP16)
+        .ripple(() {
+      Underdevelopment.displaySnackbar(context,
+          msg: "Pull request detail feature is under development");
+    });
   }
 
   Widget _noActivity(context) {
@@ -84,7 +90,6 @@ class PullRequestScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText2),
     );
   }
-
 
   IconData getIcon(
     PullRequestState type,

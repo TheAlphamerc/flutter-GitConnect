@@ -3,6 +3,7 @@ import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
@@ -203,7 +204,9 @@ class HomePageScreenBody extends StatelessWidget {
           }),
           Divider(height: 0, indent: 50),
           _getUtilRos(context, GIcons.people_24, "Organisations",
-              color: GColors.orange),
+              color: GColors.orange, onPressed: () {
+            Underdevelopment.displaySnackbar(context);
+          }),
         ],
       ),
     );

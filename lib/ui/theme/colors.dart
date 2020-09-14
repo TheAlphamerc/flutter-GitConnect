@@ -10,7 +10,7 @@ class GColors {
   // static const Color black = Color(0XFF000000);
   // static const Color white = Color(0XFFffffff);
   
-  static const Color background = Color(0XFFf1f1f1);
+  static const Color background = Color(0XFFeff0f4);
   static const Color cardColor = Color(0XFFededed);
   static const Color surfaceColor = Color(0XFFf8f8f8);
   static const Color onSurfaceLightColor = Color(0XFFfbfbfc);

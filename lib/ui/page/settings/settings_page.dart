@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/splash.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:get_it/get_it.dart';
 
 class SettingsPage extends StatelessWidget {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   SettingsPage({Key key}) : super(key: key);
   Widget _getUtilRos(context, String text,
       {Function onPressed,
@@ -34,7 +36,10 @@ class SettingsPage extends StatelessWidget {
           ),
         SizedBox(width: 8, height: 50)
       ],
-    ).ripple(onPressed);
+    ).ripple(onPressed ??
+        () {
+          Underdevelopment.displaySnackbar(context, key: scaffoldKey);
+        });
   }
 
   Widget _section1(context) {
@@ -128,6 +133,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         elevation: 0,

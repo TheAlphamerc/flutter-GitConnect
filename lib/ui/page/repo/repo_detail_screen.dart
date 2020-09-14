@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -31,7 +32,10 @@ class RepoDetailScreen extends StatelessWidget {
           )
         ],
       ),
-    );
+    ).ripple((){
+      Underdevelopment.displaySnackbar(context,
+          msg: "Detail feature is under development");
+    });
   }
 
   Widget _getUtilRos(context, String text,
@@ -59,7 +63,8 @@ class RepoDetailScreen extends StatelessWidget {
           ),
         if (icon == null) SizedBox(width: 16, height: 50)
       ],
-    ).ripple(onPressed);
+    ).ripple(onPressed ?? (){Underdevelopment.displaySnackbar(context,
+          msg: "Detail feature is under development");});
   }
 
   @override

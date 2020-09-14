@@ -17,12 +17,14 @@ class NoDataPage extends StatelessWidget {
           // Image.asset(GImages.githubMarkLight120, width:160),
           Icon(icon, size: 120),
           SizedBox(height: 16),
+          if(title != null && title.isNotEmpty)
           Text(
             title,
             style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 8),
+          if(description != null && description.isNotEmpty)
           Text(
             description,
             textAlign: TextAlign.center,

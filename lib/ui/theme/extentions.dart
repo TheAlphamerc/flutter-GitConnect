@@ -68,6 +68,10 @@ extension CornerRadius on Widget {
         borderRadius: BorderRadius.all(Radius.circular(1000)),
         child: this,
       );
+  ClipRRect  cornerRadius(double value) => ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(value)),
+        child: this,
+      );
 }
 
 extension OnPressed on Widget {

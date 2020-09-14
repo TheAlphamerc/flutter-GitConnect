@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
+import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 
@@ -97,7 +98,10 @@ class GistListScreen extends StatelessWidget {
             ),
             // Spacer(),
           ],
-        ).vP16);
+        ).vP16).ripple((){
+           Underdevelopment.displaySnackbar(context,
+          msg: "Gist detail feature is under development");
+        });
   }
 
   @override
