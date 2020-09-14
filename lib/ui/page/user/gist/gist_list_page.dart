@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class GistlistPageProvider extends StatefulWidget {
@@ -17,8 +18,9 @@ class GistlistPageProvider extends StatefulWidget {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
-          create: (BuildContext context) => PeopleBloc()..add(OnGistLoad(login)),
-          child: GistlistPageProvider(login:login),
+          create: (BuildContext context) =>
+              PeopleBloc()..add(OnGistLoad(login)),
+          child: GistlistPageProvider(login: login),
         );
       },
     );
@@ -42,18 +44,19 @@ class _GistlistPageProviderState extends State<GistlistPageProvider> {
           .add(OnGistLoad(widget.login, isLoadNextGist: true));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return GistlistPage(
-      bloc: BlocProvider.of<PeopleBloc>(context),
-      login:widget.login,
-      controller:_controller
-    );
+        bloc: BlocProvider.of<PeopleBloc>(context),
+        login: widget.login,
+        controller: _controller);
   }
 }
 
 class GistlistPage extends StatelessWidget {
-  const GistlistPage({Key key, this.bloc,this.login, this.controller}) : super(key: key);
+  const GistlistPage({Key key, this.bloc, this.login, this.controller})
+      : super(key: key);
   final PeopleBloc bloc;
   final String login;
   final ScrollController controller;
@@ -76,28 +79,19 @@ class GistlistPage extends StatelessWidget {
             PeopleState currentState,
           ) {
             if (currentState is ErrorGitState) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(currentState.errorMessage ?? 'Error'),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 32.0),
-                    child: RaisedButton(
-                      color: Colors.blue,
-                      child: Text('reload'),
-                      onPressed: () {
-                        bloc..add(OnGistLoad(login));
-                        print("Load Notification");
-                      },
-                    ),
-                  ),
-                ],
-              ));
+              return GErrorContainer(
+                description: currentState.errorMessage,
+                onPressed: () {
+                  bloc..add(OnGistLoad(login));
+                },
+              );
             }
             if (currentState is LoadedGitState) {
-              if(currentState.gist != null && currentState.gist.totalCount > 0)
-              return GistListScreen(gist: currentState.gist,login: login,controller:controller);
+              if (currentState.gist != null && currentState.gist.totalCount > 0)
+                return GistListScreen(
+                    gist: currentState.gist,
+                    login: login,
+                    controller: controller);
               return Column(
                 children: <Widget>[
                   NoDataPage(

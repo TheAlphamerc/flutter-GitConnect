@@ -7,6 +7,7 @@ import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class SearchListProvider extends StatefulWidget {
@@ -75,22 +76,15 @@ class _SearchListProviderState extends State<SearchListProvider> {
           SearchState currentState,
         ) {
           if (currentState is ErrorRepoState) {
-            return Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(currentState.errorMessage ?? 'Error'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 32.0),
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    child: Text('reload'),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ));
+            return GErrorContainer(
+              description: currentState.errorMessage,
+              onPressed: () {
+                BlocProvider.of<SearchBloc>(context)
+                  ..add(SearchForEvent(query: widget.query, type: widget.type));
+              },
+            );
           }
+
           if (currentState is LoadedSearchState) {
             if (!(currentState.list != null && currentState.list.isNotEmpty)) {
               return Column(

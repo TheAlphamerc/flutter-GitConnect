@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/bloc/navigation/index.dart';
 import 'package:flutter_github_connect/ui/page/auth/web_view.dart';
 import 'package:flutter_github_connect/ui/page/common/dashboard_page.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart' as notif;
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class AuthPage extends StatefulWidget {
@@ -76,21 +77,12 @@ class _AuthPageState extends State<AuthPage> {
         if (currentState is LoadingWebViewState) {
           return WebViewPage();
         } else if (currentState is ErrorAuthState) {
-          return Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(currentState.errorMessage ?? 'Error'),
-              Padding(
-                padding: const EdgeInsets.only(top: 32.0),
-                child: RaisedButton(
-                  color: Colors.blue,
-                  child: Text('reload'),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ));
+          return GErrorContainer(
+            description: currentState.errorMessage,
+            onPressed: () {
+              BlocProvider.of<AuthBloc>(context).add(LoadingWebView());
+            },
+          );
         }
         return GLoader(stroke: 4);
       }),

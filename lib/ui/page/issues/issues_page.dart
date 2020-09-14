@@ -4,14 +4,17 @@ import 'package:flutter_github_connect/bloc/issues/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class IssuesPage extends StatefulWidget {
   final String login;
   static const String routeName = '/issues';
 
-  const IssuesPage({Key key, this.login,})
-      : super(key: key);
+  const IssuesPage({
+    Key key,
+    this.login,
+  }) : super(key: key);
   static route(String login) => MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (BuildContext context) =>
@@ -56,24 +59,13 @@ class _IssuesPageState extends State<IssuesPage> {
             return GLoader();
           }
           if (currentState is ErrorIssuesState) {
-            return Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(currentState.errorMessage ?? 'Error'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 32.0),
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    child: Text('reload'),
-                    onPressed: () {
-                      BlocProvider.of<IssuesBloc>(context)
-                        ..add(LoadIssuesEvent(widget.login));
-                    },
-                  ),
-                ),
-              ],
-            ));
+            return GErrorContainer(
+              description: currentState.errorMessage,
+              onPressed: () {
+                BlocProvider.of<IssuesBloc>(context)
+                  ..add(LoadIssuesEvent(widget.login));
+              },
+            );
           }
           if (currentState is LoadedIssuesState) {
             if (currentState.issues.list != null &&

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_screen.dart';
-import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class RepoDetailPage extends StatelessWidget {
@@ -48,24 +48,12 @@ class RepoDetailPage extends StatelessWidget {
       body: BlocBuilder<RepoBloc, RepoState>(
         builder: (context, currentState) {
           if (currentState is ErrorRepoState) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(currentState.errorMessage ?? 'Error').hP30,
-                  Padding(
-                    padding: const EdgeInsets.only(top: 32.0),
-                    child: RaisedButton(
-                      color: Colors.blue,
-                      child: Text('reload'),
-                      onPressed: () {
-                        BlocProvider.of<RepoBloc>(context)
-                          ..add(LoadRepoEvent(name: name, owner: owner));
-                      },
-                    ),
-                  ),
-                ],
-              ),
+            return GErrorContainer(
+              description: currentState.errorMessage,
+              onPressed: () {
+                BlocProvider.of<RepoBloc>(context)
+                  ..add(LoadRepoEvent(name: name, owner: owner));
+              },
             );
           }
           if (currentState is LoadingRepoState) {

@@ -5,6 +5,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class PullRequestPageProvider extends StatefulWidget {
@@ -40,7 +41,8 @@ class _PullRequestPageProviderState extends State<PullRequestPageProvider> {
 
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      BlocProvider.of<PeopleBloc>(context).add(OnPullRequestLoad(widget.login,isLoadNextIssues: true));
+      BlocProvider.of<PeopleBloc>(context)
+          .add(OnPullRequestLoad(widget.login, isLoadNextIssues: true));
     }
   }
 
@@ -63,12 +65,15 @@ class PullRequestPageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PullRequestPage(
-        bloc: BlocProvider.of<PeopleBloc>(context), login: login,controller:controller);
+        bloc: BlocProvider.of<PeopleBloc>(context),
+        login: login,
+        controller: controller);
   }
 }
 
 class PullRequestPage extends StatelessWidget {
-  const PullRequestPage({Key key, this.bloc, this.login, this.controller}) : super(key: key);
+  const PullRequestPage({Key key, this.bloc, this.login, this.controller})
+      : super(key: key);
   final PeopleBloc bloc;
   final String login;
   final ScrollController controller;
@@ -93,31 +98,20 @@ class PullRequestPage extends StatelessWidget {
             PeopleState currentState,
           ) {
             if (currentState is ErrorPullRequestState) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(currentState.errorMessage ?? 'Error'),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 32.0),
-                    child: RaisedButton(
-                      color: Colors.blue,
-                      child: Text('reload'),
-                      onPressed: () {
-                        bloc..add(OnPullRequestLoad(login));
-                        print("Load Notification");
-                      },
-                    ),
-                  ),
-                ],
-              ));
+              return GErrorContainer(
+                description: currentState.errorMessage,
+                onPressed: () {
+                  bloc..add(OnPullRequestLoad(login));
+                },
+              );
             }
             if (currentState is LoadedPullRequestState) {
               if (currentState.pullRequestsList != null &&
                   currentState.pullRequestsList.totalCount > 0)
                 return PullRequestScreen(
-                    pullRequest: currentState.pullRequestsList,
-                    controller: controller,);
+                  pullRequest: currentState.pullRequestsList,
+                  controller: controller,
+                );
               return Column(
                 children: <Widget>[
                   NoDataPage(

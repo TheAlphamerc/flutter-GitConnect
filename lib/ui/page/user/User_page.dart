@@ -5,6 +5,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class UserPage extends StatefulWidget {
@@ -47,11 +48,11 @@ class _UserPageState extends State<UserPage> {
         title: Text(widget.login ?? "Profile"),
         actions: <Widget>[
           IconButton(
-                  icon: Icon(GIcons.share_android_24, color: GColors.blue),
-                  onPressed: () {
-                    Utility.share("https://www.github.com/${widget.login}");
-                  },
-                ),
+            icon: Icon(GIcons.share_android_24, color: GColors.blue),
+            onPressed: () {
+              Utility.share("https://www.github.com/${widget.login}");
+            },
+          ),
         ],
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(
@@ -61,21 +62,12 @@ class _UserPageState extends State<UserPage> {
           PeopleState currentState,
         ) {
           if (currentState is ErrorPeopleState) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(currentState.errorMessage ?? 'Error'),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 32.0),
-                    child: RaisedButton(
-                      color: Colors.blue,
-                      child: Text('reload'),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ),
+            return GErrorContainer(
+              description: currentState.errorMessage,
+              onPressed: () {
+                BlocProvider.of<PeopleBloc>(context)
+                  ..add(LoadUserEvent(login: widget.login));
+              },
             );
           } else if (currentState is LoadedUserState) {
             return UserScreen(

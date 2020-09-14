@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
-import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/home_page_screen.dart';
-import 'package:flutter_github_connect/ui/widgets/flat_button.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,45 +19,11 @@ class HomePage extends StatelessWidget {
         UserState currentState,
       ) {
         if (currentState is ErrorUserState) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  height: MediaQuery.of(context).size.height - 280,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(GIcons.github_1, size: 120),
-                      SizedBox(height: 16),
-                      Text(
-                        "Seems like into trouble",
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        currentState.errorMessage,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      GFlatButton(
-                        isLoading: ValueNotifier(false),
-                        label: "Reload",
-                        onPressed: () {
-                          BlocProvider.of<UserBloc>(context).add(OnLoad());
-                        },
-                        isWraped: true,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          return GErrorContainer(
+            description: currentState.errorMessage,
+            onPressed: () {
+              BlocProvider.of<UserBloc>(context).add(OnLoad());
+            },
           );
         } else if (currentState is LoadedUserState) {
           return HomePageScreen(

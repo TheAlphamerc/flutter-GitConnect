@@ -5,7 +5,7 @@ import "package:build_context/build_context.dart";
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_screen.dart';
-import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class ActorPage extends StatefulWidget {
@@ -15,7 +15,7 @@ class ActorPage extends StatefulWidget {
         return BlocProvider<PeopleBloc>(
           create: (BuildContext context) =>
               PeopleBloc()..add(LoadFollowEvent(login, type)),
-          child: ActorPage(type: type,login: login),
+          child: ActorPage(type: type, login: login),
         );
       },
     );
@@ -30,7 +30,6 @@ class ActorPage extends StatefulWidget {
 }
 
 class _ActorPageState extends State<ActorPage> {
-  
   ScrollController _controller;
 
   @override
@@ -41,10 +40,11 @@ class _ActorPageState extends State<ActorPage> {
 
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      BlocProvider.of<PeopleBloc>(context)
-          .add(LoadFollowEvent(widget.login, widget.type,isLoadNextFollow: true));
+      BlocProvider.of<PeopleBloc>(context).add(
+          LoadFollowEvent(widget.login, widget.type, isLoadNextFollow: true));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,8 +65,10 @@ class _ActorPageState extends State<ActorPage> {
           PeopleState currentState,
         ) {
           return PeoplePage(
-              peopleBloc: BlocProvider.of<PeopleBloc>(context), type: widget.type,controller: _controller);
-
+              login: widget.login,
+              peopleBloc: BlocProvider.of<PeopleBloc>(context),
+              type: widget.type,
+              controller: _controller);
         },
       ),
     );
@@ -78,8 +80,11 @@ class PeoplePage extends StatelessWidget {
   final PeopleBloc peopleBloc;
   final PeopleType type;
   final ScrollController controller;
+  final String login;
 
-  const PeoplePage({Key key, this.peopleBloc, this.type,this.controller}) : super(key: key);
+  const PeoplePage(
+      {Key key, this.peopleBloc, this.type, this.controller, this.login})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PeopleBloc, PeopleState>(
@@ -89,21 +94,12 @@ class PeoplePage extends StatelessWidget {
         PeopleState currentState,
       ) {
         if (currentState is ErrorPeopleState) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(currentState.errorMessage ?? 'Error'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 32.0),
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    child: Text('reload'),
-                    onPressed: _load,
-                  ),
-                ),
-              ],
-            ),
+          return GErrorContainer(
+            description: currentState.errorMessage,
+            onPressed: () {
+              BlocProvider.of<PeopleBloc>(context)
+                ..add(LoadFollowEvent(login, type));
+            },
           );
         }
         if (currentState is LoadingFollowState) {
@@ -112,9 +108,8 @@ class PeoplePage extends StatelessWidget {
           if (currentState.followModel != null &&
               currentState.followModel.nodes.isNotEmpty) {
             return PeopleScreen(
-              followers: currentState.followModel.nodes,
-              controller:controller
-            );
+                followers: currentState.followModel.nodes,
+                controller: controller);
           } else {
             return Column(
               children: <Widget>[
@@ -131,9 +126,5 @@ class PeoplePage extends StatelessWidget {
         return GLoader();
       },
     );
-  }
-
-  void _load() {
-    // peopleBloc.add(LoadPeopleEvent());
   }
 }
