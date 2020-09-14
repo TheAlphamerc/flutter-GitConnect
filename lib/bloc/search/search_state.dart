@@ -113,7 +113,18 @@ class LoadingNextSearchState extends LoadedSearchState {
 class ErrorRepoState extends SearchState {
   final String errorMessage;
 
-  ErrorRepoState(int version, this.errorMessage);
+  ErrorRepoState(this.errorMessage);
   @override
   String toString() => 'ErrorRepoState';
+}
+class ErrorNextRepoState extends LoadedSearchState {
+  final String errorMessage;
+
+  ErrorNextRepoState( this.errorMessage,{
+      List<dynamic> list,
+      GithubSearchType type,
+      String endCursor,
+      bool ,hasNextPage}):super(list:list,type:type,endCursor:endCursor,hasNextPage:hasNextPage);
+  @override
+  String toString() => 'ErrorNextRepoState';
 }

@@ -38,6 +38,10 @@ class SearchForEvent extends SearchEvent {
       if (!(currentState is LoadedSearchState)) {
         yield LoadingSearchState();
       } else if (currentState is LoadedSearchState) {
+        if(currentState is LoadingNextSearchState){
+          print("Restrict APi calling untill previus state is not updated");
+          return;
+        }
         yield LoadingNextSearchState(
             endCursor: currentState.endCursor,
             type: type,
@@ -66,8 +70,15 @@ class SearchForEvent extends SearchEvent {
       }
     } catch (_, stackTrace) {
       developer.log('$_',
-          name: 'LoadRepoEvent', error: _, stackTrace: stackTrace);
-      yield ErrorRepoState(0, _?.toString());
+          name: 'SearchForEvent', error: _, stackTrace: stackTrace);
+      if (currentState is LoadedSearchState) {
+        yield ErrorNextRepoState(_?.toString(),
+            list: currentState.list,
+            endCursor: currentState.endCursor,
+            hasNextPage: currentState.hasNextPage,
+            type: currentState.type);
+      } else
+        yield ErrorRepoState(_?.toString());
     }
   }
 }

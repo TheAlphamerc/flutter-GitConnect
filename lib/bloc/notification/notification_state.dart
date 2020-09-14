@@ -39,10 +39,10 @@ class LoadingNextNotificationState extends LoadedNotificationState {
   @override
   String toString() => 'LoadingNextNotificationState';
 }
-class ErrorNextNotificationState extends NotificationState {
+class ErrorNextNotificationState extends LoadedNotificationState {
   final String errorMessage;
 
-  ErrorNextNotificationState({this.errorMessage,bool hasNextPage, List<NotificationModel> list, int pageNo});
+  ErrorNextNotificationState({this.errorMessage,bool hasNextPage, List<NotificationModel> list, int pageNo}) : super(list:list, pageNo: pageNo,hasNextPage: hasNextPage);
 
   @override
   String toString() => 'ErrorNextNotificationState';
