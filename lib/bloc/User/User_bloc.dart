@@ -26,8 +26,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         } else {
           yield* event.getUser(currentState: state, bloc: this);
         }
-      } else if (event is OnGistLoad) {
-        yield* event.getGist(currentState: state, bloc: this);
       }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'UserBloc', error: _, stackTrace: stackTrace);

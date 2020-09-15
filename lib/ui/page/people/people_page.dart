@@ -115,8 +115,8 @@ class PeoplePage extends StatelessWidget {
               children: <Widget>[
                 NoDataPage(
                   title: "No ${type.asString().toLowerCase()}",
-                  description: "No ${type.asString().toLowerCase()} found!!",
-                  icon: GIcons.github_1,
+                  description: "Getting empty data here",
+                  icon: GIcons.github,
                 ),
               ],
             );

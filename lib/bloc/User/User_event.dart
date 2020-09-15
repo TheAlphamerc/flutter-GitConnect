@@ -107,32 +107,3 @@ class OnPullRequestLoad extends UserEvent {
     }
   }
 }
-
-class OnGistLoad extends UserEvent {
-  @override
-  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {}
-
-  @override
-  Stream<UserState> getPullRequest(
-      {UserState currentState, UserBloc bloc}) async* {}
-  @override
-  Stream<UserState> getGist({UserState currentState, UserBloc bloc}) async* {
-    if (currentState is LoadedGitState) {
-      return;
-    }
-    final state = currentState as LoadedUserState;
-    try {
-      yield LoadingUserState();
-      print("Loading Gist state");
-      final pullRequestsList = await _userRepository.fetchGistList();
-      print("Loading End");
-      yield LoadedGitState(
-          user: state.user, eventList: state.eventList, gist: pullRequestsList);
-    } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
-      yield ErrorGitState(_?.toString(),
-          user: state.user, eventList: state.eventList);
-    }
-  }
-}

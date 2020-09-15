@@ -52,18 +52,6 @@ class LoadedPullRequestState extends LoadedUserState {
   String toString() => 'LoadedUserState $user';
 }
 
-class LoadedGitState extends LoadedUserState {
-  final UserModel user;
-  final List<EventModel> eventList;
-  final Gists gist;
-
-  LoadedGitState({@required this.user, this.eventList, this.gist})
-      : super( user,eventList);
-
-  @override
-  String toString() => 'LoadedUserState $user';
-}
-
 class ErrorUserState extends UserState {
   final String errorMessage;
 
@@ -86,17 +74,6 @@ class ErrorPullRequestState extends LoadedUserState {
   final UserModel user;
   final List<EventModel> eventList;
   ErrorPullRequestState(this.errorMessage, {this.user, this.eventList})
-      : super( user,eventList);
-
-  @override
-  String toString() => 'ErrorUserState';
-}
-
-class ErrorGitState extends LoadedUserState {
-  final String errorMessage;
-  final UserModel user;
-  final List<EventModel> eventList;
-  ErrorGitState(this.errorMessage, {this.user, this.eventList})
       : super( user,eventList);
 
   @override

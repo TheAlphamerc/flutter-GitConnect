@@ -74,6 +74,8 @@ class _IssuesPageState extends State<IssuesPage> {
                   list: currentState.issues.list,
                   hideAppBar: true,
                   controller: _controller);
+
+            // If issues list is empty then display empty list message
             return NoDataPage(
               title: "Empty issues",
               description:
