@@ -11,8 +11,8 @@ class Config{
     return "notifications?all=true&participating=true&since=$since&per_page=10&page=$pageNo";
   }
 
-  static String getEvent(userName) {
-    return "users/$userName/events";
+  static String getEvent({userName,int pageNo = 1}) {
+    return "users/$userName/events?per_page=20&page=$pageNo";
   }
   static String getReadme({String name, String owner}) {
     return "https://raw.githubusercontent.com/$owner/$name/master/README.md";

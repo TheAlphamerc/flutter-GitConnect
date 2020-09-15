@@ -22,15 +22,19 @@ abstract class PeopleEvent extends Equatable {
   List<Object> get props => [];
 
   Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc});
+      {PeopleState currentState, PeopleBloc bloc}) async* {}
 
-  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc});
+  Stream<PeopleState> getUser(
+      {PeopleState currentState, PeopleBloc bloc}) async* {}
 
   Stream<PeopleState> getGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {}
 
   Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc});
+      {PeopleState currentState, PeopleBloc bloc}) async* {}
+
+  Stream<PeopleState> getActivities(
+      {PeopleState currentState, PeopleBloc bloc}) async* {}
 }
 
 class LoadUserEvent extends PeopleEvent {
@@ -38,18 +42,6 @@ class LoadUserEvent extends PeopleEvent {
 
   final bool isLoadNextRepositories;
   final String login;
-
-  @override
-  Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
-
-  @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
 
   @override
   Stream<PeopleState> getUser(
@@ -97,9 +89,9 @@ class LoadUserEvent extends PeopleEvent {
 class LoadFollowEvent extends PeopleEvent {
   LoadFollowEvent(this.login, this.type, {this.isLoadNextFollow = false});
 
+  final bool isLoadNextFollow;
   final String login;
   final PeopleType type;
-  final bool isLoadNextFollow;
 
   @override
   Stream<PeopleState> fetchFollowersList(
@@ -132,17 +124,6 @@ class LoadFollowEvent extends PeopleEvent {
       yield ErrorPeopleState(_?.toString());
     }
   }
-
-  @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
-
-  @override
-  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
 }
 
 class OnPullRequestLoad extends PeopleEvent {
@@ -150,16 +131,6 @@ class OnPullRequestLoad extends PeopleEvent {
 
   final bool isLoadNextIssues;
   final String login;
-
-  @override
-  Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
-
-  @override
-  Stream<PeopleState> getGist(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
 
   @override
   Stream<PeopleState> getPullRequest(
@@ -180,11 +151,6 @@ class OnPullRequestLoad extends PeopleEvent {
         _?.toString(),
       );
     }
-  }
-
-  @override
-  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) {
-    return null;
   }
 
   Stream<PeopleState> getNextPullRequest(
@@ -225,12 +191,6 @@ class OnGistLoad extends PeopleEvent {
   final String login;
 
   @override
-  Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc}) {
-    return null;
-  }
-
-  @override
   Stream<PeopleState> getGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {
     if (currentState is LoadedGitState) {
@@ -247,14 +207,6 @@ class OnGistLoad extends PeopleEvent {
       yield ErrorGitState(_?.toString());
     }
   }
-
-  @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
-
-  @override
-  Stream<PeopleState> getUser(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
 
   Stream<PeopleState> getNextGist(
       {PeopleState currentState, PeopleBloc bloc}) async* {
@@ -288,6 +240,54 @@ class OnGistLoad extends PeopleEvent {
         gist: state.gist,
         user: state.user,
       );
+    }
+  }
+}
+
+class LoadPeopleActivitiesEvent extends PeopleEvent {
+  final bool loadNextActivity;
+
+  LoadPeopleActivitiesEvent({this.loadNextActivity=false});
+  @override
+  Stream<PeopleState> getActivities(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedUserState;
+      yield LoadingPeopleActivityStates(user: state.user);
+
+      final list = await _userRepository.fetchUserEvent(
+          login: state.user.login, pageNo: 1);
+      final bool hasNextPage = list.length == 20;
+      yield LoadedPeopleActivityStates(list,
+          user: state.user, pageNo: 2, hasNextPage: hasNextPage);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      yield ErrorPeopleState(_?.toString());
+    }
+  }
+
+  Stream<PeopleState> getNextActivities(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    final state = currentState as LoadedPeopleActivityStates;
+    try {
+      if (!state.hasNextPage) {
+        print("No activities left");
+        return;
+      }
+      yield LoadingNextPeopleActivityStates(user: state.user,eventList:state.eventList);
+
+      final list = await _userRepository.fetchUserEvent(
+          login: state.user.login, pageNo: state.pageNo);
+      yield LoadedPeopleActivityStates.next(
+          currentList: state.eventList,
+          eventList: list,
+          user: state.user,
+          pageNo: state.pageNo + 1);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'People_event', error: _, stackTrace: stackTrace);
+      yield ErrorActivitiesState(_?.toString(), state.user);
     }
   }
 }

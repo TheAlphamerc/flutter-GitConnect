@@ -13,8 +13,8 @@ class UserRepository {
   Future<UserModel> fetchNextRepositorries({String login,String endCursor}) async{
     return await apiGatway.fetchNextRepositorries(login:login,endCursor: endCursor);
   }
-  Future<List<EventModel>> fetchUserEvent() async{
-    return await apiGatway.fetchUserEvent();
+  Future<List<EventModel>> fetchUserEvent({String login,int pageNo}) async{
+    return await apiGatway.fetchUserEvent(login:login,pageNo: pageNo);
   }
 
   Future<UserPullRequests> fetchPullRequest({String login, String endCursor}) async{

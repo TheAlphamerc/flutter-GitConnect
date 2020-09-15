@@ -198,3 +198,34 @@ class ErrorNextRepositoryState extends LoadedUserState {
   @override
   String toString() => 'ErrorUserState';
 }
+
+class LoadingPeopleActivityStates extends LoadedUserState{
+  LoadingPeopleActivityStates({UserModel user,}):super(user: user);
+}
+
+class LoadedPeopleActivityStates extends LoadedUserState{
+  final List<EventModel> eventList;
+  final int pageNo;
+  final UserModel user;
+  final bool hasNextPage;
+  LoadedPeopleActivityStates(this.eventList,  {this.pageNo,this.user,this.hasNextPage}):super(user: user);
+
+  factory LoadedPeopleActivityStates.next({List<EventModel> currentList, List<EventModel> eventList, UserModel user, int pageNo}) {
+    currentList.addAll(eventList);
+    final hasNextPage = eventList != null && eventList.length == 20;
+    return LoadedPeopleActivityStates(currentList,user:user,pageNo: pageNo,hasNextPage:hasNextPage);
+  }
+  @override
+  String toString() => 'LoadedPeopleActivityStates';
+}
+class LoadingNextPeopleActivityStates extends LoadedPeopleActivityStates{
+  LoadingNextPeopleActivityStates({UserModel user,List<EventModel> eventList}): super(eventList, user:user);
+}
+class ErrorActivitiesState extends LoadedUserState {
+  final String errorMessage;
+
+  ErrorActivitiesState(this.errorMessage, UserModel user): super(user: user);
+
+  @override
+  String toString() => 'ErrorActivitiesState';
+}

@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/bloc/people/people_event.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
@@ -139,18 +140,18 @@ class UserScreenBody extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  isOtheruserProfile ? 'No pinned reposiitory available'
-                  : "Pin repositories to profile for quick access at any time, without having to search",
+                  isOtheruserProfile
+                      ? 'No pinned reposiitory available'
+                      : "Pin repositories to profile for quick access at any time, without having to search",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
-                if(!isOtheruserProfile)
-                SizedBox(height: 16),
-                if(!isOtheruserProfile)
-                GFlatButton(
-                  label: "PIN REPOSITORY",
-                  onPressed: () {},
-                ).ripple(() {})
+                if (!isOtheruserProfile) SizedBox(height: 16),
+                if (!isOtheruserProfile)
+                  GFlatButton(
+                    label: "PIN REPOSITORY",
+                    onPressed: () {},
+                  ).ripple(() {})
               ],
             ),
           );
@@ -463,6 +464,18 @@ class UserScreenBody extends StatelessWidget {
                     model.issues.totalCount.toString(),
                     onPressed: () {
                       Navigator.push(context, IssuesPage.route(model.login));
+                    },
+                  ).hP16,
+                  if(peopleBloc != null)
+                  _keyValueTile(
+                    context,
+                    "Activities",
+                    "",
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          PeopleEventsPage.getPageRoute(
+                              login: model.login, bloc: peopleBloc));
                     },
                   ).hP16,
                 ],

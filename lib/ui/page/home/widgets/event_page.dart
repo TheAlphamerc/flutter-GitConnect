@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/bloc/people/index.dart' as people;
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -12,7 +14,149 @@ import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:get_it/get_it.dart';
 
 class EventsPage extends StatelessWidget {
-  const EventsPage({Key key,}) : super(key: key);
+  const EventsPage({Key key, this.login}) : super(key: key);
+
+  final String login;
+  final int widthOffset = 66;
+
+  Widget _loader() {
+    return Container(
+      alignment: Alignment.center,
+      height: 60,
+      child: SizedBox(
+        height: 20,
+        width: 20,
+        child: GLoader(stroke: 1),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserBloc, UserState>(
+      buildWhen: (oldState, newState) {
+        if (oldState is LoadedUserState) {
+          if (oldState.eventList == null) {
+            return true;
+          } else {
+            print("Restrict Events to build again");
+            return false;
+          }
+        }
+        return false;
+      },
+      builder: (context, state) {
+        List<EventModel> eventList;
+        if (state is LoadedUserState) {
+          eventList = state.eventList;
+        } else if (state is LoadingEventState) {
+          return _loader();
+        }
+        return EventPageBody(eventList: eventList, login: login);
+      },
+    );
+  }
+}
+
+class PeopleEventsPage extends StatefulWidget {
+  const PeopleEventsPage({Key key, this.login, this.bloc}) : super(key: key);
+
+  final people.PeopleBloc bloc;
+  final String login;
+
+  @override
+  _PeopleEventsPageState createState() => _PeopleEventsPageState();
+
+  static MaterialPageRoute getPageRoute(
+      {String login, people.PeopleBloc bloc}) {
+    return MaterialPageRoute(
+      builder: (context) {
+        return PeopleEventsPage(
+          login: login,
+          bloc: bloc..add(people.LoadPeopleActivitiesEvent()),
+        );
+      },
+    );
+  }
+}
+
+class _PeopleEventsPageState extends State<PeopleEventsPage> {
+  final int widthOffset = 66;
+
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(listener);
+    super.initState();
+  }
+
+  void listener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      widget.bloc.add(people.LoadPeopleActivitiesEvent(loadNextActivity: true));
+    }
+  }
+
+  Widget _loader() {
+    return Container(
+      alignment: Alignment.center,
+      height: 60,
+      child: SizedBox(
+        height: 20,
+        width: 20,
+        child: GLoader(stroke: 1),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+          title: Column(
+        children: <Widget>[
+          Text("Activities"),
+          SizedBox(height: 4),
+          Text("${widget.login}", style: Theme.of(context).textTheme.subtitle2),
+        ],
+      )),
+      body: BlocBuilder<people.PeopleBloc, people.PeopleState>(
+        cubit: widget.bloc,
+        builder: (context, state) {
+          List<EventModel> eventList;
+          if (state is people.LoadedPeopleActivityStates) {
+            eventList = state.eventList;
+          } else if (state is people.LoadingPeopleActivityStates) {
+            return _loader();
+          }
+          if (eventList != null && eventList.isNotEmpty)
+            return SingleChildScrollView(
+              controller: _controller,
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  EventPageBody(eventList: eventList, login: widget.login),
+                  if(state is people.LoadingNextPeopleActivityStates)
+                    _loader()
+                ],
+              ),
+            );
+          return NoDataPage(
+              title: "Activities",
+              description: "No recent activity detected",
+              icon: GIcons.github);
+        },
+      ),
+    );
+  }
+}
+
+class EventPageBody extends StatelessWidget {
+  const EventPageBody({Key key, this.eventList, this.login}) : super(key: key);
+
+  final List<EventModel> eventList;
+  final String login;
   final int widthOffset = 66;
 
   Widget _issueTile(context, EventModel model, String username,
@@ -59,7 +203,7 @@ class EventsPage extends StatelessWidget {
                       ? "You Commented"
                       : model.payload.action == "closed"
                           ? "You closed this issue"
-                          : model.actor.login,
+                          : "Closed this issue",
                 ),
                 SizedBox(height: 8),
                 if (model.createdAt != null)
@@ -121,8 +265,8 @@ class EventsPage extends StatelessWidget {
                   imagePath: model.actor.avatarUrl,
                   height: 18,
                   subtitle: username == model.actor.login
-                      ? "You pushed a commit"
-                      : model.actor.login,
+                      ? "You created a commit"
+                      : "Created a new commit",
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -181,7 +325,7 @@ class EventsPage extends StatelessWidget {
                   height: 18,
                   subtitle: username == model.actor.login && isCommented
                       ? "You created a pull request"
-                      : model.actor.login,
+                      : "Created a pull request",
                 ),
                 if (model.createdAt != null)
                   Container(
@@ -242,7 +386,7 @@ class EventsPage extends StatelessWidget {
                   height: 18,
                   subtitle: username == model.actor.login
                       ? "You created a ${model.payload.refType}"
-                      : model.actor.login,
+                      : "Created a ${model.payload.refType}",
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -324,122 +468,77 @@ class EventsPage extends StatelessWidget {
         return GColors.blue;
     }
   }
-  
-  Widget _loader() {
-    return Container(
-      alignment: Alignment.center,
-      height: 60,
-      child: SizedBox(
-        height: 20,
-        width: 20,
-        child: GLoader(stroke: 1),
-      ),
-    );
-  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
-       buildWhen: (oldState, newState) {
-         if(oldState is LoadedUserState){
-           if(oldState.eventList == null){
-             return true;
-           } else{
-             print("Restrict Events to build again");
-             return false;
-           }
-         }
-        return false;
-      },
-      builder: (context, state) {
-        List<EventModel> eventList;
-        if (state is LoadedUserState) {
-          eventList = state.eventList;
-        }else if(state is LoadingEventState){
-          return  _loader();
-        }
-        return eventList == null
-            ? _noActivity(context)
-            : FutureBuilder(
-                initialData: "",
-                future: GetIt.instance<SharedPrefrenceHelper>().getUserName(),
-                builder: (context, AsyncSnapshot<String> snapshot) {
-                  return GCard(
-                    color: Theme.of(context).colorScheme.surface,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        ...eventList.map(
-                          (model) {
-                            if (model.type == UserEventType.PUSH_EVENT) {
-                              return Column(
-                                children: <Widget>[
-                                  // Text(model.type.toString()),
-                                  _pushCommitEvent(
-                                      context, model, snapshot.data ?? ""),
-                                  if (eventList.last != model)
-                                    Divider(height: 1, indent: 50),
-                                ],
-                              );
-                            } else if (model.type ==
-                                UserEventType.ISSUES_EVENT) {
-                              return Column(
-                                children: <Widget>[
-                                  // Text(model.type.toString()),
-                                  _issueTile(
-                                      context, model, snapshot.data ?? ""),
-                                  if (eventList.last != model)
-                                    Divider(height: 1, indent: 50),
-                                ],
-                              );
-                            } else if (model.type ==
-                                UserEventType.ISSUE_COMMENT_EVENT) {
-                              return Column(
-                                children: <Widget>[
-                                  // Text(model.type.toString()),
-                                  _issueTile(
-                                      context, model, snapshot.data ?? "",
-                                      isCommented: true),
-                                  if (eventList.last != model)
-                                    Divider(height: 1, indent: 50),
-                                ],
-                              );
-                            } else if (model.type ==
-                                UserEventType.PULL_REQUEST_EVENT) {
-                              return Column(
-                                children: <Widget>[
-                                  // Text(model.type.toString()),
-                                  _pullRequestTile(
-                                      context, model, snapshot.data ?? "",
-                                      isCommented: true),
-                                  if (eventList.last != model)
-                                    Divider(height: 1, indent: 50),
-                                ],
-                              );
-                            } else if (model.type ==
-                                UserEventType.CREATE_EVENT) {
-                              return Column(
-                                children: <Widget>[
-                                  // Text(model.type.toString()),
-                                  _createRepoEventTile(
-                                    context,
-                                    model,
-                                    snapshot.data ?? "",
-                                  ),
-                                  if (eventList.last != model)
-                                    Divider(height: 1, indent: 50),
-                                ],
-                              );
-                            } else {
-                              return SizedBox.shrink();
-                            }
-                          },
-                        ).toList(),
-                      ],
-                    ),
-                  );
-                },
-              );
-      },
-    );
+    return eventList == null
+        ? _noActivity(context)
+        : GCard(
+            color: Theme.of(context).colorScheme.surface,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ...eventList.map(
+                  (model) {
+                    if (model.type == UserEventType.PUSH_EVENT) {
+                      return Column(
+                        children: <Widget>[
+                          // Text(model.type.toString()),
+                          _pushCommitEvent(context, model, login ?? ""),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
+                        ],
+                      );
+                    } else if (model.type == UserEventType.ISSUES_EVENT) {
+                      return Column(
+                        children: <Widget>[
+                          // Text(model.type.toString()),
+                          _issueTile(context, model, login ?? ""),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
+                        ],
+                      );
+                    } else if (model.type ==
+                        UserEventType.ISSUE_COMMENT_EVENT) {
+                      return Column(
+                        children: <Widget>[
+                          // Text(model.type.toString()),
+                          _issueTile(context, model, login ?? "",
+                              isCommented: true),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
+                        ],
+                      );
+                    } else if (model.type == UserEventType.PULL_REQUEST_EVENT) {
+                      return Column(
+                        children: <Widget>[
+                          // Text(model.type.toString()),
+                          _pullRequestTile(context, model, login ?? "",
+                              isCommented: true),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
+                        ],
+                      );
+                    } else if (model.type == UserEventType.CREATE_EVENT) {
+                      return Column(
+                        children: <Widget>[
+                          // Text(model.type.toString()),
+                          _createRepoEventTile(
+                            context,
+                            model,
+                            login ?? "",
+                          ),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
+                        ],
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ).toList(),
+              ],
+            ),
+          );
   }
 }

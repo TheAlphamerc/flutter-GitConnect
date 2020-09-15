@@ -246,7 +246,7 @@ class HomePageScreenBody extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6,
               ).hP16,
               SizedBox(height: 16),
-              EventsPage(),
+              EventsPage(login:model.login),
               SizedBox(height: 16),
               // Text(
               //   "Typography",
