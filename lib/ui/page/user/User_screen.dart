@@ -427,6 +427,7 @@ class UserScreenBody extends StatelessWidget {
                           controller: controller,
                           userBloc: userBloc,
                           peopleBloc: peopleBloc,
+                          login: model.login
                         ),
                       );
                     },

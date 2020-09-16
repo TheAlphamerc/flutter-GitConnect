@@ -5,6 +5,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
@@ -81,14 +82,7 @@ class PullRequestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Title(
-          title: "Pull Request",
-          color: Colors.black,
-          child: Text("Pull Request",
-              style: Theme.of(context).textTheme.headline6),
-        ),
-      ),
+      appBar: AppBar(title: GAppBarTitle(login: login, title: "Pull Request")),
       body: Container(
         color: Theme.of(context).colorScheme.surface,
         child: BlocBuilder<PeopleBloc, PeopleState>(
@@ -112,15 +106,11 @@ class PullRequestPage extends StatelessWidget {
                   pullRequest: currentState.pullRequestsList,
                   controller: controller,
                 );
-              return Column(
-                children: <Widget>[
-                  NoDataPage(
-                    title: "Empty issues",
-                    description:
-                        "No pullrequest created yet,\n Once new pullrequest are created, they will be displayed here",
-                    icon: GIcons.git_pull_request_24,
-                  ),
-                ],
+              return NoDataPage(
+                title: "Empty issues",
+                description:
+                    "No pull request created yet,\n Once new pullr equest are created, they will be displayed here",
+                icon: GIcons.git_pull_request_24,
               );
             }
             if (currentState is LoadingPullRequestState) {

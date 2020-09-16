@@ -97,28 +97,7 @@ class ApiGatwayImpl implements ApiGateway {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);
-      String queryType;
-      switch (type) {
-        case GithubSearchType.People:
-          queryType = "USER";
-          break;
-        case GithubSearchType.Repository:
-          queryType = "REPOSITORY";
-          break;
-        case GithubSearchType.PullRequest:
-          queryType = "USER";
-          break;
-        case GithubSearchType.Issue:
-          queryType = "ISSUE";
-          break;
-        case GithubSearchType.ORganisation:
-          queryType = "USER";
-          break;
-
-        default:
-          queryType = "USER";
-          break;
-      }
+      String queryType = type.asString();
       final result = await searchQueryAsync(query, queryType, endCursor);
       if (result.hasException) {
         print(result.exception.toString());
@@ -154,13 +133,13 @@ class ApiGatwayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<EventModel>> fetchUserEvent() async {
+  Future<List<EventModel>> fetchUserEvent({String login,int pageNo}) async {
     try {
       var accesstoken = await _sessionService.loadSession();
-      var login = await _sessionService.getUserName();
-      assert(login != null);
+      var username =login ?? await _sessionService.getUserName();
+      assert(username != null);
       var response = await _dioClient.get(
-        Config.getEvent(login),
+        Config.getEvent(userName:username,pageNo:pageNo),
         options: Options(
           headers: {
             'Authorization': 'token $accesstoken',

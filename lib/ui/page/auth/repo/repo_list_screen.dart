@@ -5,9 +5,12 @@ import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/bloc/people/people_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/people_state.dart' as people;
 import 'package:flutter_github_connect/bloc/search/index.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/theme/extentions.dart';
+import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
@@ -17,31 +20,35 @@ class RepositoryListScreen extends StatelessWidget {
   final UserBloc userBloc;
   final PeopleBloc peopleBloc;
   final ScrollController controller;
+  final String login;
 
   static MaterialPageRoute getPageRoute(
       {ScrollController controller,
       List<RepositoriesNode> list,
       UserBloc userBloc,
-      PeopleBloc peopleBloc}) {
+      PeopleBloc peopleBloc,
+      String login}) {
     return MaterialPageRoute(
       builder: (_) => RepositoryListScreen(
         list: list,
         controller: controller,
         userBloc: userBloc,
         peopleBloc: peopleBloc,
+        login: login,
       ),
     );
   }
 
   /// `isFromUserRepositoryListPage` should be set to true if this screen is used as widget
-  const RepositoryListScreen(
-      {Key key,
-      this.list,
-      this.isFromUserRepositoryListPage = false,
-      this.controller,
-      this.userBloc,
-      this.peopleBloc})
-      : super(key: key);
+  const RepositoryListScreen({
+    Key key,
+    this.list,
+    this.isFromUserRepositoryListPage = false,
+    this.controller,
+    this.userBloc,
+    this.peopleBloc,
+    this.login,
+  }) : super(key: key);
 
   Widget repoCard(context, RepositoriesNode repo) {
     return Container(
@@ -148,11 +155,13 @@ class RepositoryListScreen extends StatelessWidget {
     return Scaffold(
       appBar: isFromUserRepositoryListPage
           ? null
-          : AppBar(
-              title: Text("Repositories"),
-            ),
-      body: list == null
-          ? SizedBox()
+          : AppBar(title: GAppBarTitle(login: login, title: "Repositories"),),
+      body: !(list != null && list.isNotEmpty)
+          ? NoDataPage(
+                title: "No repo Found",
+                description: "$login haven't created any repo yet",
+                icon: GIcons.github_1,
+              )
           : !isFromUserRepositoryListPage
               ? peopleBloc != null
                   ? BlocBuilder<PeopleBloc, people.PeopleState>(

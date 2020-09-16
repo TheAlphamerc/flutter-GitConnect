@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
@@ -64,13 +65,7 @@ class GistlistPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Title(
-          title: "Gist",
-          color: Colors.black,
-          child: Text("Gist", style: Theme.of(context).textTheme.headline6),
-        ),
-      ),
+      appBar: AppBar(title: GAppBarTitle(login: login, title: "Gists")),
       body: Container(
         child: BlocBuilder<PeopleBloc, PeopleState>(
           cubit: bloc,
@@ -92,21 +87,17 @@ class GistlistPage extends StatelessWidget {
                     gist: currentState.gist,
                     login: login,
                     controller: controller);
-              return Column(
-                children: <Widget>[
-                  NoDataPage(
-                    title: "No Gist Found",
-                    description:
-                        "No gist created yet,\n Once new gist are created, they will be displayed here",
-                    icon: GIcons.code_24,
-                  ),
-                ],
+              return NoDataPage(
+                title: "No Gist Found",
+                description:
+                    "No gist created yet,\n Once new gist are created, they will be displayed here",
+                icon: GIcons.code_24,
               );
             }
             if (currentState is OnPullRequestLoad) {
               return Center(
                 child: Text("Loading"),
-              );
+            );
             }
             return GLoader();
           },

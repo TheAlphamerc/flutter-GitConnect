@@ -92,16 +92,14 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: _getAppBar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ValueListenableBuilder<String>(
-              valueListenable: searchText,
-              builder: (context, searchText, child) {
-                return searchText.isEmpty
-                    ? child
-                    : Container(
-                        color: Theme.of(context).colorScheme.surface,
+      body:ValueListenableBuilder<String>(
+            valueListenable: searchText,
+            builder: (context, searchText, child) {
+              return searchText.isEmpty
+                  ? child
+                  : Container(
+                      color: Theme.of(context).colorScheme.surface,
+                      child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -148,18 +146,16 @@ class SearchPage extends StatelessWidget {
                             Divider(height: 0),
                           ],
                         ),
-                      );
-              },
-              child: NoDataPage(
-                title: "Find your stuff.",
-                description:
-                    "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
-                icon: GIcons.github_1,
-              ),
-            )
-          ],
-        ),
-      ),
+                      ));
+            },
+            child: NoDataPage(
+              title: "Find your stuff.",
+              description:
+                  "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
+              icon: GIcons.github_1,
+            ),
+          )
+        
     );
   }
 }

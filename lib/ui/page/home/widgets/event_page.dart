@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
@@ -83,11 +84,14 @@ class PeopleEventsPage extends StatefulWidget {
 class _PeopleEventsPageState extends State<PeopleEventsPage> {
   final int widthOffset = 66;
 
+  final getIt = GetIt.instance;
   ScrollController _controller;
+  String loggedInUserName;
 
   @override
   void initState() {
     _controller = ScrollController()..addListener(listener);
+
     super.initState();
   }
 
@@ -113,14 +117,8 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-          title: Column(
-        children: <Widget>[
-          Text("Activities"),
-          SizedBox(height: 4),
-          Text("${widget.login}", style: Theme.of(context).textTheme.subtitle2),
-        ],
-      )),
+      appBar:
+          AppBar(title: GAppBarTitle(login: widget.login, title: "Activities")),
       body: BlocBuilder<people.PeopleBloc, people.PeopleState>(
         cubit: widget.bloc,
         builder: (context, state) {
@@ -136,9 +134,18 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
               physics: BouncingScrollPhysics(),
               child: Column(
                 children: <Widget>[
-                  EventPageBody(eventList: eventList, login: widget.login),
-                  if(state is people.LoadingNextPeopleActivityStates)
-                    _loader()
+                  FutureBuilder(
+                      future: getIt<SharedPrefrenceHelper>().getUserName(),
+                      builder: (context, AsyncSnapshot<String> snapshot) {
+                        if(snapshot.hasData)
+                        return EventPageBody(
+                          eventList: eventList,
+                          login: widget.login,
+                          loggedInUserName: snapshot.data,
+                        );
+                        return _loader();
+                      }),
+                  if (state is people.LoadingNextPeopleActivityStates) _loader()
                 ],
               ),
             );
@@ -153,14 +160,16 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
 }
 
 class EventPageBody extends StatelessWidget {
-  const EventPageBody({Key key, this.eventList, this.login}) : super(key: key);
+  const EventPageBody(
+      {Key key, this.eventList, this.login, this.loggedInUserName})
+      : super(key: key);
 
   final List<EventModel> eventList;
   final String login;
   final int widthOffset = 66;
+  final String loggedInUserName;
 
-  Widget _issueTile(context, EventModel model, String username,
-      {bool isCommented = false}) {
+  Widget _issueTile(context, EventModel model, {bool isCommented = false}) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
         child: Row(
@@ -199,7 +208,7 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: username == model.actor.login && isCommented
+                  subtitle: isMyEvent(model.actor.login) && isCommented
                       ? "You Commented"
                       : model.payload.action == "closed"
                           ? "You closed this issue"
@@ -224,7 +233,7 @@ class EventPageBody extends StatelessWidget {
         ).vP16);
   }
 
-  Widget _pushCommitEvent(context, EventModel model, String username) {
+  Widget _pushCommitEvent(context, EventModel model) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
         child: Row(
@@ -264,7 +273,7 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: username == model.actor.login
+                  subtitle: isMyEvent(model.actor.login)
                       ? "You created a commit"
                       : "Created a new commit",
                 ),
@@ -283,7 +292,7 @@ class EventPageBody extends StatelessWidget {
         ).vP16);
   }
 
-  Widget _pullRequestTile(context, EventModel model, String username,
+  Widget _pullRequestTile(context, EventModel model,
       {bool isCommented = false}) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
@@ -323,7 +332,7 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: username == model.actor.login && isCommented
+                  subtitle: isMyEvent(model.actor.login) && isCommented
                       ? "You created a pull request"
                       : "Created a pull request",
                 ),
@@ -344,7 +353,7 @@ class EventPageBody extends StatelessWidget {
         ).vP16);
   }
 
-  Widget _createRepoEventTile(context, EventModel model, String username) {
+  Widget _createRepoEventTile(context, EventModel model) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
         child: Row(
@@ -384,9 +393,58 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: username == model.actor.login
+                  subtitle: isMyEvent(model.actor.login)
                       ? "You created a ${model.payload.refType}"
                       : "Created a ${model.payload.refType}",
+                ),
+                SizedBox(height: 8),
+                Container(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    Utility.getPassedTime(model.createdAt.toString()) + " ago",
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ).vP16);
+  }
+
+  Widget _watchRepoEventTile(context, EventModel model) {
+    return GCard(
+        color: Theme.of(context).colorScheme.surface,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 50,
+              child: Icon(
+                GIcons.eye_24,
+                color: GColors.blue,
+                size: 20,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width - widthOffset,
+                  child: Text(
+                    '${model.repo.name}',
+                    style: Theme.of(context).textTheme.subtitle1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 8),
+                UserAvatar(
+                  imagePath: model.actor.avatarUrl,
+                  height: 18,
+                  subtitle: isMyEvent(model.actor.login)
+                      ? "You created a ${model.payload.refType}"
+                      : "${model.payload.action} watching repo",
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -469,6 +527,13 @@ class EventPageBody extends StatelessWidget {
     }
   }
 
+  bool isMyEvent(String name) {
+    if (loggedInUserName != null) {
+      return name == loggedInUserName;
+    } else
+      return login == name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return eventList == null
@@ -484,7 +549,10 @@ class EventPageBody extends StatelessWidget {
                       return Column(
                         children: <Widget>[
                           // Text(model.type.toString()),
-                          _pushCommitEvent(context, model, login ?? ""),
+                          _pushCommitEvent(
+                            context,
+                            model,
+                          ),
                           if (eventList.last != model)
                             Divider(height: 1, indent: 50),
                         ],
@@ -493,7 +561,7 @@ class EventPageBody extends StatelessWidget {
                       return Column(
                         children: <Widget>[
                           // Text(model.type.toString()),
-                          _issueTile(context, model, login ?? ""),
+                          _issueTile(context, model),
                           if (eventList.last != model)
                             Divider(height: 1, indent: 50),
                         ],
@@ -503,8 +571,7 @@ class EventPageBody extends StatelessWidget {
                       return Column(
                         children: <Widget>[
                           // Text(model.type.toString()),
-                          _issueTile(context, model, login ?? "",
-                              isCommented: true),
+                          _issueTile(context, model, isCommented: true),
                           if (eventList.last != model)
                             Divider(height: 1, indent: 50),
                         ],
@@ -513,8 +580,7 @@ class EventPageBody extends StatelessWidget {
                       return Column(
                         children: <Widget>[
                           // Text(model.type.toString()),
-                          _pullRequestTile(context, model, login ?? "",
-                              isCommented: true),
+                          _pullRequestTile(context, model, isCommented: true),
                           if (eventList.last != model)
                             Divider(height: 1, indent: 50),
                         ],
@@ -523,11 +589,15 @@ class EventPageBody extends StatelessWidget {
                       return Column(
                         children: <Widget>[
                           // Text(model.type.toString()),
-                          _createRepoEventTile(
-                            context,
-                            model,
-                            login ?? "",
-                          ),
+                          _createRepoEventTile(context, model),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
+                        ],
+                      );
+                    } else if (model.type == UserEventType.WATCH_EVENT) {
+                      return Column(
+                        children: <Widget>[
+                          _watchRepoEventTile(context, model),
                           if (eventList.last != model)
                             Divider(height: 1, indent: 50),
                         ],

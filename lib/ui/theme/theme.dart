@@ -21,6 +21,7 @@ class AppTheme {
         // primaryTextTheme: TextThemes.darkTheme,
         textTheme: TextThemes.darkTextTheme,
         appBarTheme: AppBarTheme(
+          elevation: 2,
           brightness: Brightness.dark,
           color: DarkColor.surfaceColor,
           iconTheme: IconThemeData(color: DarkColor.white),
@@ -42,7 +43,7 @@ class AppTheme {
         appBarTheme: AppBarTheme(
           brightness: Brightness.light,
           color: GColors.white,
-          elevation: 0,
+          elevation: 1,
           textTheme: TextTheme(
             headline6: TextStyle(color: GColors.black, fontSize: 20),
           ),

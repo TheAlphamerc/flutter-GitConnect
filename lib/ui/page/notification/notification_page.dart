@@ -30,18 +30,11 @@ class NotificationPage extends StatelessWidget {
               return NotificationScreen(
                 list: currentState.list,
               );
-            return Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: NoDataPage(
-                    title: "No Notification Available",
-                    description:
-                        "Seems like you have no notification for now. If new notifiaction appear it will be displayed here",
-                    icon: GIcons.alert_16,
-                  ),
-                ),
-              ],
+            return NoDataPage(
+              title: "No Notification Available",
+              description:
+                  "Seems like you have no notification for now. If new notifiaction appear it will be displayed here",
+              icon: GIcons.alert_16,
             );
           }
           return GLoader();

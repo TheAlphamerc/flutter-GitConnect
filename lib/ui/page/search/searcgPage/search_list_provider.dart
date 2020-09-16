@@ -47,20 +47,6 @@ class _SearchListProviderState extends State<SearchListProvider> {
     }
   }
 
-  String _getAppBarTitle() {
-    switch (widget.type) {
-      case GithubSearchType.People:
-        return "People";
-      case GithubSearchType.Repository:
-        return "Repository";
-      case GithubSearchType.Issue:
-        return "Issues";
-
-      default:
-        return "People";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +54,7 @@ class _SearchListProviderState extends State<SearchListProvider> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Text(_getAppBarTitle()),
+        title: Text(widget.type.asSmallString()),
       ),
       body: BlocBuilder<SearchBloc, SearchState>(
         builder: (
@@ -87,14 +73,10 @@ class _SearchListProviderState extends State<SearchListProvider> {
 
           if (currentState is LoadedSearchState) {
             if (!(currentState.list != null && currentState.list.isNotEmpty)) {
-              return Column(
-                children: <Widget>[
-                  NoDataPage(
-                    title: "No ${_getAppBarTitle()} Found",
-                    description: "Try again with different keyword",
-                    icon: GIcons.github_1,
-                  ),
-                ],
+              return NoDataPage(
+                title: "No ${widget.type.asSmallString()} Found",
+                description: "Try again with different keyword",
+                icon: GIcons.github_1,
               );
             }
             switch (currentState.type) {

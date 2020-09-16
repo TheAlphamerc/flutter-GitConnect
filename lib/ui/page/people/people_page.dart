@@ -5,6 +5,7 @@ import "package:build_context/build_context.dart";
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_screen.dart';
+import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
@@ -50,14 +51,9 @@ class _ActorPageState extends State<ActorPage> {
     return Scaffold(
       backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 2,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Title(
-          title: widget.type.asString(),
-          color: Colors.black,
-          child: Text(widget.type.asString(),
-              style: Theme.of(context).textTheme.headline6),
-        ),
+        title:GAppBarTitle(login: widget.login, title: widget.type.asString()),
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(
         builder: (
@@ -111,14 +107,10 @@ class PeoplePage extends StatelessWidget {
                 followers: currentState.followModel.nodes,
                 controller: controller);
           } else {
-            return Column(
-              children: <Widget>[
-                NoDataPage(
-                  title: "No ${type.asString().toLowerCase()}",
-                  description: "Getting empty data here",
-                  icon: GIcons.github,
-                ),
-              ],
+            return NoDataPage(
+              title: "No ${type.asString().toLowerCase()}",
+              description: "Getting empty data here",
+              icon: GIcons.github,
             );
           }
         }

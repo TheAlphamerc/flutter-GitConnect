@@ -520,3 +520,28 @@ enum GithubSearchType {
   Repository,
   ORganisation,
 }
+
+extension TypeOfSearch on GithubSearchType {
+  String asString() => {
+        GithubSearchType.Issue: "ISSUE",
+        GithubSearchType.ORganisation: "USER",
+        GithubSearchType.PullRequest: "USER",
+        GithubSearchType.Repository : "REPOSITORY",
+        GithubSearchType.People: "USER",
+      }[this];
+  String asSmallString() => {
+        GithubSearchType.Issue: "Issues",
+        GithubSearchType.ORganisation: "Organisation",
+        GithubSearchType.PullRequest: "Pull request",
+        GithubSearchType.Repository : "Repository",
+        GithubSearchType.People: "People",
+      }[this];
+
+  static GithubSearchType fromString(String value) => {
+        'ISSUE': GithubSearchType.Issue,
+        'ORGANISATION': GithubSearchType.ORganisation,
+        'USER': GithubSearchType.People,
+        'PULLREQUEST': GithubSearchType.PullRequest,
+        'REPOSITORY': GithubSearchType.Repository,
+      }[value];
+}

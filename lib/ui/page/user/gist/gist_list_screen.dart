@@ -107,12 +107,13 @@ class GistListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GCard(
-      color: Theme.of(context).colorScheme.surface,
+      radius: 0,
+      // color: Theme.of(context).backgroundColor,
       child: ListView.separated(
         controller: controller,
         itemCount: gist.nodes.length,
         separatorBuilder: (BuildContext context, int index) =>
-            Divider(indent: 50),
+            Divider(indent: 50,height:0),
         itemBuilder: (BuildContext context, int index) {
           return _pullRequestTile(
             context,

@@ -199,6 +199,7 @@ class HomePageScreenBody extends StatelessWidget {
                 controller: controller,
                 userBloc: bloc,
                 peopleBloc: null,
+                login: model.login
               ),
             );
           }),
