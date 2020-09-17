@@ -1,30 +1,5 @@
-// To parse this JSON data, do
-//
-//     final gistResponse = gistResponseFromJson(jsonString);
-
 import 'dart:convert';
-
 import 'package:flutter_github_connect/model/page_info_model.dart';
-
-// class GistResponse {
-//     GistResponse({
-//         this.data,
-//     });
-
-//     final Data data;
-
-//     factory GistResponse.fromRawJson(String str) => GistResponse.fromJson(json.decode(str));
-
-//     String toRawJson() => json.encode(toJson());
-
-//     factory GistResponse.fromJson(Map<String, dynamic> json) => GistResponse(
-//         data: json["data"] == null ? null : Data.fromJson(json["data"]),
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//         "data": data == null ? null : data.toJson(),
-//     };
-// }
 
 class GistResponse {
     GistResponse({
@@ -230,4 +205,231 @@ class EnumValues<T> {
         }
         return reverseMap;
     }
+}
+
+
+class GistDetail {
+    GistDetail({
+        this.url,
+        this.forksUrl,
+        this.commitsUrl,
+        this.id,
+        this.nodeId,
+        this.gitPullUrl,
+        this.gitPushUrl,
+        this.htmlUrl,
+        this.files,
+        this.public,
+        this.createdAt,
+        this.updatedAt,
+        this.description,
+        this.comments,
+        this.user,
+        this.commentsUrl,
+        this.owner,
+        this.forks,
+        this.history,
+        this.truncated,
+    });
+
+    final String url;
+    final String forksUrl;
+    final String commitsUrl;
+    final String id;
+    final String nodeId;
+    final String gitPullUrl;
+    final String gitPushUrl;
+    final String htmlUrl;
+    final Files files;
+    final bool public;
+    final DateTime createdAt;
+    final DateTime updatedAt;
+    final String description;
+    final int comments;
+    final dynamic user;
+    final String commentsUrl;
+    final Owner owner;
+    final List<dynamic> forks;
+    final List<History> history;
+    final bool truncated;
+
+    factory GistDetail.fromRawJson(String str) => GistDetail.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory GistDetail.fromJson(Map<String, dynamic> json) => GistDetail(
+        url: json["url"] == null ? null : json["url"],
+        forksUrl: json["forks_url"] == null ? null : json["forks_url"],
+        commitsUrl: json["commits_url"] == null ? null : json["commits_url"],
+        id: json["id"] == null ? null : json["id"],
+        nodeId: json["node_id"] == null ? null : json["node_id"],
+        gitPullUrl: json["git_pull_url"] == null ? null : json["git_pull_url"],
+        gitPushUrl: json["git_push_url"] == null ? null : json["git_push_url"],
+        htmlUrl: json["html_url"] == null ? null : json["html_url"],
+        files: json["files"] == null ? null :  Files.fromJson(json["files"]),
+        public: json["public"] == null ? null : json["public"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        description: json["description"] == null ? null : json["description"],
+        comments: json["comments"] == null ? null : json["comments"],
+        user: json["user"],
+        commentsUrl: json["comments_url"] == null ? null : json["comments_url"],
+        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        forks: json["forks"] == null ? null : List<dynamic>.from(json["forks"].map((x) => x)),
+        history: json["history"] == null ? null : List<History>.from(json["history"].map((x) => History.fromJson(x))),
+        truncated: json["truncated"] == null ? null : json["truncated"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "url": url == null ? null : url,
+        "forks_url": forksUrl == null ? null : forksUrl,
+        "commits_url": commitsUrl == null ? null : commitsUrl,
+        "id": id == null ? null : id,
+        "node_id": nodeId == null ? null : nodeId,
+        "git_pull_url": gitPullUrl == null ? null : gitPullUrl,
+        "git_push_url": gitPushUrl == null ? null : gitPushUrl,
+        "html_url": htmlUrl == null ? null : htmlUrl,
+        "files": files == null ? null : files.toJson(),
+        "public": public == null ? null : public,
+        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
+        "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "description": description == null ? null : description,
+        "comments": comments == null ? null : comments,
+        "user": user,
+        "comments_url": commentsUrl == null ? null : commentsUrl,
+        "owner": owner == null ? null : owner.toJson(),
+        "forks": forks == null ? null : List<dynamic>.from(forks.map((x) => x)),
+        "history": history == null ? null : List<History>.from(history.map((x) => x.toJson())),
+        "truncated": truncated == null ? null : truncated,
+    };
+}
+
+class Files {
+    Files({this.list});
+
+    final List<FileModel> list;
+    
+    factory Files.fromRawJson(String str) => Files.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Files.fromJson(Map<String, dynamic> json) {
+     List<FileModel> list = List<FileModel>();
+      json.forEach((key, value) {
+          list.add(FileModel.fromJson(value));
+      });
+     return Files(list: list);
+    }
+
+    Map<String, dynamic> toJson() => {
+        "files": list == null ? null : List<FileModel>.from(list.map((x) => x.toJson()))
+    };
+}
+
+class FileModel {
+    FileModel({
+        this.filename,
+        this.type,
+        this.language,
+        this.rawUrl,
+        this.size,
+        this.truncated,
+        this.content,
+    });
+
+    final String filename;
+    final String type;
+    final String language;
+    final String rawUrl;
+    final int size;
+    final bool truncated;
+    final String content;
+
+    factory FileModel.fromRawJson(String str) => FileModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory FileModel.fromJson(Map<String, dynamic> json) => FileModel(
+        filename: json["filename"] == null ? null : json["filename"],
+        type: json["type"] == null ? null : json["type"],
+        language: json["language"] == null ? null : json["language"],
+        rawUrl: json["raw_url"] == null ? null : json["raw_url"],
+        size: json["size"] == null ? null : json["size"],
+        truncated: json["truncated"] == null ? null : json["truncated"],
+        content: json["content"] == null ? null : json["content"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "filename": filename == null ? null : filename,
+        "type": type == null ? null : type,
+        "language": language == null ? null : language,
+        "raw_url": rawUrl == null ? null : rawUrl,
+        "size": size == null ? null : size,
+        "truncated": truncated == null ? null : truncated,
+        "content": content == null ? null : content,
+    };
+}
+
+class History {
+    History({
+        this.user,
+        this.version,
+        this.committedAt,
+        this.changeStatus,
+        this.url,
+    });
+
+    final Owner user;
+    final String version;
+    final DateTime committedAt;
+    final ChangeStatus changeStatus;
+    final String url;
+
+    factory History.fromRawJson(String str) => History.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory History.fromJson(Map<String, dynamic> json) => History(
+        user: json["user"] == null ? null : Owner.fromJson(json["user"]),
+        version: json["version"] == null ? null : json["version"],
+        committedAt: json["committed_at"] == null ? null : DateTime.parse(json["committed_at"]),
+        changeStatus: json["change_status"] == null ? null : ChangeStatus.fromJson(json["change_status"]),
+        url: json["url"] == null ? null : json["url"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "user": user == null ? null : user.toJson(),
+        "version": version == null ? null : version,
+        "committed_at": committedAt == null ? null : committedAt.toIso8601String(),
+        "change_status": changeStatus == null ? null : changeStatus.toJson(),
+        "url": url == null ? null : url,
+    };
+}
+
+class ChangeStatus {
+    ChangeStatus({
+        this.total,
+        this.additions,
+        this.deletions,
+    });
+
+    final int total;
+    final int additions;
+    final int deletions;
+
+    factory ChangeStatus.fromRawJson(String str) => ChangeStatus.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory ChangeStatus.fromJson(Map<String, dynamic> json) => ChangeStatus(
+        total: json["total"] == null ? null : json["total"],
+        additions: json["additions"] == null ? null : json["additions"],
+        deletions: json["deletions"] == null ? null : json["deletions"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "total": total == null ? null : total,
+        "additions": additions == null ? null : additions,
+        "deletions": deletions == null ? null : deletions,
+    };
 }

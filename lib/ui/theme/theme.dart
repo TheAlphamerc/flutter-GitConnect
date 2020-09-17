@@ -42,7 +42,7 @@ class AppTheme {
         textTheme: TextThemes.lightTextTheme,
         appBarTheme: AppBarTheme(
           brightness: Brightness.light,
-          color: GColors.white,
+          color: GColors.surfaceColor,
           elevation: 1,
           textTheme: TextTheme(
             headline6: TextStyle(color: GColors.black, fontSize: 20),

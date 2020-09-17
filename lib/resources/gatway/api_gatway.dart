@@ -1,7 +1,6 @@
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
-import 'package:flutter_github_connect/bloc/issues/index.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
@@ -21,6 +20,7 @@ abstract class ApiGateway{
    Future<issues.Issues> fetchIssues({String login,String endCursor});
    Future<UserPullRequests> fetchPullRequest({String login,endCursor});
    Future<Gists> fetchGistList({String login,String endCursor});
+   Future<GistDetail> fetchGistDetail(String id);
    Future<people.FollowModel> fetchFollowUserList({String login,PeopleType type, String endCursor});
    Future<RepositoryModel> fetchRepository({String name, String owner});
    Future<String> fetchReadme({String name, String owner});

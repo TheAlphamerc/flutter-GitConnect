@@ -290,4 +290,26 @@ class ApiGatwayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<GistDetail> fetchGistDetail(String id)async {
+    try {
+      var accesstoken = await _sessionService.loadSession();
+      var response = await _dioClient.get(
+        Config.getGistDetail(id),
+        options: Options(
+          headers: {
+            'Authorization': 'token $accesstoken',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+        ),
+      );
+
+      final map  = _dioClient.getJsonBody(response);
+      final GistDetail model = GistDetail.fromJson(map);
+      return model;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

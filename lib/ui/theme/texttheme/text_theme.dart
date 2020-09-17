@@ -6,37 +6,37 @@ class TextThemes {
         headline1: GoogleFonts.montserrat(
           fontSize: 36.0,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: -1.5
         ),
         headline2: GoogleFonts.montserrat(
           fontSize: 34.0,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: -.5
         ),
         headline3: GoogleFonts.montserrat(
           fontSize: 32.0,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: 0
         ),
         headline4: GoogleFonts.montserrat(
           fontSize: 30.0,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: .25
         ),
         headline5: GoogleFonts.montserrat(
           fontSize: 24.0,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: .0
         ),
         headline6: GoogleFonts.montserrat(
           fontSize: 20.0,
           fontWeight: FontWeight.w500,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: .15
         ),
         subtitle1: GoogleFonts.montserrat(
@@ -53,32 +53,32 @@ class TextThemes {
         bodyText1: GoogleFonts.montserrat(
           fontSize: 16.0,
           fontWeight: FontWeight.w400,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: .5
         ),
         bodyText2: GoogleFonts.montserrat(
           fontSize: 14.0,
           fontWeight: FontWeight.w400,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: .25
         ),
         caption: GoogleFonts.montserrat(
           fontSize: 12.0,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: .4
         ),
         overline: GoogleFonts.montserrat(
           fontSize: 10.0,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: 1.5
         ),
       
         button: GoogleFonts.montserrat(
           fontSize: 14.0,
           fontWeight: FontWeight.w500,
-          color: Colors.white,
+          color: Color(0xffe5e3e6),
           letterSpacing: 1.2
         ),
       );

@@ -17,4 +17,7 @@ class Config{
   static String getReadme({String name, String owner}) {
     return "https://raw.githubusercontent.com/$owner/$name/master/README.md";
   }
+  static String getGistDetail(String id){
+    return "gists/$id";
+  }
 }

@@ -97,7 +97,7 @@ class GistlistPage extends StatelessWidget {
             if (currentState is OnPullRequestLoad) {
               return Center(
                 child: Text("Loading"),
-            );
+              );
             }
             return GLoader();
           },
