@@ -312,4 +312,30 @@ class ApiGatwayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<UserPullRequests> fetchRepoPullRequest({String owner, String endCursor, String name})async {
+    try {
+      assert(name != null,"Repository name is required");
+      assert(owner != null);
+      print("fetchRepoPullRequest Init");
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      print("fetchPullRequest");
+      
+      assert(owner != null);
+      final result = await getRepoPullRequest(owner,name,endCursor);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      final list =
+          UserPullRequests.fromJson(result.data["repository"]["pullRequests"]);
+
+      return list;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

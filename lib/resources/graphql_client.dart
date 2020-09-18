@@ -101,6 +101,14 @@ Future<QueryResult> getUserPullRequest(String login, String endCursor) async {
   return await _innerClient.query(_options);
 }
 
+Future<QueryResult> getRepoPullRequest(String owner,String name, String endCursor) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.repoPullRequests,
+      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
+
 Future<QueryResult> getUserGistList(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
       document: Apis.gist,

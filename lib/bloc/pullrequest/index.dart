@@ -1,0 +1,12 @@
+import 'dart:async';
+import 'package:bloc/bloc.dart';
+import 'dart:developer' as developer;
+import 'package:equatable/equatable.dart';
+import 'package:flutter_github_connect/model/pul_request.dart';
+import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
+import 'package:flutter_github_connect/resources/repository/pullrequest_repository.dart';
+import 'package:get_it/get_it.dart';
+import 'package:meta/meta.dart';
+part  'pullrequest_bloc.dart';
+part  'pullrequest_event.dart';
+part  'pullrequest_state.dart';
