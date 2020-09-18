@@ -1,11 +1,12 @@
 part of 'index.dart';
 
-@immutable
+@immutable 
 abstract class PullrequestEvent extends Equatable{
-  Stream<PullrequestState> getrepoPullrequest(
-      {PullrequestState currentState, PullrequestBloc bloc});
   final PullrequestRepository _pullrequestRepository = PullrequestRepository(apiGatway: GetIt.instance<ApiGateway>());
-
+  @override
+  Stream<PullrequestState> getrepoPullrequest({PullrequestState currentState, PullrequestBloc bloc}) async* {}
+  @override
+  Stream<PullrequestState> getPullRequest({PullrequestState currentState, PullrequestBloc bloc}) async* {}
   @override
   List<Object> get props => [];
 }
@@ -14,9 +15,7 @@ class LoadRepoPullRequests extends PullrequestEvent {
   final String owner;
   final String name;
   final bool isNextRepoPull;
-
-  @override
-  String toString() => 'LoadPullrequestEvent';
+ 
 
   LoadRepoPullRequests({this.name, this.owner,this.isNextRepoPull = false}) : assert(owner != null),assert(name!= null);
 
@@ -54,6 +53,57 @@ class LoadRepoPullRequests extends PullrequestEvent {
       yield ErrorNextRepoPullRequestState(
         errorMessage: _?.toString(),
         repoPullRequest: state.repoPullRequest,
+      );
+    }
+  }
+}
+
+class OnPullRequestLoad extends PullrequestEvent {
+  OnPullRequestLoad(this.login, {this.isLoadNextIssues = false});
+
+  final bool isLoadNextIssues;
+  final String login;
+
+  @override
+  Stream<PullrequestState> getPullRequest(
+      {PullrequestState currentState, PullrequestBloc bloc}) async* {
+    if (currentState is LoadedPullRequestState) {
+      return;
+    }
+    try {
+      yield LoadingPullRequestState();
+      final pullRequestsList =
+          await _pullrequestRepository.fetchUserPullRequest(login:login);
+      yield LoadedPullRequestState(pullRequestsList: pullRequestsList);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'OnPullRequestLoad', error: _, stackTrace: stackTrace);
+      yield ErrorPullRequestState(
+        _?.toString(),
+      );
+    }
+  }
+
+  Stream<PullrequestState> getNextPullRequest(
+      {PullrequestState currentState, PullrequestBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedPullRequestState;
+      if (!state.pullRequestsList.pageInfo.hasNextPage) {
+        print("No pull request left");
+        return;
+      }
+      yield LoadingNextPullRequestState(
+           state.pullRequestsList);
+      final newPullRequestList = await _pullrequestRepository.fetchUserPullRequest(login:login, endCursor: state.pullRequestsList.pageInfo.endCursor);
+      yield LoadedPullRequestState.next(
+          currentpullRequestsList: state.pullRequestsList,
+          pullRequestsList: newPullRequestList);
+    } catch (_, stackTrace) {
+      developer.log('$_',name: 'OnPullRequestLoad', error: _, stackTrace: stackTrace);
+      final state = currentState as LoadedPullRequestState;
+      yield ErrorNextPullRequestState(
+        errorMessage: _?.toString(),
+        pullRequestsList: state.pullRequestsList,
       );
     }
   }

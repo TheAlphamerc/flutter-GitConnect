@@ -16,6 +16,13 @@ class PullrequestBloc extends Bloc<PullrequestEvent, PullrequestState> {
           yield* event.getNextPullRequest(currentState: state, bloc: this);
         }
       }
+      else if(event is OnPullRequestLoad){
+        if(!event.isLoadNextIssues){
+          yield* event.getPullRequest(currentState: state, bloc: this);
+        }else{
+          yield* event.getNextPullRequest(currentState: state, bloc: this);
+        }
+      }
       
     } catch (_, stackTrace) {
       developer.log('$_',

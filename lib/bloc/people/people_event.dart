@@ -126,64 +126,6 @@ class LoadFollowEvent extends PeopleEvent {
   }
 }
 
-class OnPullRequestLoad extends PeopleEvent {
-  OnPullRequestLoad(this.login, {this.isLoadNextIssues = false});
-
-  final bool isLoadNextIssues;
-  final String login;
-
-  @override
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) async* {
-    if (currentState is LoadedPullRequestState) {
-      return;
-    }
-    // final state = currentState as LoadedEventsState;
-    try {
-      yield LoadingPullRequestState();
-      final pullRequestsList =
-          await _userRepository.fetchPullRequest(login: login);
-      yield LoadedPullRequestState(pullRequestsList: pullRequestsList);
-    } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'OnPullRequestLoad', error: _, stackTrace: stackTrace);
-      yield ErrorPullRequestState(
-        _?.toString(),
-      );
-    }
-  }
-
-  Stream<PeopleState> getNextPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) async* {
-    try {
-      final state = currentState as LoadedPullRequestState;
-      if (!state.pullRequestsList.pageInfo.hasNextPage) {
-        print("No pull request left");
-        return;
-      }
-      yield LoadingNextPullRequestState(
-          state.user, state.eventList, state.pullRequestsList);
-      final newPullRequestList = await _userRepository.fetchPullRequest(
-          login: login, endCursor: state.pullRequestsList.pageInfo.endCursor);
-      yield LoadedPullRequestState.getNextRepositories(
-          currentpullRequestsList: state.pullRequestsList,
-          userModel: state.user,
-          eventList: state.eventList,
-          pullRequestsList: newPullRequestList);
-    } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'OnPullRequestLoad', error: _, stackTrace: stackTrace);
-      final state = currentState as LoadedPullRequestState;
-      yield ErrorNextPullRequestState(
-        errorMessage: _?.toString(),
-        eventList: state.eventList,
-        pullRequestsList: state.pullRequestsList,
-        user: state.user,
-      );
-    }
-  }
-}
-
 class OnGistLoad extends PeopleEvent {
   OnGistLoad(this.login, {this.isLoadNextGist = false});
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_github_connect/bloc/User/index.dart';
-import 'package:flutter_github_connect/bloc/people/index.dart';
+// import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/bloc/pullrequest/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
@@ -20,10 +20,10 @@ class PullRequestPageProvider extends StatefulWidget {
   }) {
     return MaterialPageRoute(
       builder: (context) {
-        return BlocProvider<PeopleBloc>(
+        return BlocProvider<PullrequestBloc>(
           create: (BuildContext context) =>
-              PeopleBloc()..add(OnPullRequestLoad(login)),
-          child: PullRequestPageProvider(login: login),
+              PullrequestBloc()..add(OnPullRequestLoad(login)),
+          child: PullRequestPageProvider(login:login),
         );
       },
     );
@@ -43,7 +43,7 @@ class _PullRequestPageProviderState extends State<PullRequestPageProvider> {
 
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      BlocProvider.of<PeopleBloc>(context)
+      BlocProvider.of<PullrequestBloc>(context)
           .add(OnPullRequestLoad(widget.login, isLoadNextIssues: true));
     }
   }
@@ -67,7 +67,7 @@ class PullRequestPageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PullRequestPage(
-        bloc: BlocProvider.of<PeopleBloc>(context),
+        bloc: BlocProvider.of<PullrequestBloc>(context),
         login: login,
         controller: controller);
   }
@@ -76,7 +76,7 @@ class PullRequestPageBody extends StatelessWidget {
 class PullRequestPage extends StatelessWidget {
   const PullRequestPage({Key key, this.bloc, this.login, this.controller})
       : super(key: key);
-  final PeopleBloc bloc;
+  final PullrequestBloc bloc;
   final String login;
   final ScrollController controller;
   @override
@@ -86,11 +86,11 @@ class PullRequestPage extends StatelessWidget {
       appBar: AppBar(title: GAppBarTitle(login: login, title: "Pull Request")),
       body: Container(
         color: Theme.of(context).colorScheme.surface,
-        child: BlocBuilder<PeopleBloc, PeopleState>(
+        child: BlocBuilder<PullrequestBloc, PullrequestState>(
           cubit: bloc,
           builder: (
             BuildContext context,
-            PeopleState currentState,
+            PullrequestState currentState,
           ) {
             if (currentState is ErrorPullRequestState) {
               return GErrorContainer(
