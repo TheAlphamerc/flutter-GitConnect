@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/under_development.dart';
+import 'package:flutter_github_connect/ui/page/issues/repo_issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
@@ -132,6 +133,9 @@ class RepoDetailScreen extends StatelessWidget {
                   context,
                   "Issues",
                   value: "${model.issues.totalCount}",
+                  onPressed:(){
+                    Navigator.push(context, RepoIssuesPage.getPageRoute(owner:model.owner.login, name:model.name));
+                  }
                 ),
                 _getUtilRos(
                   context,

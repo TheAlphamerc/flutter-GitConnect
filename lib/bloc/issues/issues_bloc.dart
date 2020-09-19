@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_github_connect/bloc/issues/index.dart';
 
 class IssuesBloc extends Bloc<IssuesEvent, IssuesState> {
-  IssuesBloc() : super(LoadingUserState());
+  IssuesBloc() : super(LoadingUserIssuesState());
 
   @override
   Stream<IssuesState> mapEventToState(
@@ -16,7 +16,13 @@ class IssuesBloc extends Bloc<IssuesEvent, IssuesState> {
         if(event.isLoadNextIssues){
           yield* event.getNextIssues(currentState: state, bloc: this);
         }else{
-          yield* event.applyAsync(currentState: state, bloc: this);
+          yield* event.loadIssues(currentState: state, bloc: this);
+        }
+      }else if(event is LoadRepoIssuesEvent){
+        if(event.isLoadNextRepoIssues){
+          yield* event.getNextRepoIssues(currentState: state, bloc: this);
+        }else{
+          yield* event.loadRepoIssues(currentState: state, bloc: this);
         }
       }
     } catch (_, stackTrace) {

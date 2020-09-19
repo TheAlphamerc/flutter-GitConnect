@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/resources/grapgqlApi/repo_api.dart';
 
 class Apis {
   static String get issues => IssuesApis.issues;
+  static String get repoIssues => IssuesApis.repoIssues;
   static String get pullRequests => PullRequestQraphQl.pullRequests;
   static String get repoPullRequests => PullRequestQraphQl.repoPullRequest;
   static String get gist => GistGraphQl.gist;

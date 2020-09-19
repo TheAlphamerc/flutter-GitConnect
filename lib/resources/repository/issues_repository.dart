@@ -8,4 +8,8 @@ class IssuesRepository {
   Future<Issues> getIssues({String login,String endCursor}) async {
     return await apiGatway.fetchIssues(login:login, endCursor: endCursor);
   }
+
+  Future<Issues> getRepoIssues({String owner,String name,String endCursor}) async {
+    return await apiGatway.fetchRepoIssues(owner:owner,name:name,endCursor: endCursor);
+  }
 }

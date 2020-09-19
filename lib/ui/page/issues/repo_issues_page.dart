@@ -8,26 +8,23 @@ import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
-class IssuesPage extends StatefulWidget {
-  final String login;
-  static const String routeName = '/issues';
+class RepoIssuesPage extends StatefulWidget {
+  final String owner;
+  final String name;
 
-  const IssuesPage({
-    Key key,
-    this.login,
-  }) : super(key: key);
-  static route(String login) => MaterialPageRoute(
+  const RepoIssuesPage({Key key, this.owner, this.name}) : super(key: key);
+  static getPageRoute({String owner, String name}) => MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (BuildContext context) =>
-              IssuesBloc()..add(LoadIssuesEvent(login)),
-          child: IssuesPage(),
+              IssuesBloc()..add(LoadRepoIssuesEvent(owner: owner, name: name)),
+          child: RepoIssuesPage(name: name, owner: owner),
         ),
       );
   @override
-  _IssuesPageState createState() => _IssuesPageState();
+  _RepoIssuesPagState createState() => _RepoIssuesPagState();
 }
 
-class _IssuesPageState extends State<IssuesPage> {
+class _RepoIssuesPagState extends State<RepoIssuesPage> {
   ScrollController _controller;
   @override
   void initState() {
@@ -38,9 +35,10 @@ class _IssuesPageState extends State<IssuesPage> {
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
       BlocProvider.of<IssuesBloc>(context).add(
-        LoadIssuesEvent(
-          widget.login,
-          isLoadNextIssues: true,
+        LoadRepoIssuesEvent(
+          name: widget.name,
+          owner: widget.owner,
+          isLoadNextRepoIssues: true,
         ),
       );
     }
@@ -50,25 +48,28 @@ class _IssuesPageState extends State<IssuesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar:  AppBar(title: GAppBarTitle(title: "Issues")),
+      appBar: AppBar(title: GAppBarTitle(login: widget.name, title: "Issues")),
       body: BlocBuilder<IssuesBloc, IssuesState>(
         builder: (
           BuildContext context,
           IssuesState currentState,
         ) {
-          if (currentState is LoadingUserIssuesState) {
+          if (currentState is LoadingRepoIssuesState) {
             return GLoader();
           }
-          if (currentState is ErrorIssuesState) {
+          if (currentState is ErrorRepoIssuesState) {
             return GErrorContainer(
               description: currentState.errorMessage,
               onPressed: () {
                 BlocProvider.of<IssuesBloc>(context)
-                  ..add(LoadIssuesEvent(widget.login));
+                  ..add(LoadRepoIssuesEvent(
+                    name: widget.name,
+                    owner: widget.owner,
+                  ));
               },
             );
           }
-          if (currentState is LoadedIssuesState) {
+          if (currentState is LoadedRepoIssuesState) {
             if (currentState.issues.list != null &&
                 currentState.issues.list.isNotEmpty)
               return IssueListPage(
