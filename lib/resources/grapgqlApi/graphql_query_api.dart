@@ -12,6 +12,7 @@ class Apis {
   static String get gist => GistGraphQl.gist;
   static String get followers => PeopleApi.followers;
   static String get following => PeopleApi.following;
+  static String get repoWatchers => RepoApi.watchers;
   static String get repositoryDetail => RepoApi.repositoryDetail;
   static String get repository => RepoApi.repository;
   static const String user = r'''

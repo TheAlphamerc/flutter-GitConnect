@@ -12,29 +12,24 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class PeopleEvent extends Equatable {
-  final PeopleRepository _peopleRepository =
-      PeopleRepository(apiGatway: GetIt.instance<ApiGateway>());
+  final PeopleRepository _peopleRepository = PeopleRepository(apiGatway: GetIt.instance<ApiGateway>());
 
-  final UserRepository _userRepository =
-      UserRepository(apiGatway: GetIt.instance<ApiGateway>());
+  final UserRepository _userRepository = UserRepository(apiGatway: GetIt.instance<ApiGateway>());
 
   @override
   List<Object> get props => [];
 
-  Stream<PeopleState> fetchFollowersList(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
+  Stream<PeopleState> fetchFollowersList({PeopleState currentState, PeopleBloc bloc}) async* {}
 
-  Stream<PeopleState> getUser(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
+  Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) async* {}
 
-  Stream<PeopleState> getGist(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
+  Stream<PeopleState> getGist({PeopleState currentState, PeopleBloc bloc}) async* {}
 
-  Stream<PeopleState> getPullRequest(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
-
-  Stream<PeopleState> getActivities(
-      {PeopleState currentState, PeopleBloc bloc}) async* {}
+  Stream<PeopleState> getActivities({PeopleState currentState, PeopleBloc bloc}) async* {}
+  
+  Stream<PeopleState> getRepoWatchers({PeopleState currentState, PeopleBloc bloc})  async* {}
+  
+  Stream<PeopleState> getNextRepoWatchers({PeopleState currentState, PeopleBloc bloc}) async* {}
 }
 
 class LoadUserEvent extends PeopleEvent {
@@ -230,6 +225,46 @@ class LoadPeopleActivitiesEvent extends PeopleEvent {
       developer.log('$_',
           name: 'People_event', error: _, stackTrace: stackTrace);
       yield ErrorActivitiesState(_?.toString(), state.user);
+    }
+  }
+}
+
+class LoadWatchersEvent extends PeopleEvent {
+  final bool isLoadNextWatchers;
+  final String name;
+  final String owner;
+  LoadWatchersEvent({this.isLoadNextWatchers=false,this.name,this.owner}) : assert(name != null), assert(owner!= null);
+  @override
+  Stream<PeopleState> getRepoWatchers(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    try {
+      yield LoadingWatcherState();
+
+      final list = await _peopleRepository.getRepoWatchers(name: name, owner: owner);
+      yield LoadedWatcherState(list);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadWatchersEvent', error: _, stackTrace: stackTrace);
+      yield ErrorWatchersState(_?.toString());
+    }
+  }
+  @override
+  Stream<PeopleState> getNextRepoWatchers(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    final state = currentState as LoadedWatcherState;
+    try {
+      if (!state.watchers.pageInfo.hasNextPage) {
+        print("No watchers left");
+        return;
+      }
+      yield LoadingNextWatcherState(state.watchers);
+
+     final list = await _peopleRepository.getRepoWatchers(name: name, owner: owner,endCursor:state.watchers.pageInfo.endCursor);
+      yield LoadedWatcherState.next(currentWatchers: state.watchers, watchers:list);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'People_event', error: _, stackTrace: stackTrace);
+      yield ErrorNextWatchersState(_?.toString(), watchers: state.watchers);
     }
   }
 }

@@ -76,5 +76,25 @@ class RepoApi {
       }
     }
   }
-''';
+  ''';
+  static const String watchers = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
+    repository(name: $name, owner: $owner) {
+      ... on Repository {
+        watchers(after: $endCursor, first: 10) {
+          totalCount
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          nodes {
+            avatarUrl
+            bio
+            login
+            name
+          }
+        }
+      }
+    }
+  }
+  ''';
 }

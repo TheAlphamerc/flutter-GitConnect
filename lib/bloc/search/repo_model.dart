@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter_github_connect/bloc/User/User_model.dart';
+import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'package:flutter_github_connect/model/page_info_model.dart';
+import 'package:flutter_github_connect/model/pul_request.dart';
+
 class RepositoryModel2 {
   RepositoryModel2({
     this.id,
@@ -497,20 +502,27 @@ class PrimaryLanguage {
 class Watchers {
     Watchers({
         this.totalCount,
+        this.pageInfo,
+        this.userList
     });
 
     final int totalCount;
-
+    PageInfo pageInfo;
+    final List<UserModel> userList;
     factory Watchers.fromRawJson(String str) => Watchers.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
     factory Watchers.fromJson(Map<String, dynamic> json) => Watchers(
         totalCount: json["totalCount"] == null ? null : json["totalCount"],
+        pageInfo: json["pageInfo"] == null ? null : PageInfo.fromJson(json["pageInfo"]),
+        userList: json["nodes"] == null ? null : List<UserModel>.from(json["nodes"].map((x) => UserModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
         "totalCount": totalCount == null ? null : totalCount,
+        "pageInfo": pageInfo == null ? null : pageInfo.toJson(),
+        "user": userList == null ? null : List<dynamic>.from(userList.map((x) => x.toJson())),
     };
 }
 enum GithubSearchType {

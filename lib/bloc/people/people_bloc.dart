@@ -34,6 +34,13 @@ class PeopleBloc extends Bloc<PeopleEvent, PeopleState> {
           yield* event.getActivities(currentState: state, bloc: this);
         }
       }
+      else if (event is LoadWatchersEvent){
+        if(event.isLoadNextWatchers){
+          yield* event.getNextRepoWatchers(currentState: state, bloc: this);
+        }else{
+          yield* event.getRepoWatchers(currentState: state, bloc: this);
+        }
+      }
     } catch (_, stackTrace) {
       developer.log('$_', name: 'PeopleBloc', error: _, stackTrace: stackTrace);
       yield state;

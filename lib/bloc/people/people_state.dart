@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
+import 'package:flutter_github_connect/bloc/search/repo_model.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
 
 abstract class PeopleState extends Equatable {
@@ -169,4 +170,37 @@ class ErrorActivitiesState extends LoadedUserState {
 
   @override
   String toString() => 'ErrorActivitiesState';
+}
+
+class LoadingWatcherState extends PeopleState {}
+class LoadedWatcherState extends PeopleState {
+  final Watchers watchers;
+  LoadedWatcherState(this.watchers);
+
+  factory LoadedWatcherState.next({Watchers currentWatchers, Watchers watchers}){
+   currentWatchers.userList.addAll(watchers.userList);
+   currentWatchers.pageInfo = watchers.pageInfo;
+   return LoadedWatcherState(currentWatchers);
+  }
+}
+class ErrorWatchersState extends LoadedUserState {
+  final String errorMessage;
+
+  ErrorWatchersState(this.errorMessage);
+
+  @override
+  String toString() => 'ErrorWatchersState';
+}
+class LoadingNextWatcherState extends LoadedWatcherState {
+  LoadingNextWatcherState(Watchers watchers) : super(watchers);
+  
+}
+
+class ErrorNextWatchersState extends LoadedWatcherState {
+  final String errorMessage;
+
+  ErrorNextWatchersState(this.errorMessage,{Watchers watchers}): super(watchers);
+
+  @override
+  String toString() => 'ErrorNextWatchersState';
 }

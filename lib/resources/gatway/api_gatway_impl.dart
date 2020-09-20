@@ -360,4 +360,26 @@ class ApiGatwayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<Watchers> fetchRepoWatchers({String name, String owner, String endCursor}) async{
+    try {
+      assert(name != null,"Repository name is required");
+      assert(owner != null);
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      
+      final result = await getRepoWatchers(owner,name,endCursor);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      final watchers = Watchers.fromJson(result.data["repository"]["watchers"]);
+
+      return watchers;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
