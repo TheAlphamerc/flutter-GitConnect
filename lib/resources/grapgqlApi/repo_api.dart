@@ -97,4 +97,25 @@ class RepoApi {
     }
   }
   ''';
+
+  static const String startgazers = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
+    repository(name: $name, owner: $owner) {
+      ... on Repository {
+        stargazers(after: $endCursor, first: 10) {
+          totalCount
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          nodes {
+            avatarUrl
+            bio
+            login
+            name
+          }
+        }
+      }
+    }
+  }
+  ''';
 }

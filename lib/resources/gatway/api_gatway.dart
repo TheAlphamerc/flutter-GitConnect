@@ -27,4 +27,5 @@ abstract class ApiGateway{
    Future<String> fetchReadme({String name, String owner});
    Future<Watchers> fetchRepoWatchers({String name, String owner,String endCursor});
    Future<UserPullRequests> fetchRepoPullRequest({String owner, String endCursor, String name});
+   Future<Stargazers> fetchRepoStargazers({String owner, String endCursor, String name});
 }

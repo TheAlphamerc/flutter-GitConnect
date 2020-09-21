@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/issues/repo_issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
+import 'package:flutter_github_connect/ui/page/repo/stargezers/repo_stargezers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/repo/watchers/repo_watchers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
@@ -20,7 +21,7 @@ class RepoDetailScreen extends StatelessWidget {
     this.model,
   }) : super(key: key);
   final RepositoryModel model;
-  Widget _iconWithText(context, IconData icon, String text, {Color iconColor}) {
+  Widget _iconWithText(context, IconData icon, String text, {Color iconColor, Function onPressed}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -36,8 +37,14 @@ class RepoDetailScreen extends StatelessWidget {
         ],
       ),
     ).ripple((){
-      Underdevelopment.displaySnackbar(context,
+      if(onPressed != null){
+        onPressed();
+      }
+      else{
+        Underdevelopment.displaySnackbar(context,
           msg: "Detail feature is under development");
+      }
+      
     });
   }
 
@@ -112,6 +119,9 @@ class RepoDetailScreen extends StatelessWidget {
                       context,
                       GIcons.star_fill_24,
                       "${model.stargazers.totalCount} Stars",
+                      onPressed:(){
+                        Navigator.push(context, RepoStargezersPageProvider.getPageRoute(owner:model.owner.login, name:model.name));
+                       }
                     ),
                     SizedBox(width: 20),
                     _iconWithText(

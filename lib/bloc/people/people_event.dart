@@ -30,6 +30,10 @@ abstract class PeopleEvent extends Equatable {
   Stream<PeopleState> getRepoWatchers({PeopleState currentState, PeopleBloc bloc})  async* {}
   
   Stream<PeopleState> getNextRepoWatchers({PeopleState currentState, PeopleBloc bloc}) async* {}
+
+  Stream<PeopleState> getRepoStargezres({PeopleState currentState, PeopleBloc bloc})  async* {}
+  
+  Stream<PeopleState> getNextRepoStargezres({PeopleState currentState, PeopleBloc bloc}) async* {}
 }
 
 class LoadUserEvent extends PeopleEvent {
@@ -265,6 +269,46 @@ class LoadWatchersEvent extends PeopleEvent {
       developer.log('$_',
           name: 'People_event', error: _, stackTrace: stackTrace);
       yield ErrorNextWatchersState(_?.toString(), watchers: state.watchers);
+    }
+  }
+}
+
+class LoadStargezersEvent extends PeopleEvent {
+  final bool isLoadNextStartgers;
+  final String name;
+  final String owner;
+  LoadStargezersEvent({this.isLoadNextStartgers=false,this.name,this.owner}) : assert(name != null), assert(owner!= null);
+  @override
+  Stream<PeopleState> getRepoStargezres(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    try {
+      yield LoadingStargezersState();
+
+      final list = await _peopleRepository.fetchRepoStargazers(name: name, owner: owner);
+      yield LoadedStargezersState(list);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'LoadStargezersEvent', error: _, stackTrace: stackTrace);
+      yield ErrorStargezersState(_?.toString());
+    }
+  }
+  @override
+  Stream<PeopleState> getNextRepoStargezres(
+      {PeopleState currentState, PeopleBloc bloc}) async* {
+    final state = currentState as LoadedStargezersState;
+    try {
+      if (!state.stargezers.pageInfo.hasNextPage) {
+        print("No watchers left");
+        return;
+      }
+      yield LoadingNextStargezersState(state.stargezers);
+
+     final list = await _peopleRepository.fetchRepoStargazers(name: name, owner: owner,endCursor:state.stargezers.pageInfo.endCursor);
+      yield LoadedStargezersState.next(currentStargazers: state.stargezers, stargezers:list);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'People_event', error: _, stackTrace: stackTrace);
+      yield ErrorNextStargezersState(_?.toString(), stargezers: state.stargezers);
     }
   }
 }

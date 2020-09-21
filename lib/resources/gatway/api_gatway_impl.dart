@@ -382,4 +382,26 @@ class ApiGatwayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<Stargazers> fetchRepoStargazers({String owner, String endCursor, String name}) async{
+    try {
+      assert(name != null,"Repository name is required");
+      assert(owner != null);
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      
+      final result = await getRepoStargazres(owner,name,endCursor);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      final stargazers = Stargazers.fromJson(result.data["repository"]["stargazers"]);
+
+      return stargazers;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

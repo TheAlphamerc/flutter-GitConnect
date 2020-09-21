@@ -5,7 +5,7 @@ import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
 import 'package:flutter_github_connect/bloc/search/repo_model.dart';
-import 'package:flutter_github_connect/model/pul_request.dart';
+import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 
 abstract class PeopleState extends Equatable {
   @override
@@ -203,4 +203,37 @@ class ErrorNextWatchersState extends LoadedWatcherState {
 
   @override
   String toString() => 'ErrorNextWatchersState';
+}
+
+class LoadingStargezersState extends PeopleState {}
+class LoadedStargezersState extends PeopleState {
+  final Stargazers stargezers;
+  LoadedStargezersState(this.stargezers);
+
+  factory LoadedStargezersState.next({Stargazers currentStargazers, Stargazers stargezers}){
+   currentStargazers.userList.addAll(stargezers.userList);
+   currentStargazers.pageInfo = stargezers.pageInfo;
+   return LoadedStargezersState(currentStargazers);
+  }
+}
+class ErrorStargezersState extends LoadedUserState {
+  final String errorMessage;
+
+  ErrorStargezersState(this.errorMessage);
+
+  @override
+  String toString() => 'ErrorStargezersState';
+}
+class LoadingNextStargezersState extends LoadedStargezersState {
+  LoadingNextStargezersState(Stargazers stargezers) : super(stargezers);
+  
+}
+
+class ErrorNextStargezersState extends LoadedStargezersState {
+  final String errorMessage;
+
+  ErrorNextStargezersState(this.errorMessage,{Stargazers stargezers}): super(stargezers);
+
+  @override
+  String toString() => 'ErrorNextStargezerssState';
 }

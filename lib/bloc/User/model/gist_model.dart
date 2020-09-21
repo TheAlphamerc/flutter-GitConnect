@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/model/page_info_model.dart';
 
 class GistResponse {
@@ -176,20 +177,27 @@ class Owner {
 class Stargazers {
     Stargazers({
         this.totalCount,
+        this.pageInfo,
+        this.userList
     });
 
     final int totalCount;
-
+     PageInfo pageInfo;
+    final List<UserModel> userList;
     factory Stargazers.fromRawJson(String str) => Stargazers.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
     factory Stargazers.fromJson(Map<String, dynamic> json) => Stargazers(
         totalCount: json["totalCount"] == null ? null : json["totalCount"],
+        pageInfo: json["pageInfo"] == null ? null : PageInfo.fromJson(json["pageInfo"]),
+        userList: json["nodes"] == null ? null : List<UserModel>.from(json["nodes"].map((x) => UserModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
         "totalCount": totalCount == null ? null : totalCount,
+        "pageInfo": pageInfo == null ? null : pageInfo.toJson(),
+        "user": userList == null ? null : List<dynamic>.from(userList.map((x) => x.toJson())),
     };
 }
 

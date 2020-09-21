@@ -15,6 +15,7 @@ class Apis {
   static String get repoWatchers => RepoApi.watchers;
   static String get repositoryDetail => RepoApi.repositoryDetail;
   static String get repository => RepoApi.repository;
+  static String get stargazers => RepoApi.startgazers;
   static const String user = r'''
    query userInfo($login: String!) {
     user(login: $login) {
