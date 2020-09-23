@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/issues/repo_issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
+import 'package:flutter_github_connect/ui/page/repo/forks/repo_forks_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/repo/stargezers/repo_stargezers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/repo/watchers/repo_watchers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
@@ -128,6 +129,9 @@ class RepoDetailScreen extends StatelessWidget {
                       context,
                       GIcons.git_fork_24,
                       "${model.forkCount} Forks",
+                      onPressed:(){
+                        Navigator.push(context, RepoForksPageProvider.getPageRoute(owner:model.owner.login, name:model.name));
+                       }
                     ),
                   ],
                 ),

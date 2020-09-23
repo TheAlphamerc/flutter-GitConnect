@@ -1,9 +1,10 @@
 part of 'repo_bloc.dart';
 
 abstract class RepoEvent extends Equatable {
-  Stream<RepoState> applyAsync({RepoState currentState, RepoBloc bloc});
-  final RepoRepository _issuesRepository =
-      RepoRepository(apiGatway: GetIt.instance<ApiGateway>());
+  Stream<RepoState> loadRepoDetail({RepoState currentState, RepoBloc bloc})async* {}
+  Stream<RepoState> getRepoForks({RepoState currentState, RepoBloc bloc})async* {}
+  Stream<RepoState> getNextRepoForks({RepoState currentState, RepoBloc bloc})async* {}
+  final RepoRepository _repoRepository =   RepoRepository(apiGatway: GetIt.instance<ApiGateway>());
   @override
   List<Object> get props => [];
 }
@@ -14,14 +15,14 @@ class LoadRepoEvent extends RepoEvent {
 
   LoadRepoEvent({this.name, this.owner});
   @override
-  Stream<RepoState> applyAsync({RepoState currentState, RepoBloc bloc}) async* {
+  Stream<RepoState> loadRepoDetail({RepoState currentState, RepoBloc bloc}) async* {
     try {
       if (currentState is LoadedRepoState) {
         return;
       }
       yield LoadingRepoState();
       final model =
-          await _issuesRepository.getRepository(name: name, owner: owner);
+          await _repoRepository.getRepository(name: name, owner: owner);
       yield LoadedRepoState(
         model,
       );
@@ -37,7 +38,7 @@ class LoadRepoEvent extends RepoEvent {
   Stream<RepoState> getReadme(RepositoryModel model) async* {
     try {
       final readme =
-          await _issuesRepository.getReadme(name: name, owner: owner);
+          await _repoRepository.getReadme(name: name, owner: owner);
       yield LoadReadmeState(model, readme);
     } on ApiDataNotFoundException catch (_) {
       developer.log(
@@ -49,6 +50,44 @@ class LoadRepoEvent extends RepoEvent {
       developer.log('$_',
           name: "LoadRepoEvent", error: _, stackTrace: stackTrace);
       yield ErrorReadmeState(_?.toString(), model);
+    }
+  }
+}
+
+class LoadForksEvent extends RepoEvent {
+  final bool isLoadNextForks;
+  final String name;
+  final String owner;
+  LoadForksEvent({this.isLoadNextForks=false,this.name,this.owner}) : assert(name != null), assert(owner!= null);
+  @override
+  Stream<RepoState> getRepoForks(
+      {RepoState currentState, RepoBloc bloc}) async* {
+    try {
+      yield LoadingForksState();
+
+      final list = await _repoRepository.fetchRepoForks(name: name, owner: owner);
+      yield LoadedForksState(list);
+    } catch (_, stackTrace) {
+      developer.log('$_',name: 'LoadForksEvent', error: _, stackTrace: stackTrace);
+      yield ErrorForksState(_?.toString());
+    }
+  }
+  @override
+  Stream<RepoState> getNextRepoForks(
+      {RepoState currentState, RepoBloc bloc}) async* {
+    final state = currentState as LoadedForksState;
+    try {
+      if (!state.forks.pageInfo.hasNextPage) {
+        print("No watchers left");
+        return;
+      }
+      yield LoadingNextForksState(state.forks);
+
+     final list = await _repoRepository.fetchRepoForks(name: name, owner: owner,endCursor:state.forks.pageInfo.endCursor);
+      yield LoadedForksState.next(currentForks: state.forks, forks:list);
+    } catch (_, stackTrace) {
+      developer.log('$_', name: 'RepoEvent', error: _, stackTrace: stackTrace);
+      yield ErrorNextForksState(_?.toString(), forks: state.forks);
     }
   }
 }

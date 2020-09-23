@@ -9,6 +9,7 @@ import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
     as model;
 import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/model/forks_model.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
 import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/graphql_client.dart';
@@ -398,6 +399,28 @@ class ApiGatwayImpl implements ApiGateway {
       }
       print(result.data);
       final stargazers = Stargazers.fromJson(result.data["repository"]["stargazers"]);
+
+      return stargazers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<ForksModel> fetchRepoForks({String owner, String endCursor, String name}) async{
+     try {
+      assert(name != null,"Repository name is required");
+      assert(owner != null);
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      
+      final result = await getRepoForks(owner,name,endCursor);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      final stargazers = ForksModel.fromJson(result.data["repository"]["forks"]);
 
       return stargazers;
     } catch (error) {

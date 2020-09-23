@@ -107,6 +107,13 @@ Future<QueryResult> getRepoStargazres(String owner,String name, String endCursor
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
+Future<QueryResult> getRepoForks(String owner,String name, String endCursor) async {
+  final QueryOptions _options = QueryOptions(
+      document: Apis.forks ,
+      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      fetchPolicy: FetchPolicy.noCache);
+  return await _innerClient.query(_options);
+}
 
 Future<QueryResult> getAuthUserName() async {
   final QueryOptions _options = QueryOptions(

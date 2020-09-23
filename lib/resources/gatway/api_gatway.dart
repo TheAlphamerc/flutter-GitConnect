@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
+import 'package:flutter_github_connect/model/forks_model.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart' as issues;
@@ -28,4 +29,5 @@ abstract class ApiGateway{
    Future<Watchers> fetchRepoWatchers({String name, String owner,String endCursor});
    Future<UserPullRequests> fetchRepoPullRequest({String owner, String endCursor, String name});
    Future<Stargazers> fetchRepoStargazers({String owner, String endCursor, String name});
+   Future<ForksModel> fetchRepoForks({String owner, String endCursor, String name});
 }

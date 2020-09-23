@@ -118,4 +118,39 @@ class RepoApi {
     }
   }
   ''';
+  static const String forks = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
+    repository(name: $name, owner: $owner) {
+      ... on Repository {
+        forks(orderBy: {field: CREATED_AT, direction: DESC}, first: 10, after: $endCursor) {
+          totalCount
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+          nodes {
+            createdAt
+            forkCount
+            name
+            nameWithOwner
+            description
+            stargazers {
+              totalCount
+            }
+            languages(first: 1, orderBy: {field: SIZE, direction: DESC}) {
+              totalSize
+              nodes {
+                name
+                color
+              }
+            }
+            owner {
+              login
+              avatarUrl
+            }
+          }
+        }
+      }
+    }
+  }
+  ''';
 }

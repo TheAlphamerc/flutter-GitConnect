@@ -1,5 +1,6 @@
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
+import 'package:flutter_github_connect/model/forks_model.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart'
     as model;
@@ -28,5 +29,8 @@ class RepoRepository {
     assert(name != null, owner != null);
     return await apiGatway.fetchReadme(name: name, owner: owner);
   }
-   
+  Future<ForksModel> fetchRepoForks({String name, String owner,String endCursor}) async {
+    assert(name != null, owner != null);
+    return await apiGatway.fetchRepoForks(name: name, owner: owner,endCursor:endCursor);
+  }
 }
