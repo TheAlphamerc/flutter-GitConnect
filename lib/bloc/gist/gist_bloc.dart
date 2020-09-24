@@ -20,7 +20,15 @@ class GistBloc extends Bloc<GistEvent, GistState> {
   ) async* {
     try {
       if (event is LoadGistDetailEvent) {
-        yield*  event.loadAsync();
+        yield*  event.loadGiistDetail();
+      }else if (event is OnGistLoad) {
+         if(event.isLoadNextGist){
+          yield* event.getNextGist(currentState: state, bloc: this);
+        }
+        else{
+          yield* event.getGist(currentState: state, bloc: this);
+        }
+        
       }
     } catch (_, stackTrace) {
       log('$_', name: 'IssuesBloc', error: _, stackTrace: stackTrace);

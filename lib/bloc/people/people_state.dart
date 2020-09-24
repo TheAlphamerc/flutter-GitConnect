@@ -5,7 +5,6 @@ import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
 import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
 import 'package:flutter_github_connect/bloc/search/repo_model.dart';
-import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 
 abstract class PeopleState extends Equatable {
   @override
@@ -71,65 +70,6 @@ class LoadedEventsState extends LoadedUserState {
 
   @override
   String toString() => 'LoadedUserState $user';
-}
-class LoadedGitState extends PeopleState {
-  final UserModel user;
-  final List<EventModel> eventList;
-  final Gists gist;
-
-  LoadedGitState({this.user, this.eventList, this.gist});
-
-  @override
-  String toString() => 'LoadedUserState $user';
-
-  factory LoadedGitState.next({Gists currenctGistModel, UserModel userModel, List<EventModel> eventList, Gists gistModel}) {
-    currenctGistModel.nodes.addAll(gistModel.nodes);
-    currenctGistModel.pageInfo = gistModel.pageInfo;
-    print("New cursor is ${gistModel.pageInfo.endCursor}");
-    return LoadedGitState(
-        user: userModel,
-        eventList: eventList,
-        gist: currenctGistModel,);
-  }
-}
-
-class LoadingNextGistState extends LoadedGitState {
-  final Gists gist;
-
-  LoadingNextGistState({this.gist, UserModel user, List<EventModel> eventList})
-      : super(user: user, eventList: eventList, gist: gist);
-}
-
-class ErrorNextGistState extends LoadedGitState {
-  final String errorMessage;
-  ErrorNextGistState(
-      {this.errorMessage,
-      UserModel user,
-      List<EventModel> eventList,
-      Gists gist})
-      : super(user: user, eventList: eventList, gist: gist);
-}
-
-class ErrorUserState extends PeopleState {
-  final String errorMessage;
-
-  ErrorUserState(this.errorMessage);
-
-  @override
-  String toString() => 'ErrorUserState';
-}
-
-
-
-class ErrorGitState extends LoadedEventsState {
-  final String errorMessage;
-  final UserModel user;
-  final List<EventModel> eventList;
-  ErrorGitState(this.errorMessage, {this.user, this.eventList})
-      : super(user: user, eventList: eventList);
-
-  @override
-  String toString() => 'ErrorUserState';
 }
 
 class ErrorNextRepositoryState extends LoadedUserState {

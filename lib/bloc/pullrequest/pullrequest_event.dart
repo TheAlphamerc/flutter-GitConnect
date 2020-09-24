@@ -3,9 +3,7 @@ part of 'index.dart';
 @immutable 
 abstract class PullrequestEvent extends Equatable{
   final PullrequestRepository _pullrequestRepository = PullrequestRepository(apiGatway: GetIt.instance<ApiGateway>());
-  @override
   Stream<PullrequestState> getrepoPullrequest({PullrequestState currentState, PullrequestBloc bloc}) async* {}
-  @override
   Stream<PullrequestState> getPullRequest({PullrequestState currentState, PullrequestBloc bloc}) async* {}
   @override
   List<Object> get props => [];

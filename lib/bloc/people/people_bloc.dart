@@ -19,15 +19,7 @@ class PeopleBloc extends Bloc<PeopleEvent, PeopleState> {
         } else {
           yield* event.getUser(currentState: state, bloc: this);
         }
-      } else if (event is OnGistLoad) {
-         if(event.isLoadNextGist){
-          yield* event.getNextGist(currentState: state, bloc: this);
-        }
-        else{
-          yield* event.getGist(currentState: state, bloc: this);
-        }
-        
-      }else if (event is LoadPeopleActivitiesEvent){
+      } else if (event is LoadPeopleActivitiesEvent){
         if(event.loadNextActivity){
           yield* event.getNextActivities(currentState: state, bloc: this);
         }else{

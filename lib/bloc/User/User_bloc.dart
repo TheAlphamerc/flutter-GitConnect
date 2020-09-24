@@ -18,9 +18,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserEvent event,
   ) async* {
     try {
-      if (event is OnPullRequestLoad) {
-        yield* event.getPullRequest(currentState: state, bloc: this);
-      } else if (event is OnLoad) {
+       if (event is OnLoad) {
         if (event.isLoadNextRepositories) {
           yield* event.getNextRepositories(currentState: state, bloc: this);
         } else {

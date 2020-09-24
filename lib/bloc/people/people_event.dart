@@ -23,8 +23,6 @@ abstract class PeopleEvent extends Equatable {
 
   Stream<PeopleState> getUser({PeopleState currentState, PeopleBloc bloc}) async* {}
 
-  Stream<PeopleState> getGist({PeopleState currentState, PeopleBloc bloc}) async* {}
-
   Stream<PeopleState> getActivities({PeopleState currentState, PeopleBloc bloc}) async* {}
   
   Stream<PeopleState> getRepoWatchers({PeopleState currentState, PeopleBloc bloc})  async* {}
@@ -125,65 +123,6 @@ class LoadFollowEvent extends PeopleEvent {
   }
 }
 
-class OnGistLoad extends PeopleEvent {
-  OnGistLoad(this.login, {this.isLoadNextGist = false});
-
-  final bool isLoadNextGist;
-  final String login;
-
-  @override
-  Stream<PeopleState> getGist(
-      {PeopleState currentState, PeopleBloc bloc}) async* {
-    if (currentState is LoadedGitState) {
-      return;
-    }
-    try {
-      // yield LoadingUserState();
-
-      final gistModel = await _userRepository.fetchGistList(login: login);
-
-      yield LoadedGitState(gist: gistModel);
-    } catch (_, stackTrace) {
-      developer.log('$_', name: 'OnGistLoad', error: _, stackTrace: stackTrace);
-      yield ErrorGitState(_?.toString());
-    }
-  }
-
-  Stream<PeopleState> getNextGist(
-      {PeopleState currentState, PeopleBloc bloc}) async* {
-    try {
-      final state = currentState as LoadedGitState;
-      if (!state.gist.pageInfo.hasNextPage) {
-        print("No Gist left");
-        return;
-      }
-      yield LoadingNextGistState(
-        gist: state.gist,
-        user: state.user,
-        eventList: state.eventList,
-      );
-      print(state.gist.pageInfo.endCursor);
-      final gistModel = await _userRepository.fetchGistList(
-          login: login, endCursor: state.gist.pageInfo.endCursor);
-      yield LoadedGitState.next(
-        currenctGistModel: state.gist,
-        userModel: state.user,
-        eventList: state.eventList,
-        gistModel: gistModel,
-      );
-    } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'OnGistLoadt', error: _, stackTrace: stackTrace);
-      final state = currentState as LoadedGitState;
-      yield ErrorNextGistState(
-        errorMessage: _?.toString(),
-        eventList: state.eventList,
-        gist: state.gist,
-        user: state.user,
-      );
-    }
-  }
-}
 
 class LoadPeopleActivitiesEvent extends PeopleEvent {
   final bool loadNextActivity;
@@ -202,8 +141,7 @@ class LoadPeopleActivitiesEvent extends PeopleEvent {
       yield LoadedPeopleActivityStates(list,
           user: state.user, pageNo: 2, hasNextPage: hasNextPage);
     } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
+      developer.log('$_',name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
       yield ErrorPeopleState(_?.toString());
     }
   }
@@ -226,8 +164,7 @@ class LoadPeopleActivitiesEvent extends PeopleEvent {
           user: state.user,
           pageNo: state.pageNo + 1);
     } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'People_event', error: _, stackTrace: stackTrace);
+      developer.log('$_',name: 'People_event', error: _, stackTrace: stackTrace);
       yield ErrorActivitiesState(_?.toString(), state.user);
     }
   }
@@ -266,8 +203,7 @@ class LoadWatchersEvent extends PeopleEvent {
      final list = await _peopleRepository.getRepoWatchers(name: name, owner: owner,endCursor:state.watchers.pageInfo.endCursor);
       yield LoadedWatcherState.next(currentWatchers: state.watchers, watchers:list);
     } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'People_event', error: _, stackTrace: stackTrace);
+      developer.log('$_', name: 'People_event', error: _, stackTrace: stackTrace);
       yield ErrorNextWatchersState(_?.toString(), watchers: state.watchers);
     }
   }
@@ -287,8 +223,7 @@ class LoadStargezersEvent extends PeopleEvent {
       final list = await _peopleRepository.fetchRepoStargazers(name: name, owner: owner);
       yield LoadedStargezersState(list);
     } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'LoadStargezersEvent', error: _, stackTrace: stackTrace);
+      developer.log('$_',name: 'LoadStargezersEvent', error: _, stackTrace: stackTrace);
       yield ErrorStargezersState(_?.toString());
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_github_connect/bloc/gist/gist_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
@@ -18,9 +19,8 @@ class GistlistPageProvider extends StatefulWidget {
   }) {
     return MaterialPageRoute(
       builder: (context) {
-        return BlocProvider<PeopleBloc>(
-          create: (BuildContext context) =>
-              PeopleBloc()..add(OnGistLoad(login)),
+        return BlocProvider<GistBloc>(
+          create: (BuildContext context) => GistBloc()..add(OnGistLoad(login)),
           child: GistlistPageProvider(login: login),
         );
       },
@@ -41,7 +41,7 @@ class _GistlistPageProviderState extends State<GistlistPageProvider> {
 
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      BlocProvider.of<PeopleBloc>(context)
+      BlocProvider.of<GistBloc>(context)
           .add(OnGistLoad(widget.login, isLoadNextGist: true));
     }
   }
@@ -49,7 +49,7 @@ class _GistlistPageProviderState extends State<GistlistPageProvider> {
   @override
   Widget build(BuildContext context) {
     return GistlistPage(
-        bloc: BlocProvider.of<PeopleBloc>(context),
+        bloc: BlocProvider.of<GistBloc>(context),
         login: widget.login,
         controller: _controller);
   }
@@ -58,7 +58,7 @@ class _GistlistPageProviderState extends State<GistlistPageProvider> {
 class GistlistPage extends StatelessWidget {
   const GistlistPage({Key key, this.bloc, this.login, this.controller})
       : super(key: key);
-  final PeopleBloc bloc;
+  final GistBloc bloc;
   final String login;
   final ScrollController controller;
   @override
@@ -67,11 +67,11 @@ class GistlistPage extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(title: GAppBarTitle(login: login, title: "Gists")),
       body: Container(
-        child: BlocBuilder<PeopleBloc, PeopleState>(
+        child: BlocBuilder<GistBloc, GistState>(
           cubit: bloc,
           builder: (
             BuildContext context,
-            PeopleState currentState,
+            GistState currentState,
           ) {
             if (currentState is ErrorGitState) {
               return GErrorContainer(

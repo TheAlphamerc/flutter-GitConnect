@@ -211,7 +211,7 @@ class EventPageBody extends StatelessWidget {
                   subtitle: isMyEvent(model.actor.login) && isCommented
                       ? "You Commented"
                       : model.payload.action == "closed"
-                          ? "You closed this issue"
+                          ? "${isMyEvent(model.actor.login) ? "You" : ""} closed this issue"
                           : "Closed this issue",
                 ),
                 SizedBox(height: 8),

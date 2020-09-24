@@ -12,11 +12,13 @@ import 'package:meta/meta.dart';
 abstract class UserEvent extends Equatable {
   @override
   List<Object> get props => [];
-  Stream<UserState> getUser({UserState currentState, UserBloc bloc});
-  Stream<UserState> getGist({UserState currentState, UserBloc bloc});
-  Stream<UserState> getPullRequest({UserState currentState, UserBloc bloc});
-  final UserRepository _userRepository =
-      UserRepository(apiGatway: GetIt.instance<ApiGateway>());
+  
+  final UserRepository _userRepository =UserRepository(apiGatway: GetIt.instance<ApiGateway>());
+  
+  Stream<UserState> getUser({UserState currentState, UserBloc bloc})async*{}
+  
+  Stream<UserState> getGist({UserState currentState, UserBloc bloc})async*{}
+  
 }
 
 class OnLoad extends UserEvent {
@@ -43,11 +45,6 @@ class OnLoad extends UserEvent {
     }
   }
 
-  @override
-  Stream<LoadedPullRequestState> getPullRequest(
-      {UserState currentState, UserBloc bloc}) {
-    return null;
-  }
 
   Stream<UserState> getNextRepositories(
       {UserState currentState, UserBloc bloc}) async* {
@@ -69,41 +66,6 @@ class OnLoad extends UserEvent {
       final state = currentState as LoadedUserState;
       yield ErrorNextRepositoryState(
           errorMessage: _?.toString(), user: state.user);
-    }
-  }
-
-  @override
-  Stream<UserState> getGist({UserState currentState, UserBloc bloc}) async* {}
-}
-
-class OnPullRequestLoad extends UserEvent {
-  @override
-  Stream<UserState> getGist({UserState currentState, UserBloc bloc}) async* {}
-
-  @override
-  Stream<UserState> getUser({UserState currentState, UserBloc bloc}) async* {}
-
-  @override
-  Stream<UserState> getPullRequest(
-      {UserState currentState, UserBloc bloc}) async* {
-    if (currentState is LoadedPullRequestState) {
-      return;
-    }
-    final state = currentState as LoadedUserState;
-    try {
-      yield LoadingUserState();
-      print("Loading UserState");
-      final pullRequestsList = await _userRepository.fetchPullRequest();
-      print("Loading End");
-      yield LoadedPullRequestState(
-          user: state.user,
-          eventList: state.eventList,
-          pullRequestsList: pullRequestsList);
-    } catch (_, stackTrace) {
-      developer.log('$_',
-          name: 'LoadUserEvent', error: _, stackTrace: stackTrace);
-      yield ErrorPullRequestState(_?.toString(),
-          user: state.user, eventList: state.eventList);
     }
   }
 }
