@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_github_connect/bloc/User/index.dart';
 import 'package:flutter_github_connect/model/page_info_model.dart';
 
 class User {
@@ -84,6 +85,16 @@ class Node {
         "url": url == null ? null : url,
         "bio": bio == null ? null : bio,
       };
+  
+  UserModel toUserModel(){
+      return UserModel(
+        avatarUrl: this.avatarUrl,
+        login: this.login, 
+        name: this.name,
+        url:this.url,
+        bio: this.bio,
+      );
+  }
 }
 
 enum PeopleType { Follower, Following }

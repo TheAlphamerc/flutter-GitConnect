@@ -114,6 +114,14 @@ class SearchUser {
     data['avatarUrl'] = this.avatarUrl;
     return data;
   }
+
+  UserModel toUserModel(){
+      return UserModel(
+        avatarUrl: this.avatarUrl,
+        login: this.login, 
+        name: this.name,
+       );
+  }
 }
 
 /// Search Repository

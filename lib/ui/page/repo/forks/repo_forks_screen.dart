@@ -20,7 +20,7 @@ class ForksScreen extends StatelessWidget {
   final List<ForksNode> forksList;
   final ScrollController controller;
 
-  Widget userTile(context, ForksNode model) {
+  Widget _forkTile(context, ForksNode model) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -87,18 +87,6 @@ class ForksScreen extends StatelessWidget {
     );
   }
 
-  Widget _loader() {
-    return Container(
-      alignment: Alignment.center,
-      height: 60,
-      child: SizedBox(
-        height: 30,
-        width: 30,
-        child: GLoader(stroke: 1),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,13 +103,13 @@ class ForksScreen extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is LoadingNextForksState) {
-                  return _loader();
+                  return GCLoader();
                 }
                 return SizedBox.shrink();
               },
             );
           }
-          return userTile(context, forksList[index]);
+          return _forkTile(context, forksList[index]);
         },
       ),
     );

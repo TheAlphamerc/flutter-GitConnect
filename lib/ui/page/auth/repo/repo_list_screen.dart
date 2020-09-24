@@ -121,12 +121,12 @@ class RepositoryListScreen extends StatelessWidget {
         if ((index >= list.length && !isFromUserRepositoryListPage) &&
             (peopleBloc != null || userBloc != null)) {
           print("Fetching user's repositories");
-          return displayLoader ? _loader() : SizedBox.shrink();
+          return displayLoader ? GCLoader() : SizedBox.shrink();
         } else if (index >= list.length && isFromUserRepositoryListPage) {
           print("Fetching more repositories");
           return BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
-              if (state is LoadingNextSearchState) return _loader();
+              if (state is LoadingNextSearchState) return GCLoader();
 
               return SizedBox.shrink();
             },
@@ -135,18 +135,6 @@ class RepositoryListScreen extends StatelessWidget {
         final repo = list[index];
         return repoCard(context, repo);
       },
-    );
-  }
-
-  Widget _loader() {
-    return Container(
-      alignment: Alignment.center,
-      height: 60,
-      child: SizedBox(
-        height: 20,
-        width: 20,
-        child: GLoader(stroke: 1),
-      ),
     );
   }
 

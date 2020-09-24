@@ -20,3 +20,19 @@ class GLoader extends StatelessWidget {
     );
   }
 }
+
+
+class GCLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      height: 60,
+      child: SizedBox(
+        height: 30,
+        width: 30,
+        child: GLoader(stroke: 1),
+      ),
+    );
+  }
+}

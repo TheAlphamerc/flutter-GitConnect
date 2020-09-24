@@ -20,18 +20,6 @@ class EventsPage extends StatelessWidget {
   final String login;
   final int widthOffset = 66;
 
-  Widget _loader() {
-    return Container(
-      alignment: Alignment.center,
-      height: 60,
-      child: SizedBox(
-        height: 20,
-        width: 20,
-        child: GLoader(stroke: 1),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserState>(
@@ -51,7 +39,7 @@ class EventsPage extends StatelessWidget {
         if (state is LoadedUserState) {
           eventList = state.eventList;
         } else if (state is LoadingEventState) {
-          return _loader();
+          return GCLoader();
         }
         return EventPageBody(eventList: eventList, login: login);
       },
@@ -101,18 +89,6 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
     }
   }
 
-  Widget _loader() {
-    return Container(
-      alignment: Alignment.center,
-      height: 60,
-      child: SizedBox(
-        height: 20,
-        width: 20,
-        child: GLoader(stroke: 1),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +102,7 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
           if (state is people.LoadedPeopleActivityStates) {
             eventList = state.eventList;
           } else if (state is people.LoadingPeopleActivityStates) {
-            return _loader();
+            return GCLoader();
           }
           if (eventList != null && eventList.isNotEmpty)
             return SingleChildScrollView(
@@ -143,9 +119,9 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
                           login: widget.login,
                           loggedInUserName: snapshot.data,
                         );
-                        return _loader();
+                        return GCLoader();
                       }),
-                  if (state is people.LoadingNextPeopleActivityStates) _loader()
+                  if (state is people.LoadingNextPeopleActivityStates) GCLoader()
                 ],
               ),
             );
