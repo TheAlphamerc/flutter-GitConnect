@@ -31,7 +31,7 @@ Stable release build will be available soon..
 
 ## Features
 
-* Login with hithub account
+* Login with Github account
 * Activities          
 * Contribution graph.
 * Markdown and code highlighting support
