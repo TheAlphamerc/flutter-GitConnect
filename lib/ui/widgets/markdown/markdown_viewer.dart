@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
+import 'package:flutter_github_connect/ui/theme/theme.dart';
 import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
 import 'package:flutter_github_connect/ui/widgets/markdown/syntax_highlight.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -13,10 +16,40 @@ class MarkdownViewer extends StatelessWidget {
     RegExp exp = new RegExp(r'!\[.*\]\((.+)\)');
     RegExp expImg = new RegExp("<img.*?(?:>|\/>)");
     RegExp expSrc = new RegExp("src=[\'\"]?([^\'\"]*)[\'\"]?");
+    RegExp anchor = new RegExp(r'<a[\s]+([^>]+)>((?:.(?!\<\/a\>))*.)<\/a>');
 
     String mdDataCode = markdownData;
     try {
       Iterable<Match> tags = exp.allMatches(markdownData);
+            var anchorList = anchor.allMatches(markdownData);
+      if(anchorList != null && anchorList.length > 0){
+        for (Match m in anchorList) {
+          String imageMatch = m.group(0);
+          if (imageMatch != null && !imageMatch.contains(".svg")) {
+            String match = imageMatch.replaceAll("\)", "?raw=true)");
+            if (!match.contains(".svg") && match.contains("http")) {
+              String src = match
+                  .replaceAll(new RegExp(r'!\[.*\]\(.*'), "")
+                  .replaceAll(")", "");
+                  final Match imgtag = RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*>').firstMatch(src);
+
+                  if(imgtag != null){
+                   final Match link = RegExp(r'<a[^>]* href=\"([^\"]*)\"[^>]*>').firstMatch(src);
+                   src = link.group(0).split("\"")[1];
+                    match = imgtag.group(0);
+                  }
+              //  String actionMatch = "$match$src";
+              // match = actionMatch;
+              // print(src);
+              // print(match);
+            } else {
+              match = "";
+            }
+            mdDataCode = mdDataCode.replaceAll(m.group(0), match);
+          }
+        }
+      }
+
       if (tags != null && tags.length > 0) {
         for (Match m in tags) {
           String imageMatch = m.group(0);
@@ -113,11 +146,10 @@ class MarkdownViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5.0),
       child: SingleChildScrollView(
         child: new MarkdownBody(
           styleSheet: _getStyleSheet(context),
-          syntaxHighlighter: new GHighlighter(),
+          syntaxHighlighter: new GHighlighter(isDarkMode : CustomTheme.instanceOf(context).isDarkMode),
           imageBuilder: (uri, text, val) => _getImageBuilder(uri),
           data: _getMarkDownData(markdownData),
           onTapLink: (String source) {
@@ -142,10 +174,25 @@ class SubscriptSyntax extends md.InlineSyntax {
 }
 
 class GHighlighter extends SyntaxHighlighter {
+  final bool isDarkMode;
+
+  GHighlighter({this.isDarkMode});
   @override
   TextSpan format(String source) {
     String showSource = source.replaceAll("&lt;", "<");
     showSource = showSource.replaceAll("&gt;", ">");
-    return new DartSyntaxHighlighter().format(showSource);
+    return new DartSyntaxHighlighter(null,isDarkMode).format(showSource);
+  }
+}
+
+class TestMarkdownPage extends StatelessWidget {
+  const TestMarkdownPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar:AppBar(),
+      body: MarkdownViewer(markdownData: readme,),
+    );
   }
 }

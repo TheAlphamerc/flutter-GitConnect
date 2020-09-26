@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/ui/page/splash.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
+import 'package:flutter_github_connect/ui/widgets/markdown/markdown_viewer.dart';
 import 'package:get_it/get_it.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -52,9 +53,7 @@ class SettingsPage extends StatelessWidget {
               color: GColors.green, selectedText: "Automatic", onPressed: () {
             _changeTheme(
                 context,
-                CustomTheme.instanceOf(context).themeType == ThemeType.LIGHT
-                    ? ThemeType.DARK
-                    : ThemeType.LIGHT);
+                CustomTheme.instanceOf(context).toggle);
           }),
           Divider(height: 0),
           _getUtilRos(context, "App Icon",

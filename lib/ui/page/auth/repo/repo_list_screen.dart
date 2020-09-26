@@ -144,7 +144,7 @@ class RepositoryListScreen extends StatelessWidget {
       appBar: isFromUserRepositoryListPage
           ? null
           : AppBar(title: GAppBarTitle(login: login, title: "Repositories"),),
-      body: !(list != null && list.isNotEmpty)
+      body: !(list != null && list.isNotEmpty) && isFromUserRepositoryListPage
           ? NoDataPage(
                 title: "No repo Found",
                 description: "$login haven't created any repo yet",

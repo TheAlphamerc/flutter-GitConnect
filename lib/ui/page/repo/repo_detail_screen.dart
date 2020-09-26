@@ -10,6 +10,7 @@ import 'package:flutter_github_connect/ui/page/repo/forks/repo_forks_page_provid
 import 'package:flutter_github_connect/ui/page/repo/stargezers/repo_stargezers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/repo/watchers/repo_watchers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
+import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/markdown/markdown_viewer.dart';
@@ -69,7 +70,7 @@ class RepoDetailScreen extends StatelessWidget {
         if (icon != null)
           Icon(
             icon,
-            color: Theme.of(context).colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.surface,
             size: 18,
           ),
         if (icon == null) SizedBox(width: 16, height: 50)
@@ -80,12 +81,14 @@ class RepoDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = CustomTheme.instanceOf(context).isDarkMode;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GCard(
             radius: 0,
+            color: isDarkMode ? null : Theme.of(context).colorScheme.surface,
             padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
@@ -141,6 +144,7 @@ class RepoDetailScreen extends StatelessWidget {
           ),
           GCard(
             radius: 0,
+            color: isDarkMode ? null : Theme.of(context).colorScheme.surface,
             child: Column(
               children: <Widget>[
                 Divider(height: 1),
@@ -184,6 +188,8 @@ class RepoDetailScreen extends StatelessWidget {
               if (state is LoadReadmeState)
                 return GCard(
                   radius: 0,
+                  color: isDarkMode ? null : Theme.of(context).colorScheme.surface,
+                  padding: EdgeInsets.symmetric(horizontal: 4) + EdgeInsets.only(top:8),
                   child: Center(
                     child: MarkdownViewer(
                       markdownData: state.readme,

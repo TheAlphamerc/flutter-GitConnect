@@ -12,17 +12,27 @@ class SyntaxHighlighterStyle {
       this.classStyle,
       this.constantStyle});
 
-  static SyntaxHighlighterStyle defaultStyle() {
+  static SyntaxHighlighterStyle darkDefaultStyleStyle() {
     return new SyntaxHighlighterStyle(
-        baseStyle: new TextStyle(color: Color.fromRGBO(212, 212, 212, 1.0)),
-        numberStyle: new TextStyle(color: Colors.blue[800]),
-        commentStyle: new TextStyle(color: Color.fromRGBO(124, 126, 120, 1.0)),
-        keywordStyle: new TextStyle(color: Color.fromRGBO(228, 125, 246, 1.0)),
-        stringStyle: new TextStyle(color: Color.fromRGBO(150, 190, 118, 1.0)),
-        punctuationStyle:
-            new TextStyle(color: Color.fromRGBO(212, 212, 212, 1.0)),
-        classStyle: new TextStyle(color: Color.fromRGBO(150, 190, 118, 1.0)),
-        constantStyle: new TextStyle(color: Colors.brown[500]));
+        baseStyle:        new TextStyle(color: Color.fromRGBO(212, 212, 212, 1.0),height: 1.5),
+        numberStyle:      new TextStyle(color: Colors.blue[800],height: 1.5),
+        commentStyle:     new TextStyle(color: Color.fromRGBO(124, 126, 120, 1.0),height: 1.5),
+        keywordStyle:    new TextStyle(color: Color(0xffca5454), height: 1.5),
+        stringStyle:      new TextStyle(color: Color.fromRGBO(150, 190, 118, 1.0),height: 1.5),
+        punctuationStyle: new TextStyle(color: Color.fromRGBO(212, 212, 212, 1.0),height: 1.5),
+        classStyle:       new TextStyle(color: Color(0xff7cb1dc), height: 1.5),
+        constantStyle:    new TextStyle(color: Colors.brown[500]));
+  }
+  static SyntaxHighlighterStyle lightDefaultStyleStyle() {
+    return new SyntaxHighlighterStyle(
+        baseStyle:        new TextStyle(color: Colors.black87,    height: 1.5, letterSpacing: .7),
+        numberStyle:      new TextStyle(color: Colors.blue[800],  height: 1.5, letterSpacing: .7),
+        commentStyle:     new TextStyle(color: Color(0xff256728), height: 1.5, letterSpacing: .7),
+        keywordStyle:     new TextStyle(color: Color(0xffbd1919), height: 1.5, letterSpacing: .7),
+        stringStyle:      new TextStyle(color: Color(0xff757fe4), height: 1.5, letterSpacing: .7),
+        punctuationStyle: new TextStyle(color: Colors.black87,    height: 1.5, letterSpacing: .7),
+        classStyle:       new TextStyle(color: Color(0xff3ca5f9), height: 1.5, letterSpacing: .7),
+        constantStyle:    new TextStyle(color: Colors.brown[500], height: 1.5, letterSpacing: .7));
   }
 
   final TextStyle baseStyle;
@@ -40,13 +50,17 @@ abstract class SyntaxCostomHighlighter {
 }
 
 class DartSyntaxHighlighter extends SyntaxCostomHighlighter {
-  DartSyntaxHighlighter([this._style]) {
+  DartSyntaxHighlighter([this._style,this.isDarkMode = true]) {
     _spans = <_HighlightSpan>[];
 
-    if (_style == null) _style = SyntaxHighlighterStyle.defaultStyle();
+    if (_style == null){
+       _style = isDarkMode ? SyntaxHighlighterStyle.darkDefaultStyleStyle() : SyntaxHighlighterStyle.lightDefaultStyleStyle();
+
+    } 
   }
 
   SyntaxHighlighterStyle _style;
+  final bool isDarkMode;
 
   static const List<String> _kKeywords = const <String>[
     'abstract',
@@ -285,7 +299,7 @@ class DartSyntaxHighlighter extends SyntaxCostomHighlighter {
           continue;
         }
 
-        //中文
+        
         if (_scanner.scan(new RegExp(r"[\u4e00-\u9fa5]"))) {
           _spans.add(new _HighlightSpan(_HighlightType.punctuation,
               _scanner.lastMatch.start, _scanner.lastMatch.end));

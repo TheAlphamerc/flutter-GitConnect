@@ -33,6 +33,8 @@ class CustomThemeState extends State<CustomTheme> {
   ThemeType  _themeType;
   ThemeType get themeType => _themeType;
   ThemeData get theme => _theme;
+  ThemeType get toggle => _themeType == ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT;
+  bool get isDarkMode => _themeType == ThemeType.DARK;
 
   @override
   void initState() {
