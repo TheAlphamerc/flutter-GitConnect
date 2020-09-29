@@ -28,27 +28,8 @@ class _SplashPageState extends State<SplashPage> {
     final accessToken = await prefs.getAccessToken();
     if (accessToken != null) {
       print("***************** Auto Login ***********************");
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) {
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<NavigationBloc>(
-                  create: (BuildContext context) => NavigationBloc(),
-                ),
-                BlocProvider<UserBloc>(
-                  create: (BuildContext context) => UserBloc()..add(OnLoad()),
-                ),
-                BlocProvider<notif.NotificationBloc>(
-                  create: (BuildContext context) =>
-                      notif.NotificationBloc()..add(notif.OnLoad()),
-                ),
-              ],
-              child: DashBoardPage(),
-            );
-          },
-        ),
-      );
+      Navigator.of(context)
+          .pushAndRemoveUntil(DashBoardPage.getPageRoute(), (_) => false);
     }
   }
 

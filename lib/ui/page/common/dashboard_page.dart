@@ -10,8 +10,31 @@ import 'package:flutter_github_connect/ui/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import "package:build_context/build_context.dart";
+import 'package:flutter_github_connect/bloc/notification/index.dart' as notif;
 
 class DashBoardPage extends StatelessWidget {
+
+  static MaterialPageRoute getPageRoute(){
+    return MaterialPageRoute(
+          builder: (context) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<NavigationBloc>(
+                  create: (BuildContext context) => NavigationBloc(),
+                ),
+                BlocProvider<UserBloc>(
+                  create: (BuildContext context) => UserBloc()..add(OnLoad()),
+                ),
+                BlocProvider<notif.NotificationBloc>(
+                  create: (BuildContext context) =>
+                      notif.NotificationBloc()..add(notif.OnLoad()),
+                ),
+              ],
+              child: DashBoardPage(),
+            );
+          },
+        );
+  }
   Widget getPage(int index) {
     switch (index) {
       case 0:
