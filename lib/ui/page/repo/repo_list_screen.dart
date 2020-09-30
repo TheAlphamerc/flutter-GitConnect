@@ -9,7 +9,6 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/theme/extentions.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';

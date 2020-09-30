@@ -7,7 +7,7 @@ import 'package:flutter_github_connect/bloc/people/people_bloc.dart';
 import 'package:flutter_github_connect/bloc/people/people_event.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
-import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/home/widgets/event_page.dart';
 import 'package:flutter_github_connect/ui/page/issues/issues_page.dart';
 import 'package:flutter_github_connect/ui/page/people/people_page.dart';

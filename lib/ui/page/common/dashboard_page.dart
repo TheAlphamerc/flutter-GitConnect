@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/User/index.dart';
+import 'package:flutter_github_connect/bloc/favourite/index.dart';
 import 'package:flutter_github_connect/bloc/navigation/index.dart';
 import 'package:flutter_github_connect/ui/page/home/home_page.dart';
 import 'package:flutter_github_connect/ui/page/notification/notification_page.dart';
@@ -29,6 +30,9 @@ class DashBoardPage extends StatelessWidget {
                   create: (BuildContext context) =>
                       notif.NotificationBloc()..add(notif.OnLoad()),
                 ),
+                BlocProvider(
+                  create: (context) => FavouriteBloc()..add(LoadFavouriteReposEvent()),
+                )
               ],
               child: DashBoardPage(),
             );

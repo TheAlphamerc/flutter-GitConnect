@@ -117,3 +117,12 @@ extension ExAlignment on Widget {
         alignment: Alignment.bottomLeft,
       );
 }
+extension StringHelper on String{
+  String takeOnly(int value){
+    if(this != null && this.length >=value){
+      return this.substring(0,value);
+    }else{
+      return this;
+    }
+  }
+}

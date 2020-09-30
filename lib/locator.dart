@@ -5,6 +5,8 @@ import 'package:flutter_github_connect/resources/dio_client.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway_impl.dart';
 import 'package:flutter_github_connect/resources/service/auth_service.dart';
+import 'package:flutter_github_connect/resources/service/db_service/db_service.dart';
+import 'package:flutter_github_connect/resources/service/db_service/db_service_impl.dart';
 import 'package:flutter_github_connect/resources/service/impl/auth_service_impl.dart';
 import 'package:flutter_github_connect/resources/service/impl/session_service_impl.dart';
 import 'package:flutter_github_connect/resources/service/session_service.dart';
@@ -32,5 +34,9 @@ void setUpDependency() {
       DioClient(Dio(), baseEndpoint: Config.apiBaseUrl, logging: true),
       GetIt.instance<SessionService>(),
     ),
+  );
+
+  serviceLocator.registerSingletonAsync<DbService>(
+     ()async  => DbServiceImpl().initDB()
   );
 }

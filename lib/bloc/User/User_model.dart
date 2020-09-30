@@ -394,6 +394,16 @@ class RepositoriesNode extends Equatable {
         "owner": owner == null ? null : owner.toJson(),
         "stargazers": stargazers == null ? null : stargazers.toJson(),
       };
+  Map<String, dynamic> toDbJson() => {
+        "name": name == null ? null : name,
+        "owner": owner == null ? null : json.encode(owner.toJson()),
+  };
+  factory RepositoriesNode.fromDbJson(Map<String, dynamic> parsedJson) =>
+      RepositoriesNode(
+        name: parsedJson["name"] == null ? null : parsedJson["name"],
+        owner: parsedJson["owner"] == null ? null : Owner.fromJson(json.decode(parsedJson["owner"])),
+       
+      );
 
   @override
   List<Object> get props => [name];

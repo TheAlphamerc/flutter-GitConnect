@@ -60,7 +60,7 @@ class UserAvatar extends StatelessWidget {
               subtitle == null
                   ? SizedBox.shrink()
                   : Text(subtitle,
-                      style: titleStyle ?? context.textTheme.subtitle2),
+                      style: subTitleStyle ?? context.textTheme.subtitle2),
             ],
           ),
         ],

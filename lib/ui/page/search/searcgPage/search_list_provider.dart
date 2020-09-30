@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/search_event.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
-import 'package:flutter_github_connect/ui/page/auth/repo/repo_list_screen.dart';
+import 'package:flutter_github_connect/ui/page/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
