@@ -94,7 +94,7 @@ class HomePageScreenBody extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline5),
                 SizedBox(height: 16),
                 GFlatButton(
-                  label: "ADD FavouriteS",
+                  label: "ADD Favourites",
                   onPressed: () {},
                 ).ripple(() {})
               ],

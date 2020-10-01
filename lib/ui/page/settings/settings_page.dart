@@ -6,11 +6,10 @@ import 'package:flutter_github_connect/ui/page/splash.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
-import 'package:flutter_github_connect/ui/widgets/markdown/markdown_viewer.dart';
 import 'package:get_it/get_it.dart';
 
 class SettingsPage extends StatelessWidget {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   SettingsPage({Key key}) : super(key: key);
   Widget _getUtilRos(context, String text,
       {Function onPressed,
@@ -50,7 +49,7 @@ class SettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _getUtilRos(context, "Appearence",
-              color: GColors.green, selectedText: "Automatic", onPressed: () {
+              color: GColors.green, selectedText: CustomTheme.instanceOf(context).isDarkMode ? "Dark Mode" : "Light Mode", onPressed: () {
             _changeTheme(
                 context,
                 CustomTheme.instanceOf(context).toggle);
@@ -61,8 +60,7 @@ class SettingsPage extends StatelessWidget {
           Divider(height: 0),
           _getUtilRos(context, "Push Notifications",
               color: GColors.purple,
-              selectedText: "Direct mention",
-              onPressed: () {}),
+              selectedText: "Direct mention"),
           Divider(height: 0),
           _getUtilRos(context, "Swipe Options", color: GColors.orange),
         ],

@@ -96,7 +96,7 @@ class FavouriteReposWidget extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         GFlatButton(
-                          label: "ADD FavouriteS",
+                          label: "ADD Favourites",
                           onPressed: () async {
                             Navigator.push(
                               context,
