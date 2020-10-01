@@ -16,8 +16,7 @@ abstract class UserEvent extends Equatable {
   final UserRepository _userRepository =UserRepository(apiGatway: GetIt.instance<ApiGateway>());
   
   Stream<UserState> getUser({UserState currentState, UserBloc bloc})async*{}
-  
-  Stream<UserState> getGist({UserState currentState, UserBloc bloc})async*{}
+  Stream<UserState> refreshSelectFavRepolistUser({UserState currentState, UserBloc bloc})async*{}
   
 }
 
@@ -66,6 +65,24 @@ class OnLoad extends UserEvent {
       final state = currentState as LoadedUserState;
       yield ErrorNextRepositoryState(
           errorMessage: _?.toString(), user: state.user);
+    }
+  }
+}
+
+/// this event is added to refresh ui when user add or remove favoutire repository list
+/// Refresh of ui is needed to refresh plus/cross icon and their color
+class OnselectFavRepoRefreshEvent extends UserEvent{
+   @override
+  Stream<UserState> refreshSelectFavRepolistUser({UserState currentState, UserBloc bloc}) async* {
+    try {
+      final state = currentState as LoadedUserState;
+      yield LoadingUserState();
+      final userModel = state.user;
+      yield LoadedUserState(userModel,state.eventList);
+    } catch (_, stackTrace) {
+      developer.log('$_',
+          name: 'OnselectFavRepoRefreshEvent', error: _, stackTrace: stackTrace);
+      yield ErrorUserState(_?.toString());
     }
   }
 }

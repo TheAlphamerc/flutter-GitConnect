@@ -8,12 +8,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(LoadingUserState());
 
   @override
-  Future<void> close() async {
-    // dispose objects
-    await super.close();
-  }
-
-  @override
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
@@ -24,7 +18,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         } else {
           yield* event.getUser(currentState: state, bloc: this);
         }
-      }
+      }else if(event is OnselectFavRepoRefreshEvent){
+          yield* event.refreshSelectFavRepolistUser(currentState: state, bloc: this);
+      } 
     } catch (_, stackTrace) {
       developer.log('$_', name: 'UserBloc', error: _, stackTrace: stackTrace);
       yield state;

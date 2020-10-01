@@ -25,10 +25,7 @@ class AddRepotoFavouriteEvent extends FavouriteEvent {
   Stream<FavouriteState> addRepoFavourite({FavouriteState currentState, FavouriteBloc bloc}) async* {
     yield LoadingFavouriteReposState();
     await GetIt.instance.get<DbService>().addFavouriteRepository(repo);
-    
-    // var state = currentState as LoadedFavReposState;
-    print(GetIt.instance.get<DbService>().favouriteList.length);
-     yield LoadedFavReposState(GetIt.instance.get<DbService>().favouriteList);
+    yield LoadedFavReposState(GetIt.instance.get<DbService>().favouriteList);
   }
 
   @override

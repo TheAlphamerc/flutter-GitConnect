@@ -67,6 +67,7 @@ class SelectFavouriteRepoPage extends StatelessWidget {
       ),
     ).ripple(() {
       favBloc..add(AddRepotoFavouriteEvent(repo));
+      userBloc..add(OnselectFavRepoRefreshEvent());
     });
   }
 
