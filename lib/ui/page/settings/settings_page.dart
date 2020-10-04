@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/ui/page/common/under_development.dart';
+import 'package:flutter_github_connect/ui/page/settings/about_us.dart';
 import 'package:flutter_github_connect/ui/page/splash.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:get_it/get_it.dart';
 
 class SettingsPage extends StatelessWidget {
- final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   SettingsPage({Key key}) : super(key: key);
   Widget _getUtilRos(context, String text,
       {Function onPressed,
-      Color color,
       IconData icon = GIcons.chevron_right_24,
       String selectedText = ""}) {
     return Row(
@@ -48,21 +49,22 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(context, "Appearence",
-              color: GColors.green, selectedText: CustomTheme.instanceOf(context).isDarkMode ? "Dark Mode" : "Light Mode", onPressed: () {
-            _changeTheme(
-                context,
-                CustomTheme.instanceOf(context).toggle);
+          _getUtilRos(context, "About us", onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => AboutUsPage()));
           }),
           Divider(height: 0),
-          _getUtilRos(context, "App Icon",
-              color: GColors.blue, selectedText: "  "),
+          _getUtilRos(context, "Share App", selectedText: "  "),
+          Divider(height: 0),
+          _getUtilRos(context, "Appearence",
+              selectedText: CustomTheme.instanceOf(context).isDarkMode
+                  ? "Dark Mode"
+                  : "Light Mode", onPressed: () {
+            _changeTheme(context, CustomTheme.instanceOf(context).toggle);
+          }),
           Divider(height: 0),
           _getUtilRos(context, "Push Notifications",
-              color: GColors.purple,
               selectedText: "Direct mention"),
-          Divider(height: 0),
-          _getUtilRos(context, "Swipe Options", color: GColors.orange),
         ],
       ),
     );
@@ -77,7 +79,6 @@ class SettingsPage extends StatelessWidget {
           _getUtilRos(
             context,
             "Share Feedback",
-            color: GColors.green,
             icon: GIcons.pencil_24,
           ),
         ],
@@ -91,9 +92,9 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(context, "Privacy Policy", color: GColors.green),
+          _getUtilRos(context, "Privacy Policy"),
           Divider(height: 0),
-          _getUtilRos(context, "Terms of Service", color: GColors.blue),
+          _getUtilRos(context, "Terms of Service"),
         ],
       ),
     );
@@ -105,8 +106,7 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(context, "Sign out", color: GColors.green, icon: null,
-              onPressed: () {
+          _getUtilRos(context, "Sign out", icon: null, onPressed: () {
             /// [Todo] Temprary workaround for logout
             final getIt = GetIt.instance;
             final prefs = getIt<SharedPrefrenceHelper>();
@@ -134,7 +134,9 @@ class SettingsPage extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         elevation: 0,
-        title: Text("Settings"),
+        title: GAppBarTitle(
+          title: "Settings",
+        ),
         backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: Container(
