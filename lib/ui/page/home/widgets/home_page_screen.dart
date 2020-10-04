@@ -126,7 +126,7 @@ class HomePageScreenBody extends StatelessWidget {
         children: <Widget>[
           _getUtilRos(context, GIcons.issue_opened_24, "Issues",
               color: GColors.green, onPressed: () {
-            Navigator.push(context, IssuesPage.route(model.login));
+            Navigator.push(context, IssuesPage.route(model.login,count:model.issues.totalCount));
           }),
           Divider(height: 0, indent: 50),
           _getUtilRos(context, GIcons.git_pull_request_16, "Pull Request",

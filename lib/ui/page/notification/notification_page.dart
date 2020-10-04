@@ -31,10 +31,10 @@ class NotificationPage extends StatelessWidget {
                 list: currentState.list,
               );
             return NoDataPage(
-              title: "No Notification Available",
+              title: "",
               description:
-                  "Seems like you have no notification for now. If new notifiaction appear it will be displayed here",
-              icon: GIcons.alert_16,
+                  "Nothing to see here!!",
+              icon: GIcons.bell_slash_24,
             );
           }
           return GLoader();

@@ -155,6 +155,9 @@ class LoadedStargezersState extends PeopleState {
    currentStargazers.pageInfo = stargezers.pageInfo;
    return LoadedStargezersState(currentStargazers);
   }
+
+  bool get isNotNullEmpty => this.stargezers != null && this.stargezers.userList != null &&
+                this.stargezers.userList.isNotEmpty;
 }
 class ErrorStargezersState extends LoadedUserState {
   final String errorMessage;

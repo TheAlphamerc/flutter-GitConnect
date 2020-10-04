@@ -16,13 +16,14 @@ class RepoWatchersPageProvider extends StatefulWidget {
   static MaterialPageRoute getPageRoute(
     BuildContext context, {
     String name,
-    String owner
+    String owner,
+    int count,
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
           create: (BuildContext context) =>
-              PeopleBloc()..add(LoadWatchersEvent(name:name,owner:owner)),
+              PeopleBloc()..add(LoadWatchersEvent(name:name,owner:owner,count:count)),
           child: RepoWatchersPageProvider(name: name, owner:owner),
         );
       },

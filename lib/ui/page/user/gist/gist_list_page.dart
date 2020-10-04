@@ -11,16 +11,16 @@ import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class GistlistPageProvider extends StatefulWidget {
   final String login;
-
   const GistlistPageProvider({Key key, this.login}) : super(key: key);
   static MaterialPageRoute getPageRoute(
     BuildContext context, {
     String login,
+    int count
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<GistBloc>(
-          create: (BuildContext context) => GistBloc()..add(OnGistLoad(login)),
+          create: (BuildContext context) => GistBloc()..add(OnGistLoad(login, count:count)),
           child: GistlistPageProvider(login: login),
         );
       },
@@ -82,15 +82,15 @@ class GistlistPage extends StatelessWidget {
               );
             }
             if (currentState is LoadedGitState) {
-              if (currentState.gist != null && currentState.gist.totalCount > 0)
+              if (currentState.isNotNullEmpty)
                 return GistListScreen(
                     gist: currentState.gist,
                     login: login,
                     controller: controller);
               return NoDataPage(
-                title: "No Gist Found",
+                title: "",
                 description:
-                    "No gist created yet,\n Once new gist are created, they will be displayed here",
+                    "Nothing to see here!!",
                 icon: GIcons.code_24,
               );
             }

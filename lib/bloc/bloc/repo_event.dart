@@ -58,14 +58,14 @@ class LoadForksEvent extends RepoEvent {
   final bool isLoadNextForks;
   final String name;
   final String owner;
-  LoadForksEvent({this.isLoadNextForks=false,this.name,this.owner}) : assert(name != null), assert(owner!= null);
+  final int count;
+  LoadForksEvent({this.name,this.owner,this.count,this.isLoadNextForks=false}) : assert(name != null), assert(owner!= null);
   @override
   Stream<RepoState> getRepoForks(
       {RepoState currentState, RepoBloc bloc}) async* {
     try {
       yield LoadingForksState();
-
-      final list = await _repoRepository.fetchRepoForks(name: name, owner: owner);
+      final list = count == 0 ? null : await _repoRepository.fetchRepoForks(name: name, owner: owner);
       yield LoadedForksState(list);
     } catch (_, stackTrace) {
       developer.log('$_',name: 'LoadForksEvent', error: _, stackTrace: stackTrace);

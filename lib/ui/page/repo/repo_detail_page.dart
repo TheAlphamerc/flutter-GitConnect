@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
+import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_screen.dart';
+import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
@@ -44,6 +47,14 @@ class RepoDetailPage extends StatelessWidget {
           child:
               Text("Repository", style: Theme.of(context).textTheme.headline6),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(GIcons.share_android_24, color: GColors.blue),
+            onPressed: () {
+              Utility.share("https://github.com/$owner/$name");
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<RepoBloc, RepoState>(
         builder: (context, currentState) {

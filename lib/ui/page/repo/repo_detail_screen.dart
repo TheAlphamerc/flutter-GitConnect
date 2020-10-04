@@ -124,7 +124,7 @@ class RepoDetailScreen extends StatelessWidget {
                       GIcons.star_fill_24,
                       "${model.stargazers.totalCount} Stars",
                       onPressed:(){
-                        Navigator.push(context, RepoStargezersPageProvider.getPageRoute(owner:model.owner.login, name:model.name));
+                        Navigator.push(context, RepoStargezersPageProvider.getPageRoute(owner:model.owner.login, name:model.name, count: model.stargazers.totalCount));
                        }
                     ),
                     SizedBox(width: 20),
@@ -133,7 +133,7 @@ class RepoDetailScreen extends StatelessWidget {
                       GIcons.git_fork_24,
                       "${model.forkCount} Forks",
                       onPressed:(){
-                        Navigator.push(context, RepoForksPageProvider.getPageRoute(owner:model.owner.login, name:model.name));
+                        Navigator.push(context, RepoForksPageProvider.getPageRoute(owner:model.owner.login, name:model.name, count:model.forkCount));
                        }
                     ),
                   ],
@@ -153,7 +153,7 @@ class RepoDetailScreen extends StatelessWidget {
                   "Issues",
                   value: "${model.issues.totalCount}",
                   onPressed:(){
-                    Navigator.push(context, RepoIssuesPage.getPageRoute(owner:model.owner.login, name:model.name));
+                    Navigator.push(context, RepoIssuesPage.getPageRoute(owner:model.owner.login, name:model.name, count:model.issues.totalCount));
                   }
                 ),
                 _getUtilRos(
@@ -161,7 +161,7 @@ class RepoDetailScreen extends StatelessWidget {
                   "Watchers",
                   value: "${model.watchers.totalCount}",
                   onPressed:(){
-                    Navigator.push(context, RepoWatchersPageProvider.getPageRoute(context, owner:model.owner.login, name:model.name));
+                    Navigator.push(context, RepoWatchersPageProvider.getPageRoute(context, owner:model.owner.login, name:model.name, count:model.watchers.totalCount));
                   }
                 ),
                 _getUtilRos(
@@ -169,7 +169,7 @@ class RepoDetailScreen extends StatelessWidget {
                   "Pull Request",
                   value: "${model.pullRequests.totalCount}",
                   onPressed:(){
-                    Navigator.push(context, RepoPullRequestPageProvider.getPageRoute(context, owner:model.owner.login, name:model.name));
+                    Navigator.push(context, RepoPullRequestPageProvider.getPageRoute(context, owner:model.owner.login, name:model.name, count:model.pullRequests.totalCount));
                   }
                 ),
                 _getUtilRos(context, "Language",

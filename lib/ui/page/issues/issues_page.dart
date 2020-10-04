@@ -10,16 +10,15 @@ import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class IssuesPage extends StatefulWidget {
   final String login;
-  static const String routeName = '/issues';
 
   const IssuesPage({
     Key key,
     this.login,
   }) : super(key: key);
-  static route(String login) => MaterialPageRoute(
+  static route(String login,{int count}) => MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (BuildContext context) =>
-              IssuesBloc()..add(LoadIssuesEvent(login)),
+              IssuesBloc()..add(LoadIssuesEvent(login,count:count)),
           child: IssuesPage(),
         ),
       );

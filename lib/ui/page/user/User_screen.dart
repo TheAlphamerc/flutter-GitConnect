@@ -444,6 +444,7 @@ class UserScreenBody extends StatelessWidget {
                         GistlistPageProvider.getPageRoute(
                           context,
                           login: model.login,
+                          count:model.gists?.totalCount
                         ),
                       );
                     },

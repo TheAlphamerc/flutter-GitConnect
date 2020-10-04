@@ -17,12 +17,13 @@ class PullRequestPageProvider extends StatefulWidget {
   static MaterialPageRoute getPageRoute(
     BuildContext context, {
     String login,
+    int count
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PullrequestBloc>(
           create: (BuildContext context) =>
-              PullrequestBloc()..add(OnPullRequestLoad(login)),
+              PullrequestBloc()..add(OnPullRequestLoad(login,count:count)),
           child: PullRequestPageProvider(login:login),
         );
       },
@@ -108,9 +109,9 @@ class PullRequestPage extends StatelessWidget {
                   controller: controller,
                 );
               return NoDataPage(
-                title: "Empty issues",
+                title: "",
                 description:
-                    "No pull request created yet,\n Once new pullr equest are created, they will be displayed here",
+                    "No pull request created yet",
                 icon: GIcons.git_pull_request_24,
               );
             }
@@ -131,19 +132,20 @@ class PullRequestPage extends StatelessWidget {
 class RepoPullRequestPageProvider extends StatefulWidget {
   final String name;
   final String owner;
-
-  const RepoPullRequestPageProvider({Key key, this.name,this.owner}) : super(key: key);
+  final int count;
+  const RepoPullRequestPageProvider({Key key, this.name,this.owner,this.count}) : super(key: key);
   static MaterialPageRoute getPageRoute(
     BuildContext context, {
     String name,
-    String owner
+    String owner,
+    int count
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PullrequestBloc>(
           create: (BuildContext context) =>
-              PullrequestBloc()..add(LoadRepoPullRequests(name:name,owner:owner)),
-          child: RepoPullRequestPageProvider(name: name, owner:owner),
+              PullrequestBloc()..add(LoadRepoPullRequests(name:name,owner:owner,count:count)),
+          child: RepoPullRequestPageProvider(name: name, owner:owner,count:count),
         );
       },
     );
@@ -218,9 +220,9 @@ class RepoPullRequestPage extends StatelessWidget {
                   controller: controller,
                 );
               return NoDataPage(
-                title: "Empty issues",
+                title: "",
                 description:
-                    "No pull request created yet,\n Once new pullr equest are created, they will be displayed here",
+                    "No pull request created yet",
                 icon: GIcons.git_pull_request_24,
               );
             }

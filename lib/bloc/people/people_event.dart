@@ -84,11 +84,12 @@ class LoadUserEvent extends PeopleEvent {
 }
 
 class LoadFollowEvent extends PeopleEvent {
-  LoadFollowEvent(this.login, this.type, {this.isLoadNextFollow = false});
+  LoadFollowEvent(this.login, this.type, {this.count, this.isLoadNextFollow = false});
 
   final bool isLoadNextFollow;
   final String login;
   final PeopleType type;
+  final int count;
 
   @override
   Stream<PeopleState> fetchFollowersList(
@@ -96,8 +97,7 @@ class LoadFollowEvent extends PeopleEvent {
     try {
       if (!isLoadNextFollow) {
         yield LoadingFollowState();
-        final followers =
-            await _peopleRepository.fetchFollowersList(login, type: type);
+        final followers = count == 0 ? null :  await _peopleRepository.fetchFollowersList(login, type: type);
         yield LoadedFollowState(followers);
       } else {
         final state = currentState as LoadedFollowState;
@@ -108,8 +108,7 @@ class LoadFollowEvent extends PeopleEvent {
         yield LoadingNextFollowState(state.followModel);
         final followModel = await _peopleRepository.fetchFollowersList(login,
             type: type, endCursor: state.followModel.pageInfo.endCursor);
-        yield LoadedFollowState.next(
-            model: followModel, currentFollowModel: state.followModel);
+        yield LoadedFollowState.next(model: followModel, currentFollowModel: state.followModel);
       }
     } on OperationException catch (_, stackTrace) {
       developer.log('$_',
@@ -174,14 +173,15 @@ class LoadWatchersEvent extends PeopleEvent {
   final bool isLoadNextWatchers;
   final String name;
   final String owner;
-  LoadWatchersEvent({this.isLoadNextWatchers=false,this.name,this.owner}) : assert(name != null), assert(owner!= null);
+  final int count;
+  LoadWatchersEvent({this.isLoadNextWatchers=false,this.count,this.name,this.owner}) : assert(name != null), assert(owner!= null);
   @override
   Stream<PeopleState> getRepoWatchers(
       {PeopleState currentState, PeopleBloc bloc}) async* {
     try {
       yield LoadingWatcherState();
 
-      final list = await _peopleRepository.getRepoWatchers(name: name, owner: owner);
+      final list = count == 0 ? null : await _peopleRepository.getRepoWatchers(name: name, owner: owner);
       yield LoadedWatcherState(list);
     } catch (_, stackTrace) {
       developer.log('$_',
@@ -213,14 +213,14 @@ class LoadStargezersEvent extends PeopleEvent {
   final bool isLoadNextStartgers;
   final String name;
   final String owner;
-  LoadStargezersEvent({this.isLoadNextStartgers=false,this.name,this.owner}) : assert(name != null), assert(owner!= null);
+  final int count;
+  LoadStargezersEvent({this.name,this.owner, this.count,this.isLoadNextStartgers=false}) : assert(name != null), assert(owner!= null);
   @override
   Stream<PeopleState> getRepoStargezres(
       {PeopleState currentState, PeopleBloc bloc}) async* {
     try {
       yield LoadingStargezersState();
-
-      final list = await _peopleRepository.fetchRepoStargazers(name: name, owner: owner);
+      final list = count == 0 ? null : await _peopleRepository.fetchRepoStargazers(name: name, owner: owner);
       yield LoadedStargezersState(list);
     } catch (_, stackTrace) {
       developer.log('$_',name: 'LoadStargezersEvent', error: _, stackTrace: stackTrace);

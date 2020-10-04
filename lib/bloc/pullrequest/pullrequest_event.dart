@@ -12,10 +12,11 @@ abstract class PullrequestEvent extends Equatable{
 class LoadRepoPullRequests extends PullrequestEvent {
   final String owner;
   final String name;
+  final int count;
   final bool isNextRepoPull;
  
 
-  LoadRepoPullRequests({this.name, this.owner,this.isNextRepoPull = false}) : assert(owner != null),assert(name!= null);
+  LoadRepoPullRequests({this.name, this.owner,this.count,this.isNextRepoPull = false}) : assert(owner != null),assert(name!= null);
 
   @override
   Stream<PullrequestState> getrepoPullrequest(
@@ -23,7 +24,7 @@ class LoadRepoPullRequests extends PullrequestEvent {
     try {
       yield LoadingRepoPullRequest();
 
-      final repoPullRequest = await _pullrequestRepository.fetchRepoPullRequest(name:name, owner:owner);
+      final repoPullRequest = count == 0 ? null : await _pullrequestRepository.fetchRepoPullRequest(name:name, owner:owner);
       yield LoadedRepoPullRequest(repoPullRequest: repoPullRequest);
     } catch (_, stackTrace) {
       developer.log('$_', name: 'LoadPullrequestEvent', error: _, stackTrace: stackTrace);
@@ -57,11 +58,11 @@ class LoadRepoPullRequests extends PullrequestEvent {
 }
 
 class OnPullRequestLoad extends PullrequestEvent {
-  OnPullRequestLoad(this.login, {this.isLoadNextIssues = false});
+  OnPullRequestLoad(this.login, {this.count,this.isLoadNextIssues = false});
 
   final bool isLoadNextIssues;
   final String login;
-
+  final int count;
   @override
   Stream<PullrequestState> getPullRequest(
       {PullrequestState currentState, PullrequestBloc bloc}) async* {
@@ -70,8 +71,7 @@ class OnPullRequestLoad extends PullrequestEvent {
     }
     try {
       yield LoadingPullRequestState();
-      final pullRequestsList =
-          await _pullrequestRepository.fetchUserPullRequest(login:login);
+      final pullRequestsList = count == 0 ? null : await _pullrequestRepository.fetchUserPullRequest(login:login);
       yield LoadedPullRequestState(pullRequestsList: pullRequestsList);
     } catch (_, stackTrace) {
       developer.log('$_',

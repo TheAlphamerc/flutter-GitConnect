@@ -15,13 +15,14 @@ class RepoStargezersPageProvider extends StatefulWidget {
   const RepoStargezersPageProvider({Key key, this.name,this.owner}) : super(key: key);
   static MaterialPageRoute getPageRoute(
     {String name,
-    String owner
+    String owner,
+    int count,
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
           create: (BuildContext context) =>
-              PeopleBloc()..add(LoadStargezersEvent(name:name,owner:owner)),
+              PeopleBloc()..add(LoadStargezersEvent(name:name,owner:owner,count:count)),
           child: RepoStargezersPageProvider(name: name, owner:owner),
         );
       },
@@ -91,17 +92,16 @@ class RepoStargazersPage extends StatelessWidget {
               );
             }
             if (currentState is LoadedStargezersState) {
-              if (currentState.stargezers!= null &&
-                  currentState.stargezers.totalCount > 0)
+              if (currentState.isNotNullEmpty)
                 return StargazersScreen(
                   watchersList: currentState.stargezers.userList,
                   controller: controller,
                 );
               return NoDataPage(
-                title: "Empty issues",
+                title: "",
                 description:
-                    "No one is watching this repository yet,\n Once people started watching this repo, they will be displayed here",
-                icon: GIcons.git_pull_request_24,
+                    "Nothing is here to see\nCome back later!!",
+                icon: GIcons.star_fill_24,
               );
             }
             if (currentState is LoadingStargezersState) {

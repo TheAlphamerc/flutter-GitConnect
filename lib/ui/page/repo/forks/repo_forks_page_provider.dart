@@ -11,17 +11,17 @@ import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 class RepoForksPageProvider extends StatefulWidget {
   final String name;
   final String owner;
-
   const RepoForksPageProvider({Key key, this.name,this.owner}) : super(key: key);
   static MaterialPageRoute getPageRoute(
     {String name,
-    String owner
+    String owner, 
+    int count
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<RepoBloc>(
           create: (BuildContext context) =>
-              RepoBloc()..add(LoadForksEvent(name:name,owner:owner)),
+              RepoBloc()..add(LoadForksEvent(name:name,owner:owner,count:count)),
           child: RepoForksPageProvider(name: name, owner:owner),
         );
       },
@@ -98,9 +98,8 @@ class RepoForksPage extends StatelessWidget {
                   controller: controller,
                 );
               return NoDataPage(
-                title: "Empty Forks",
-                description:
-                    "No one forked this repository yet,\n Once people forked this repo, they will be displayed here",
+                title: "",
+                description: "Nothing to see here!!",
                 icon: GIcons.git_fork_24,
               );
             }

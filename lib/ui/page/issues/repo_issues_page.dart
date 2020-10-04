@@ -11,13 +11,12 @@ import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 class RepoIssuesPage extends StatefulWidget {
   final String owner;
   final String name;
-
   const RepoIssuesPage({Key key, this.owner, this.name}) : super(key: key);
-  static getPageRoute({String owner, String name}) => MaterialPageRoute(
+  static getPageRoute({String owner, String name,int count}) => MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (BuildContext context) =>
-              IssuesBloc()..add(LoadRepoIssuesEvent(owner: owner, name: name)),
-          child: RepoIssuesPage(name: name, owner: owner),
+              IssuesBloc()..add(LoadRepoIssuesEvent(owner: owner, name: name,count:count)),
+          child: RepoIssuesPage(name: name, owner: owner,),
         ),
       );
   @override
@@ -70,8 +69,7 @@ class _RepoIssuesPagState extends State<RepoIssuesPage> {
             );
           }
           if (currentState is LoadedRepoIssuesState) {
-            if (currentState.issues.list != null &&
-                currentState.issues.list.isNotEmpty)
+            if (currentState.isNotNullEmpty)
               return IssueListPage(
                   list: currentState.issues.list,
                   hideAppBar: true,

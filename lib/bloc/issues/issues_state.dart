@@ -59,6 +59,9 @@ class LoadedRepoIssuesState extends IssuesState {
     currentIssueModel.pageInfo = issuesModel.pageInfo;
     return LoadedRepoIssuesState(currentIssueModel);
   }
+
+  bool get isNotNullEmpty => this.issues != null && this.issues.list != null &&
+                this.issues.list.isNotEmpty;
 }
 
 class ErrorRepoIssuesState extends IssuesState {

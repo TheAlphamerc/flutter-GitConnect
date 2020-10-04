@@ -31,11 +31,11 @@ class LoadGistDetailEvent extends GistEvent {
 }
 
 class OnGistLoad extends GistEvent {
-  OnGistLoad(this.login, {this.isLoadNextGist = false});
+  OnGistLoad(this.login, {this.count,this.isLoadNextGist = false});
 
   final bool isLoadNextGist;
   final String login;
-
+  final int count;
   @override
   Stream<GistState> getGist(
       {GistState currentState, GistBloc bloc}) async* {
@@ -45,7 +45,7 @@ class OnGistLoad extends GistEvent {
     try {
       // yield LoadingUserState();
 
-      final gistModel = await _gistRepository.fetchGistList(login: login);
+      final gistModel = count == 0 ? null : await _gistRepository.fetchGistList(login: login);
 
       yield LoadedGitState(gist: gistModel);
     } catch (_, stackTrace) {

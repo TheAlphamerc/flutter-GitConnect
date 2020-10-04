@@ -38,6 +38,8 @@ class LoadedGitState extends GistState {
     print("New cursor is ${gistModel.pageInfo.endCursor}");
     return LoadedGitState(gist: currenctGistModel,);
   }
+
+  bool get isNotNullEmpty => this.gist != null && this.gist.totalCount > 0;
 }
 
 class LoadingNextGistState extends LoadedGitState {

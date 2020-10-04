@@ -22,9 +22,10 @@ abstract class IssuesEvent extends Equatable {
 
 class LoadIssuesEvent extends IssuesEvent {
   final String login;
+  final int count;
   final bool isLoadNextIssues;
 
-  LoadIssuesEvent(this.login, {this.isLoadNextIssues = false});
+  LoadIssuesEvent(this.login, {this.count,this.isLoadNextIssues = false});
   @override
   Stream<IssuesState> loadIssues(
       {IssuesState currentState, IssuesBloc bloc}) async* {
@@ -33,7 +34,7 @@ class LoadIssuesEvent extends IssuesEvent {
         return;
       }
       yield LoadingUserIssuesState();
-      final issues = await _issuesRepository.getIssues(login: login);
+      final issues =count ==0 ? null : await _issuesRepository.getIssues(login: login);
       yield LoadedIssuesState(issues);
     } catch (_, stackTrace) {
       developer.log('$_',
@@ -70,9 +71,10 @@ class LoadIssuesEvent extends IssuesEvent {
 class LoadRepoIssuesEvent extends IssuesEvent {
   final String owner;
   final String name;
+  final int count;
   final bool isLoadNextRepoIssues;
 
-  LoadRepoIssuesEvent({this.owner,this.name, this.isLoadNextRepoIssues = false});
+  LoadRepoIssuesEvent({this.owner,this.name,this.count,this.isLoadNextRepoIssues = false});
   @override
   Stream<IssuesState> loadRepoIssues(
       {IssuesState currentState, IssuesBloc bloc}) async* {
@@ -81,7 +83,7 @@ class LoadRepoIssuesEvent extends IssuesEvent {
         return;
       }
       yield LoadingRepoIssuesState();
-      final issues = await _issuesRepository.getRepoIssues(name:name,owner:owner);
+      final issues = count == 0 ? null : await _issuesRepository.getRepoIssues(name:name,owner:owner);
       yield LoadedRepoIssuesState(issues);
     } catch (_, stackTrace) {
       developer.log('$_',
