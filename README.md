@@ -43,7 +43,8 @@ Stable release build will be available soon..
 * See repo stargazerrs and fork Repos
 * PRs statuses
 * Gists
-* Themes mode   
+* Themes mode  
+* Commits 
 * Following/Followers
 * View Gists and their files
 * View user profile, contribution graph, activities, repositories, pullrequest and issues

@@ -80,7 +80,7 @@ class RepoApi {
   static const String watchers = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
     repository(name: $name, owner: $owner) {
       ... on Repository {
-        watchers(after: $endCursor, first: 10) {
+        watchers(after: $endCursor, first: 30) {
           totalCount
           pageInfo {
             endCursor
@@ -101,7 +101,7 @@ class RepoApi {
   static const String startgazers = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
     repository(name: $name, owner: $owner) {
       ... on Repository {
-        stargazers(after: $endCursor, first: 10) {
+        stargazers(after: $endCursor, first: 30) {
           totalCount
           pageInfo {
             endCursor
@@ -121,7 +121,7 @@ class RepoApi {
   static const String forks = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
     repository(name: $name, owner: $owner) {
       ... on Repository {
-        forks(orderBy: {field: CREATED_AT, direction: DESC}, first: 10, after: $endCursor) {
+        forks(orderBy: {field: CREATED_AT, direction: DESC}, first: 30, after: $endCursor) {
           totalCount
           pageInfo {
             hasNextPage
@@ -146,6 +146,45 @@ class RepoApi {
             owner {
               login
               avatarUrl
+            }
+          }
+        }
+      }
+    }
+  }
+  ''';
+
+  static const String commits = r'''query repo($name: String!, $owner: String!, $endCursor: String) {
+    repository(name: $name, owner: $owner) {
+      ref(qualifiedName: "master") {
+        target {
+          ... on Commit {
+            id
+            history(first: 30, after:$endCursor) {
+              totalCount
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+              edges {
+                node {
+                  messageHeadline
+                  oid
+                  message
+                  additions
+                  deletions
+                   messageBody
+                  committedDate
+                  url
+                  author {
+                    user{
+                      login,
+                      avatarUrl,
+                      name
+                    }
+                  }
+                }
+              }
             }
           }
         }

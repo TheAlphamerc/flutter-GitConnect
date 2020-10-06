@@ -16,6 +16,7 @@ import 'package:flutter_github_connect/resources/graphql_client.dart';
 import 'package:flutter_github_connect/resources/gatway/api_gatway.dart';
 import 'package:flutter_github_connect/resources/service/session_service.dart';
 import 'package:flutter_github_connect/bloc/people/people_model.dart' as people;
+import 'package:flutter_github_connect/bloc/commit/commit_model.dart' as commit;
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 
 class ApiGatwayImpl implements ApiGateway {
@@ -423,6 +424,28 @@ class ApiGatwayImpl implements ApiGateway {
       final stargazers = ForksModel.fromJson(result.data["repository"]["forks"]);
 
       return stargazers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<commit.History> fetchCommits({String name, String owner, String endCursor}) async{
+   try {
+      assert(name != null,"Repository name is required");
+      assert(owner != null);
+      var accesstoken = await _sessionService.loadSession();
+      initClient(accesstoken);
+      
+      final result = await getRepoCommits(owner,name,endCursor);
+      if (result.hasException) {
+        print(result.exception.toString());
+        throw result.exception;
+      }
+      print(result.data);
+      final map = result.data["repository"]["ref"]["target"] as Map<String, dynamic>;
+      final commits = commit.History.fromJson(map["history"]);
+      return commits;
     } catch (error) {
       throw error;
     }

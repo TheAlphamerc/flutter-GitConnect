@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
+import 'package:flutter_github_connect/bloc/commit/commit_page.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/issues/repo_issues_page.dart';
@@ -177,7 +178,11 @@ class RepoDetailScreen extends StatelessWidget {
                     icon: null),
                 _getUtilRos(context, "Default Branch",
                     value: model.defaultBranchRef?.name ?? "N/A", icon: null),
-                _getUtilRos(context, "Commits", icon: null),
+                _getUtilRos(context, "Commits", icon: null,
+                  onPressed:(){
+                    Navigator.push(context, CommitPageProvider.getPageRoute(owner:model.owner.login, name:model.name,));
+                   }
+                ),
                 _getUtilRos(context, "Browse Code", icon: null),
               ],
             ),

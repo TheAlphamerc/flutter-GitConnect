@@ -1,3 +1,4 @@
+import 'package:flutter_github_connect/bloc/commit/commit_model.dart' as commit;
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
 import 'package:flutter_github_connect/model/forks_model.dart';
@@ -32,5 +33,9 @@ class RepoRepository {
   Future<ForksModel> fetchRepoForks({String name, String owner,String endCursor}) async {
     assert(name != null, owner != null);
     return await apiGatway.fetchRepoForks(name: name, owner: owner,endCursor:endCursor);
+  }
+  Future<commit.History> fetchCommits({String name, String owner,String endCursor}) async {
+    assert(name != null, owner != null);
+    return await apiGatway.fetchCommits(name: name, owner: owner,endCursor:endCursor);
   }
 }

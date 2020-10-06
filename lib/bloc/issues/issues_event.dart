@@ -14,9 +14,9 @@ abstract class IssuesEvent extends Equatable {
   List<Object> get props => [];
   
   final IssuesRepository _issuesRepository =IssuesRepository(apiGatway: GetIt.instance<ApiGateway>());
-  @override
+  
   Stream<IssuesState> loadIssues({IssuesState currentState, IssuesBloc bloc})async*{}
-  @override
+  
   Stream<IssuesState> loadRepoIssues({IssuesState currentState, IssuesBloc bloc})async*{}
 }
 

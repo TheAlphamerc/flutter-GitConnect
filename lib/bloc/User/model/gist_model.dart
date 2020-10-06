@@ -7,14 +7,14 @@ class GistResponse {
         this.user,
     });
 
-    final User user;
+    final ActorModel user;
 
     factory GistResponse.fromRawJson(String str) => GistResponse.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
     factory GistResponse.fromJson(Map<String, dynamic> json) => GistResponse(
-        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        user: json["user"] == null ? null : ActorModel.fromJson(json["user"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -22,18 +22,18 @@ class GistResponse {
     };
 }
 
-class User {
-    User({
+class ActorModel {
+    ActorModel({
         this.gists,
     });
 
     final Gists gists;
 
-    factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+    factory ActorModel.fromRawJson(String str) => ActorModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
+    factory ActorModel.fromJson(Map<String, dynamic> json) => ActorModel(
         gists: json["gists"] == null ? null : Gists.fromJson(json["gists"]),
     );
 
