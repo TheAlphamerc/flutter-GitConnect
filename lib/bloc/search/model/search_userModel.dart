@@ -2,6 +2,7 @@ import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/search/repo_model.dart';
 import 'package:flutter_github_connect/model/page_info_model.dart';
+import 'package:flutter_github_connect/model/pul_request.dart' as pull;
 
 class SearchModel {
   Data data;
@@ -65,6 +66,9 @@ class Search {
             break;
            case GithubSearchType.Issue:
             list.add(IssuesModel.fromJson(v));
+            break;
+           case GithubSearchType.PullRequest:
+            list.add(pull.Node.fromJson(v));
             break;
           default:
             list.add(SearchRepo.fromJson(v));

@@ -192,6 +192,7 @@ class Apis {
       #  }
         ... on Issue {
           __typename
+          url
           title
           number
           closed
@@ -239,11 +240,25 @@ class Apis {
         }
         ... on PullRequest {
           __typename
-          id
+         url
+          number
+          closed
+          title
           author {
             login
             avatarUrl
             url
+          }
+          repository {
+            nameWithOwner
+          }
+          state
+          closedAt
+          createdAt
+          deletions
+          additions
+          files {
+            totalCount
           }
         }
       }

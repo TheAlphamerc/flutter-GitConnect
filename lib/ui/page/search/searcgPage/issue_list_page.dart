@@ -75,7 +75,8 @@ class IssueListPage extends StatelessWidget {
               ],
             ).vP16)
         .ripple(() {
-      Underdevelopment.displaySnackbar(context,msg: "Issue detail feature is under development");
+      Utility.launchTo(model.url);
+      // Underdevelopment.displaySnackbar(context,msg: "Issue detail feature is under development");
     });
   }
 

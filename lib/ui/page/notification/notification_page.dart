@@ -26,7 +26,7 @@ class NotificationPage extends StatelessWidget {
             );
           }
           if (currentState is LoadedNotificationState) {
-            if (currentState.list != null && currentState.list.isNotEmpty)
+            if (currentState.isNotNullEmpty)
               return NotificationScreen(
                 list: currentState.list,
               );

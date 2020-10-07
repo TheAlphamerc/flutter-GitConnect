@@ -87,6 +87,7 @@ class Issues {
 }
 
 class IssuesModel {
+  String url;
   String title;
   String createdAt;
   String state;
@@ -102,6 +103,7 @@ class IssuesModel {
   IssuesModel(
       {this.title,
       this.createdAt,
+      this.url,
       this.state,
       this.number,
       this.viewerDidAuthor,
@@ -114,6 +116,7 @@ class IssuesModel {
       this.type});
 
   IssuesModel.fromJson(Map<String, dynamic> json) {
+    url= json['url'];
     title = json['title'];
     createdAt = json['createdAt'];
     state = json['state'];
@@ -134,6 +137,7 @@ class IssuesModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['url'] = this.url;
     data['title'] = this.title;
     data['createdAt'] = this.createdAt;
     data['state'] = this.state;

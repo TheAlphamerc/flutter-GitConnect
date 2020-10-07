@@ -8,6 +8,7 @@ class PullRequestQraphQl {
           hasNextPage
         }
         nodes {
+          url
           number
           closed
           title
@@ -23,6 +24,7 @@ class PullRequestQraphQl {
           state
           closedAt
           createdAt
+          additions
           deletions
           files {
             totalCount
@@ -43,6 +45,7 @@ class PullRequestQraphQl {
             hasNextPage
           }
           nodes {
+            url
             number
             closed
             title
@@ -58,6 +61,7 @@ class PullRequestQraphQl {
             state
             closedAt
             createdAt
+            additions
             deletions
             files {
               totalCount

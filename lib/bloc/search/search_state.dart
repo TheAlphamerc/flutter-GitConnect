@@ -3,7 +3,7 @@ import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/bloc/search/index.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
-
+import 'package:flutter_github_connect/model/pul_request.dart' as pull;
 abstract class SearchState extends Equatable {
   @override
   List<Object> get props => ([]);
@@ -66,18 +66,18 @@ class LoadedSearchState extends SearchState {
   }
 
   // Todo : Need to implement
-  List<IssuesModel> toPullRequest() {
-    List<IssuesModel> userList = [];
+  pull.UserPullRequests toPullRequest() {
+    List<pull.Node> pullRequestsList = [];
     if (list != null) {
       list
         ..forEach((element) {
           if (element.type != "PullRequest") {
             return;
           }
-          userList.add(element);
+          pullRequestsList.add(element);
         });
     }
-    return userList;
+    return pull.UserPullRequests(nodes:pullRequestsList );
   }
 
   List<IssuesModel> toIssueList() {

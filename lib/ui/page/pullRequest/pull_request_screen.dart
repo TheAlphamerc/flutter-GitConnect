@@ -3,9 +3,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/model/pul_request.dart';
-import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
-import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:get_it/get_it.dart';
 
@@ -75,20 +73,10 @@ class PullRequestScreen extends StatelessWidget {
               ],
             ).vP16)
         .ripple(() {
-      Underdevelopment.displaySnackbar(context,
-          msg: "Pull request detail feature is under development");
+      Utility.launchTo(
+        model.url,
+      );
     });
-  }
-
-  Widget _noActivity(context) {
-    return GCard(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      color: Theme.of(context).colorScheme.surface,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Text("No recent activity detected at your github account yet.",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2),
-    );
   }
 
   IconData getIcon(

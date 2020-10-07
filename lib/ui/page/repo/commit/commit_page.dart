@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/commit/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
+import 'package:flutter_github_connect/ui/page/repo/commit/commit_screen.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';

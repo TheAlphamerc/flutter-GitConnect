@@ -10,6 +10,7 @@ class IssuesApis {
           hasNextPage
         }
         nodes {
+          url
           title
           createdAt
           state
@@ -52,6 +53,7 @@ class IssuesApis {
             hasNextPage
           }
           nodes {
+            url
             title
             createdAt
             state

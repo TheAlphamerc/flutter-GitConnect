@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/bloc/bloc/repo_response_model.dart';
-import 'package:flutter_github_connect/bloc/commit/commit_page.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/issues/repo_issues_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request.dart';
+import 'package:flutter_github_connect/ui/page/repo/commit/commit_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/forks/repo_forks_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/repo/stargezers/repo_stargezers_page_provider.dart';
 import 'package:flutter_github_connect/ui/page/repo/watchers/repo_watchers_page_provider.dart';
@@ -183,7 +184,9 @@ class RepoDetailScreen extends StatelessWidget {
                     Navigator.push(context, CommitPageProvider.getPageRoute(owner:model.owner.login, name:model.name,));
                    }
                 ),
-                _getUtilRos(context, "Browse Code", icon: null),
+                _getUtilRos(context, "Browse Code", icon: null, onPressed: (){
+                  Utility.launchTo("https://github.com/${model.owner.login}/${model.name}");
+                }),
               ],
             ),
           ),

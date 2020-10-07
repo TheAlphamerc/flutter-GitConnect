@@ -537,7 +537,7 @@ extension TypeOfSearch on GithubSearchType {
   String asString() => {
         GithubSearchType.Issue: "ISSUE",
         GithubSearchType.ORganisation: "USER",
-        GithubSearchType.PullRequest: "USER",
+        GithubSearchType.PullRequest: "ISSUE",
         GithubSearchType.Repository : "REPOSITORY",
         GithubSearchType.People: "USER",
       }[this];

@@ -121,7 +121,9 @@ class SearchPage extends StatelessWidget {
                             _getUtilRos(
                                 context, "Pull Request with \"$searchText\"",
                                 color: GColors.green, onPressed: () {
-                              Underdevelopment.displaySnackbar(context);
+                              // Underdevelopment.displaySnackbar(context);
+                               searchGithub(
+                                  context, searchText, GithubSearchType.PullRequest);
                             }, icon: GIcons.git_pull_request_24),
                             Divider(
                               height: 0,

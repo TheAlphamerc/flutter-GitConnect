@@ -31,7 +31,7 @@ class OnLoad extends NotificationEvent {
       }
       yield LoadingNotificationState();
       final list = await _userRepository.getNotificationsList(pageNo: 1);
-      yield LoadedNotificationState(list: null, pageNo: 2, hasNextPage: list.length == 10);
+      yield LoadedNotificationState(list: list, pageNo: 2, hasNextPage: list.length == 10);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'Load Repository Event', error: _, stackTrace: stackTrace);

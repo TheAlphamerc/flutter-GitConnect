@@ -95,9 +95,11 @@ class Node {
     this.createdAt,
     this.deletions,
     this.files,
-    this.number
+    this.number,
+    this.url,
+    this.type
   });
-
+  final String url;
   final bool closed;
   final String title;
   final _Author author;
@@ -109,12 +111,16 @@ class Node {
   final int deletions;
   final _Files files;
   final int number;
+  /// Type is used for identify type of search pull request
+  final String type;
 
   factory Node.fromRawJson(String str) => Node.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Node.fromJson(Map<String, dynamic> json) => Node(
+        type: json["__typename"] == null ? null : json["__typename"],
+        url: json["url"] == null ? null : json["url"],
         closed: json["closed"] == null ? null : json["closed"],
         title: json["title"] == null ? null : json["title"],
         author:
@@ -136,6 +142,8 @@ class Node {
       );
 
   Map<String, dynamic> toJson() => {
+        "__typename": type == null ? null : type,
+        "url": url == null ? null : url,
         "closed": closed == null ? null : closed,
         "title": title == null ? null : title,
         "author": author == null ? null : author.toJson(),

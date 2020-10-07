@@ -23,6 +23,8 @@ class LoadedNotificationState extends NotificationState {
     currentList.addAll(notificationList);
     return LoadedNotificationState(list: currentList,pageNo: pageNo,hasNextPage: hasNextPage);
   }
+
+  bool get isNotNullEmpty => this.list != null && this.list.isNotEmpty;
 }
 
 class ErrorNotificationState extends NotificationState {
