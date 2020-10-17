@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/bloc/repo_bloc.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/forks/repo_forks_screen.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -99,6 +100,7 @@ class RepoForksPage extends StatelessWidget {
                 );
               return NoDataPage(
                 title: "",
+                image: GImages.octocat12,
                 description: "Nothing to see here!!",
                 icon: GIcons.git_fork_24,
               );

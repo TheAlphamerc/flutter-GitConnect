@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/issues/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -12,11 +13,13 @@ class RepoIssuesPage extends StatefulWidget {
   final String owner;
   final String name;
   const RepoIssuesPage({Key key, this.owner, this.name}) : super(key: key);
-  static getPageRoute({String owner, String name,int count}) => MaterialPageRoute(
+  static getPageRoute({String owner, String name, int count}) => MaterialPageRoute(
         builder: (context) => BlocProvider(
-          create: (BuildContext context) =>
-              IssuesBloc()..add(LoadRepoIssuesEvent(owner: owner, name: name,count:count)),
-          child: RepoIssuesPage(name: name, owner: owner,),
+          create: (BuildContext context) => IssuesBloc()..add(LoadRepoIssuesEvent(owner: owner, name: name, count: count)),
+          child: RepoIssuesPage(
+            name: name,
+            owner: owner,
+          ),
         ),
       );
   @override
@@ -70,16 +73,13 @@ class _RepoIssuesPagState extends State<RepoIssuesPage> {
           }
           if (currentState is LoadedRepoIssuesState) {
             if (currentState.isNotNullEmpty)
-              return IssueListPage(
-                  list: currentState.issues.list,
-                  hideAppBar: true,
-                  controller: _controller);
+              return IssueListPage(list: currentState.issues.list, hideAppBar: true, controller: _controller);
 
             // If issues list is empty then display empty list message
             return NoDataPage(
+              image: GImages.octocat3,
               title: "Empty issues",
-              description:
-                  "No issue created yet,\n Once new issues are created, they will be displayed here",
+              description: "Nothing is here to see!!",
               icon: GIcons.issue_opened_24,
             );
           }

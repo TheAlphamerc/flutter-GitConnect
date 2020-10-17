@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/stargezers/repo_stargezers_screen.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -99,6 +100,7 @@ class RepoStargazersPage extends StatelessWidget {
                 );
               return NoDataPage(
                 title: "",
+                image: GImages.octocat1,
                 description:
                     "Nothing is here to see\nCome back later!!",
                 icon: GIcons.star_fill_24,

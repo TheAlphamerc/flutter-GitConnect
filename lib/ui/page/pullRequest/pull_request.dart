@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/bloc/pullrequest/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/pullRequest/pull_request_screen.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -110,6 +111,7 @@ class PullRequestPage extends StatelessWidget {
                 );
               return NoDataPage(
                 title: "",
+                image: GImages.octocat8,
                 description:
                     "No pull request created yet",
                 icon: GIcons.git_pull_request_24,
@@ -221,6 +223,7 @@ class RepoPullRequestPage extends StatelessWidget {
                 );
               return NoDataPage(
                 title: "",
+                image: GImages.octocat10,
                 description:
                     "No pull request created yet",
                 icon: GIcons.git_pull_request_24,

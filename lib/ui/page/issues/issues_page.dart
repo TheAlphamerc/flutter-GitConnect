@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/issues/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -78,8 +79,8 @@ class _IssuesPageState extends State<IssuesPage> {
             // If issues list is empty then display empty list message
             return NoDataPage(
               title: "Empty issues",
-              description:
-                  "No issue created yet,\n Once new issues are created, they will be displayed here",
+              image: GImages.octocat6,
+              description: "Nothing is here to see!!",
               icon: GIcons.issue_opened_24,
             );
           }

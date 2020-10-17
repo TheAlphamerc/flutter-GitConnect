@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/helper/shared_prefrence_helper.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -127,6 +128,7 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
             );
           return NoDataPage(
               title: "Activities",
+              image: GImages.octocat4,
               description: "No recent activity detected",
               icon: GIcons.github);
         },

@@ -5,6 +5,7 @@ import 'package:flutter_github_connect/bloc/people/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/user/gist/gist_list_screen.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -12,15 +13,11 @@ import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 class GistlistPageProvider extends StatefulWidget {
   final String login;
   const GistlistPageProvider({Key key, this.login}) : super(key: key);
-  static MaterialPageRoute getPageRoute(
-    BuildContext context, {
-    String login,
-    int count
-  }) {
+  static MaterialPageRoute getPageRoute(BuildContext context, {String login, int count}) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<GistBloc>(
-          create: (BuildContext context) => GistBloc()..add(OnGistLoad(login, count:count)),
+          create: (BuildContext context) => GistBloc()..add(OnGistLoad(login, count: count)),
           child: GistlistPageProvider(login: login),
         );
       },
@@ -41,23 +38,18 @@ class _GistlistPageProviderState extends State<GistlistPageProvider> {
 
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      BlocProvider.of<GistBloc>(context)
-          .add(OnGistLoad(widget.login, isLoadNextGist: true));
+      BlocProvider.of<GistBloc>(context).add(OnGistLoad(widget.login, isLoadNextGist: true));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GistlistPage(
-        bloc: BlocProvider.of<GistBloc>(context),
-        login: widget.login,
-        controller: _controller);
+    return GistlistPage(bloc: BlocProvider.of<GistBloc>(context), login: widget.login, controller: _controller);
   }
 }
 
 class GistlistPage extends StatelessWidget {
-  const GistlistPage({Key key, this.bloc, this.login, this.controller})
-      : super(key: key);
+  const GistlistPage({Key key, this.bloc, this.login, this.controller}) : super(key: key);
   final GistBloc bloc;
   final String login;
   final ScrollController controller;
@@ -82,15 +74,11 @@ class GistlistPage extends StatelessWidget {
               );
             }
             if (currentState is LoadedGitState) {
-              if (currentState.isNotNullEmpty)
-                return GistListScreen(
-                    gist: currentState.gist,
-                    login: login,
-                    controller: controller);
+              if (currentState.isNotNullEmpty) return GistListScreen(gist: currentState.gist, login: login, controller: controller);
               return NoDataPage(
                 title: "",
-                description:
-                    "Nothing to see here!!",
+                image: GImages.octocat4,
+                description: "Nothing to see here!!",
                 icon: GIcons.code_24,
               );
             }

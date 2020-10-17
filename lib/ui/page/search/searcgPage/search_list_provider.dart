@@ -8,6 +8,7 @@ import 'package:flutter_github_connect/ui/page/repo/repo_list_screen.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/issue_list_page.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/user_list_page.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
@@ -49,6 +50,7 @@ class _SearchListProviderState extends State<SearchListProvider> {
   }
   Widget _emptyWidget(){
     return NoDataPage(
+                image: GImages.octocat9,
                 title: "No ${widget.type.asSmallString()} Found",
                 description: "Try again with different keyword",
                 icon: GIcons.github_1,

@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/commit/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/commit/commit_screen.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
@@ -13,10 +14,9 @@ class CommitPageProvider extends StatefulWidget {
   final String owner;
 
   const CommitPageProvider({Key key, this.name, this.owner}) : super(key: key);
-  static MaterialPageRoute getPageRoute({String owner, String name,int count}) => MaterialPageRoute(
+  static MaterialPageRoute getPageRoute({String owner, String name, int count}) => MaterialPageRoute(
         builder: (context) => BlocProvider(
-          create: (BuildContext context) =>
-              CommitBloc()..add(LoadCommitsEvent(name, owner, count: count)),
+          create: (BuildContext context) => CommitBloc()..add(LoadCommitsEvent(name, owner, count: count)),
           child: CommitPageProvider(name: name, owner: owner),
         ),
       );
@@ -45,7 +45,11 @@ class _CommitPageProviderState extends State<CommitPageProvider> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(title: GAppBarTitle(title: "Commits",login: widget.name,)),
+      appBar: AppBar(
+          title: GAppBarTitle(
+        title: "Commits",
+        login: widget.name,
+      )),
       body: BlocBuilder<CommitBloc, CommitState>(
         builder: (
           BuildContext context,
@@ -60,23 +64,19 @@ class _CommitPageProviderState extends State<CommitPageProvider> {
               onPressed: () {
                 BlocProvider.of<CommitBloc>(context)
                   ..add(
-                    LoadCommitsEvent(widget.name, widget.owner,
-                        isLoadNextCommit: true),
+                    LoadCommitsEvent(widget.name, widget.owner, isLoadNextCommit: true),
                   );
               },
             );
           }
           if (currentState is LoadedCommitState) {
-            if (currentState.isNotNullEmpty)
-              return CommitScreen(
-                 history: currentState.history,
-                controller: _controller);
+            if (currentState.isNotNullEmpty) return CommitScreen(history: currentState.history, controller: _controller);
 
             // If history list is empty then display empty list message
             return NoDataPage(
+              image: GImages.octocat11,
               title: "Empty commit history",
-              description:
-                  "No issue created yet,\n Once new history are created, they will be displayed here",
+              description: "Nothing is here to see!!",
               icon: GIcons.issue_opened_24,
             );
           }

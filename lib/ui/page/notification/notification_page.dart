@@ -4,6 +4,7 @@ import 'package:flutter_github_connect/bloc/notification/index.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/notification/notification_screen.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
@@ -32,8 +33,8 @@ class NotificationPage extends StatelessWidget {
               );
             return NoDataPage(
               title: "",
-              description:
-                  "Nothing to see here!!",
+              image: GImages.octocat7,
+              description: "Nothing to see here!!",
               icon: GIcons.bell_slash_24,
             );
           }

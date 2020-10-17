@@ -9,6 +9,7 @@ import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/ui/page/common/no_data_page.dart';
 import 'package:flutter_github_connect/ui/page/repo/repo_detail_page.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
@@ -146,7 +147,8 @@ class RepositoryListScreen extends StatelessWidget {
       body: !(list != null && list.isNotEmpty) && isFromUserRepositoryListPage
           ? NoDataPage(
                 title: "No repo Found",
-                description: "$login haven't created any repo yet",
+                image: GImages.octocat11,
+                description:isFromUserRepositoryListPage ? null : "$login haven't created any repo yet",
                 icon: GIcons.github_1,
               )
           : !isFromUserRepositoryListPage

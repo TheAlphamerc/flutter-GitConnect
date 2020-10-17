@@ -6,6 +6,7 @@ import 'package:flutter_github_connect/ui/page/common/under_development.dart';
 import 'package:flutter_github_connect/ui/page/search/searcgPage/search_list_provider.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/ui/theme/images.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key key}) : super(key: key);
@@ -149,6 +150,7 @@ class SearchPage extends StatelessWidget {
                       ));
             },
             child: NoDataPage(
+              // image: GImages.octocat12,
               title: "Find your stuff.",
               description:
                   "Search all of Github for People,\n Repository, Organizations, Issues\n and pull request",
