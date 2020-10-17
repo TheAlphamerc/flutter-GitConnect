@@ -29,6 +29,7 @@ class AppTheme {
       );
   static ThemeData get lightTheme => ThemeData.light().copyWith(
         brightness: Brightness.light,
+        primaryColor: GColors.white,
         // buttonColor: DarkColor.cardColor,
         backgroundColor: GColors.background,
         cardColor: GColors.cardColor,

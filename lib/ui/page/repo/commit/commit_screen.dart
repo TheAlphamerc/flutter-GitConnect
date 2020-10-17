@@ -149,7 +149,8 @@ class CommitScreen extends StatelessWidget {
                             decoration: TextDecoration.underline,
                           ),
                     ).ripple(() {
-                      Utility.launchTo(model.url);
+                      // Utility.launchTo(model.url);
+                      Utility.launchURL(context, model.url);
                       Navigator.pop(context);
                     }),
                   ],

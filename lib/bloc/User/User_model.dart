@@ -361,11 +361,13 @@ class RepositoriesNode extends Equatable {
       this.owner,
       this.languages,
       this.stargazers,
+      this.url,
       this.type});
 
   final String name;
   final String description;
   final Owner owner;
+  final String url;
   final Languages languages;
   final Followers stargazers;
   final String type;
@@ -377,6 +379,7 @@ class RepositoriesNode extends Equatable {
 
   factory RepositoriesNode.fromJson(Map<String, dynamic> json) =>
       RepositoriesNode(
+        url:json["url"] == null ? null : json["url"],
         name: json["name"] == null ? null : json["name"],
         description: json["description"] == null ? null : json["description"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
@@ -392,6 +395,7 @@ class RepositoriesNode extends Equatable {
   Map<String, dynamic> toJson() => {
         "name": name == null ? null : name,
         "owner": owner == null ? null : owner.toJson(),
+        "url": url == null ? null : url,
         "stargazers": stargazers == null ? null : stargazers.toJson(),
       };
   Map<String, dynamic> toDbJson() => {

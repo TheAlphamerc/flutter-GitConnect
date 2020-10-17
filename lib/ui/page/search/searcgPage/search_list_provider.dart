@@ -47,7 +47,13 @@ class _SearchListProviderState extends State<SearchListProvider> {
           .add(SearchForEvent(query: widget.query, type: widget.type));
     }
   }
-
+  Widget _emptyWidget(){
+    return NoDataPage(
+                title: "No ${widget.type.asSmallString()} Found",
+                description: "Try again with different keyword",
+                icon: GIcons.github_1,
+              );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,11 +80,7 @@ class _SearchListProviderState extends State<SearchListProvider> {
 
           if (currentState is LoadedSearchState) {
             if (!(currentState.list != null && currentState.list.isNotEmpty)) {
-              return NoDataPage(
-                title: "No ${widget.type.asSmallString()} Found",
-                description: "Try again with different keyword",
-                icon: GIcons.github_1,
-              );
+              return _emptyWidget();
             }
             switch (currentState.type) {
               case GithubSearchType.Repository:
@@ -100,6 +102,9 @@ class _SearchListProviderState extends State<SearchListProvider> {
                   controller: _controller,
                 );
               case GithubSearchType.PullRequest:
+                if(currentState.toPullRequest().nodes.length ==0){
+                  return _emptyWidget();
+                }
                 return PullRequestScreen(
                  pullRequest: currentState.toPullRequest(),
                   controller: _controller,

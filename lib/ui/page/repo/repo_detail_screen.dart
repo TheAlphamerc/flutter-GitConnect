@@ -185,7 +185,8 @@ class RepoDetailScreen extends StatelessWidget {
                    }
                 ),
                 _getUtilRos(context, "Browse Code", icon: null, onPressed: (){
-                  Utility.launchTo("https://github.com/${model.owner.login}/${model.name}");
+                  Utility.launchURL(context,"https://github.com/${model.owner.login}/${model.name}");
+                  // Utility.launchTo("https://github.com/${model.owner.login}/${model.name}");
                 }),
               ],
             ),

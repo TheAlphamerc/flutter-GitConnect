@@ -42,7 +42,7 @@ class Apis {
       isViewer
       location
       login
-      organizationVerifiedDomainEmails(login: $login)
+      #organizationVerifiedDomainEmails(login: $login)
       pinnedItemsRemaining
       projectsResourcePath
       projectsUrl
@@ -170,10 +170,10 @@ class Apis {
 ''';
 
   static String search =
-      r'''query userInfo($query: String!, $type:SearchType!,$endCursor: String) {
+        r'''query userInfo($query: String!, $type: SearchType!, $endCursor: String) {
     search(query: $query, first: 30, type: $type, after: $endCursor) {
-      pageInfo{
-         endCursor
+      pageInfo {
+        endCursor
       }
       userCount
       nodes {
@@ -185,11 +185,6 @@ class Apis {
           bio
           login
         }
-      #  ... on Organization {
-      #   name
-      #   avatarUrl
-      #   login
-      #  }
         ... on Issue {
           __typename
           url
@@ -197,30 +192,33 @@ class Apis {
           number
           closed
           closedAt
+          createdAt
           repository {
             name
-            owner{
-			      login
+            url
+            owner {
+              login
             }
           }
-           labels(first: 10) {
+          labels(first: 10) {
             __typename
             nodes {
-               color
-               name
-             }
-           }
+              color
+              name
+            }
+          }
           author {
             login
             avatarUrl
             url
           }
           state
-          }
+        }
         ... on Repository {
           __typename
           id
           name
+          url
           description
           stargazers {
             totalCount
@@ -240,7 +238,7 @@ class Apis {
         }
         ... on PullRequest {
           __typename
-         url
+          url
           number
           closed
           title
@@ -251,6 +249,7 @@ class Apis {
           }
           repository {
             nameWithOwner
+            url
           }
           state
           closedAt
@@ -263,7 +262,8 @@ class Apis {
         }
       }
     }
-  }''';
+  }
+''';
 
   static const String userName = r'''query  {
          viewer {

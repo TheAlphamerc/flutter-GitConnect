@@ -10,10 +10,8 @@ import 'package:get_it/get_it.dart';
 class PullRequestScreen extends StatelessWidget {
   final UserPullRequests pullRequest;
   final ScrollController controller;
-  const PullRequestScreen({Key key, this.pullRequest, this.controller})
-      : super(key: key);
-  Widget _pullRequestTile(context, Node model, String username,
-      {bool isCommented = false}) {
+  const PullRequestScreen({Key key, this.pullRequest, this.controller}) : super(key: key);
+  Widget _pullRequestTile(context, Node model, String username, {bool isCommented = false}) {
     final double widthOffset = 58.0;
     return GCard(
             color: Theme.of(context).colorScheme.surface,
@@ -62,8 +60,7 @@ class PullRequestScreen extends StatelessWidget {
                         width: MediaQuery.of(context).size.width - widthOffset,
                         alignment: Alignment.bottomRight,
                         child: Text(
-                          Utility.getPassedTime(model.createdAt.toString()) +
-                              " ago",
+                          Utility.getPassedTime(model.createdAt.toString()) + " ago",
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
                       )
@@ -73,9 +70,7 @@ class PullRequestScreen extends StatelessWidget {
               ],
             ).vP16)
         .ripple(() {
-      Utility.launchTo(
-        model.url,
-      );
+      Utility.launchURL(context, model.url);
     });
   }
 
@@ -129,10 +124,8 @@ class PullRequestScreen extends StatelessWidget {
                     return Column(
                       children: <Widget>[
                         // Text(model.type.toString()),
-                        _pullRequestTile(context, model, snapshot.data ?? "",
-                            isCommented: true),
-                        if (pullRequest.nodes.last != model)
-                          Divider(height: 1, indent: 50),
+                        _pullRequestTile(context, model, snapshot.data ?? "", isCommented: true),
+                        if (pullRequest.nodes.last != model) Divider(height: 1, indent: 50),
                       ],
                     );
                   },

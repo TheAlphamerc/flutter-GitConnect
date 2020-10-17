@@ -26,24 +26,13 @@ class UserAvatar extends StatelessWidget {
         children: <Widget>[
           imagePath == null
               ? Container(
-                      height: height,
-                      width: height,
-                      alignment: Alignment.center,
-                      child: Icon(GIcons.github, size:height  < 25 ? 13 : height - 10),
-                    )
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(height / 4),
-                  child: customNetworkImage(
-                    imagePath,
-                      height:height,
-                      placeholder: Container(
-                      height: height,
-                      width: height,
-                      alignment: Alignment.center,
-                      child: Icon(GIcons.github, size:height  < 25 ? 13 : height - 10),
-                    ),
-                  ),
-                ),
+                  height: height,
+                  width: height,
+                  alignment: Alignment.center,
+                  child:
+                      Icon(GIcons.github, size: height < 25 ? 13 : height - 10),
+                )
+              : Avatar(imagePath: imagePath,height: height,),
           SizedBox(width: name == null && subtitle == null ? 0 : height / 4),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +45,9 @@ class UserAvatar extends StatelessWidget {
                       style: titleStyle ?? context.textTheme.bodyText1),
               subtitle == null
                   ? SizedBox.shrink()
-                  : name == null ? SizedBox.shrink() : SizedBox(height: 10),
+                  : name == null
+                      ? SizedBox.shrink()
+                      : SizedBox(height: height > 30 ? 10 : 0),
               subtitle == null
                   ? SizedBox.shrink()
                   : Text(subtitle,
@@ -64,6 +55,28 @@ class UserAvatar extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class Avatar extends StatelessWidget {
+  const Avatar({Key key, this.imagePath, this.height}) : super(key: key);
+  final String imagePath;
+  final double height;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(height / 4.8),
+      child: customNetworkImage(
+        imagePath,
+        height: height,
+        placeholder: Container(
+          height: height,
+          width: height,
+          alignment: Alignment.center,
+          child: Icon(GIcons.github, size: height < 25 ? 13 : height - 10),
+        ),
       ),
     );
   }

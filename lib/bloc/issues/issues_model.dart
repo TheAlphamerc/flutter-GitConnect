@@ -1,3 +1,4 @@
+import 'package:flutter_github_connect/bloc/User/User_model.dart';
 import 'package:flutter_github_connect/bloc/notification/notification_model.dart';
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
 import 'package:flutter_github_connect/model/page_info_model.dart';
@@ -96,7 +97,7 @@ class IssuesModel {
   bool closed;
   String authorAssociation;
   Author author;
-  Repository repository;
+  RepositoriesNode repository;
   Labels labels;
   String closedAt;
   String type;
@@ -128,7 +129,7 @@ class IssuesModel {
     author =
         json['author'] != null ? new Author.fromJson(json['author']) : null;
     repository = json['repository'] != null
-        ? new Repository.fromJson(json['repository'])
+        ? new RepositoriesNode.fromJson(json['repository'])
         : null;
     labels =
         json['labels'] != null ? new Labels.fromJson(json['labels']) : null;
@@ -162,6 +163,7 @@ class Author {
   String login;
   String avatarUrl;
   String url;
+  String name;
 
   Author({this.login, this.avatarUrl, this.url});
 
@@ -169,6 +171,7 @@ class Author {
     login = json['login'];
     avatarUrl = json['avatarUrl'];
     url = json['url'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -176,6 +179,15 @@ class Author {
     data['login'] = this.login;
     data['avatarUrl'] = this.avatarUrl;
     data['url'] = this.url;
+    data['name'] = this.name;
     return data;
+  }
+   UserModel toUserModel() {
+    return UserModel(
+      login: this.login,
+      avatarUrl: this.avatarUrl,
+      name: this.name,
+      url: this.url
+    );
   }
 }
