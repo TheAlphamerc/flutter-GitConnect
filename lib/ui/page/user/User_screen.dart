@@ -318,7 +318,7 @@ class UserScreenBody extends StatelessWidget {
                   _iconWithText(context, GIcons.people_24, model.login),
                   _iconWithText(context, GIcons.link_24, model.websiteUrl)
                       .ripple(() {
-                    Utility.launchTo(model.websiteUrl);
+                    Utility.launchURL(context, model.websiteUrl);
                   }),
                   _iconWithText(context, GIcons.gift_24,
                       Utility.toDMYformate(model.createdAt)),

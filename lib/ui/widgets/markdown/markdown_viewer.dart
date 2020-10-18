@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/theme.dart';
 import 'package:flutter_github_connect/ui/widgets/cached_image.dart';
@@ -153,7 +154,8 @@ class MarkdownViewer extends StatelessWidget {
           imageBuilder: (uri, text, val) => _getImageBuilder(uri),
           data: _getMarkDownData(markdownData),
           onTapLink: (String source) {
-            launch(source, statusBarBrightness: Theme.of(context).brightness,enableJavaScript: true);
+            // launch(source, statusBarBrightness: Theme.of(context).brightness,enableJavaScript: true);
+            Utility.launchURL(context,source);
           },
         ),
       ),
