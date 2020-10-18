@@ -93,7 +93,7 @@ class AboutUsPage extends StatelessWidget {
         children: <Widget>[
           _getUtilRos(context, "App", icon: GIcons.link_external_24,
               onPressed: () {
-            launch("");
+            launch("www.play.google.com/store/apps/details?id=com.thealphamerc.flutter_github_connect");
           }),
           Divider(height: 0),
           _getUtilRos(context, "Project", icon: GIcons.link_external_24,
