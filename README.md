@@ -2,10 +2,12 @@
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/TheAlphamerc/flutter-GitConnect) ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/Thealphamerc/flutter-GitConnect) ![GitHub last commit](https://img.shields.io/github/last-commit/Thealphamerc/flutter-GitConnect)  ![GitHub issues](https://img.shields.io/github/issues-raw/Thealphamerc/flutter-GitConnect) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/Thealphamerc/flutter-GitConnect) 
 
 Github mobile app built in flutter framwork.
-
+App preview:- [Youtube](https://youtu.be/28Dcqr89N1g)
 
 ## Download App
 Stable release build will be available soon..
+
+
 
 
 ## Dependencies

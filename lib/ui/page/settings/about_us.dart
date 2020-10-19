@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
+import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
 import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
@@ -93,7 +94,7 @@ class AboutUsPage extends StatelessWidget {
         children: <Widget>[
           _getUtilRos(context, "App", icon: GIcons.link_external_24,
               onPressed: () {
-            launch("www.play.google.com/store/apps/details?id=com.thealphamerc.flutter_github_connect");
+            launch(Config.appLink);
           }),
           Divider(height: 0),
           _getUtilRos(context, "Project", icon: GIcons.link_external_24,
