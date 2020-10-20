@@ -40,7 +40,6 @@ dependencies:
   flutter_bloc: ^6.0.0
   build_context: ^2.0.4
   url_launcher: ^5.4.10
-   : ^1.6.11
   flutter_markdown: ^0.4.3
   webview_flutter: ^0.3.22+1
   flutter_custom_tabs: ^0.6.0
