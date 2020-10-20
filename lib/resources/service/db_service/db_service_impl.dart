@@ -45,7 +45,7 @@ class DbServiceImpl implements DbService {
     return res;
     }else{
       var res = await _database.insert("favRepo", repo.toDbJson());
-      // print("Repo ${repo.name} added to db");
+      print("Repo ${repo.name} added to db");
       _list.add(repo);
       return res; 
     }

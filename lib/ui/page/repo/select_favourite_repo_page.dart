@@ -14,14 +14,7 @@ import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:get_it/get_it.dart';
 
 class SelectFavouriteRepoPage extends StatelessWidget {
-  const SelectFavouriteRepoPage(
-      {Key key,
-      this.list,
-      this.userBloc,
-      this.peopleBloc,
-      this.controller,
-      this.login,
-      this.favBloc})
+  const SelectFavouriteRepoPage({Key key, this.list, this.userBloc, this.peopleBloc, this.controller, this.login, this.favBloc})
       : super(key: key);
   final List<RepositoriesNode> list;
   final UserBloc userBloc;
@@ -29,9 +22,8 @@ class SelectFavouriteRepoPage extends StatelessWidget {
   final ScrollController controller;
   final String login;
   final FavouriteBloc favBloc;
-  
-  static MaterialPageRoute getPageRoute(BuildContext context,
-      {ScrollController controller, String login}) {
+
+  static MaterialPageRoute getPageRoute(BuildContext context, {ScrollController controller, String login}) {
     return MaterialPageRoute(
       builder: (_) => SelectFavouriteRepoPage(
           controller: controller,
@@ -60,14 +52,14 @@ class SelectFavouriteRepoPage extends StatelessWidget {
                 subTitleStyle: Theme.of(context).textTheme.bodyText1,
               ),
               Spacer(),
-              Icon(isMarkedAsFav ? GIcons.x_circle_24 : GIcons.plus_circle_24, color:isMarkedAsFav ? GColors.red : GColors.blue)
+              Icon(isMarkedAsFav ? GIcons.x_circle_24 : GIcons.plus_circle_24, color: isMarkedAsFav ? GColors.red : GColors.blue)
             ],
           ),
         ],
       ),
     ).ripple(() {
       favBloc..add(AddRepotoFavouriteEvent(repo));
-      userBloc..add(OnselectFavRepoRefreshEvent());
+      Future.delayed(Duration(milliseconds: 50)).then((value) => userBloc..add(OnselectFavRepoRefreshEvent()));
     });
   }
 
@@ -78,8 +70,7 @@ class SelectFavouriteRepoPage extends StatelessWidget {
       itemCount: list.length + 1,
       separatorBuilder: (BuildContext context, int index) => Divider(height: 0),
       itemBuilder: (BuildContext context, int index) {
-        if ((index >= list.length) &&
-            (peopleBloc != null || userBloc != null)) {
+        if ((index >= list.length) && (peopleBloc != null || userBloc != null)) {
           print("Fetching user's repositories");
           return displayLoader ? GCLoader() : SizedBox.shrink();
         } else if (index >= list.length) {
@@ -114,8 +105,7 @@ class SelectFavouriteRepoPage extends StatelessWidget {
           bool displayLoader = false;
           if (state is LoadingNextRepositoriesState) displayLoader = true;
           if (state is LoadedUserState) {
-            return _repoList(state.user.repositories.nodes,
-                displayLoader: displayLoader);
+            return _repoList(state.user.repositories.nodes, displayLoader: displayLoader);
           } else {
             return GLoader();
           }

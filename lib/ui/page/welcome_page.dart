@@ -13,6 +13,13 @@ import 'package:get_it/get_it.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key key}) : super(key: key);
+  static MaterialPageRoute getPageRoute(BuildContext context, {String login, int count}) {
+    return MaterialPageRoute(
+      builder: (_) {
+        return WelcomePage();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +33,13 @@ class WelcomePage extends StatelessWidget {
           child: Container(
             height: 320,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(10)),
             alignment: Alignment.center,
             child: ListView(
               physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
                 SizedBox(height: 8),
-                Icon(GIcons.github,
-                    size: 100, color: theme.colorScheme.onPrimary),
+                Icon(GIcons.github, size: 100, color: theme.colorScheme.onPrimary),
                 SizedBox(height: 30),
                 Text(
                   "Signin to Github\nto continue with GitConnect",
@@ -54,28 +58,21 @@ class WelcomePage extends StatelessWidget {
                     if (accessToken == null) {
                       await Navigator.push(context, AuthPage.route());
                     } else {
-                      print(
-                          "***************** Auto Login ***********************");
+                      print("***************** Auto Login ***********************");
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) {
                             return MultiBlocProvider(
                               providers: [
                                 BlocProvider<NavigationBloc>(
-                                  create: (BuildContext context) =>
-                                      NavigationBloc(),
+                                  create: (BuildContext context) => NavigationBloc(),
                                 ),
                                 BlocProvider<UserBloc>(
-                                  create: (BuildContext context) =>
-                                      UserBloc()..add(OnLoad()),
+                                  create: (BuildContext context) => UserBloc()..add(OnLoad()),
                                 ),
-                                BlocProvider<SearchBloc>(
-                                    create: (BuildContext context) =>
-                                        SearchBloc()),
+                                BlocProvider<SearchBloc>(create: (BuildContext context) => SearchBloc()),
                                 BlocProvider<notif.NotificationBloc>(
-                                  create: (BuildContext context) =>
-                                      notif.NotificationBloc()
-                                        ..add(notif.OnLoad()),
+                                  create: (BuildContext context) => notif.NotificationBloc()..add(notif.OnLoad()),
                                 ),
                               ],
                               child: DashBoardPage(),

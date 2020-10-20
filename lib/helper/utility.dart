@@ -57,7 +57,7 @@ class Utility {
   }
 
   static void launchURL(BuildContext context, String url) async {
-    if(url == null){
+    if (url == null) {
       return;
     }
     try {
@@ -68,7 +68,6 @@ class Utility {
           enableDefaultShare: true,
           enableUrlBarHiding: true,
           showPageTitle: true,
-          animation: new custom.CustomTabsAnimation.slideIn(),
           extraCustomTabs: <String>[
             // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
             'org.mozilla.firefox',

@@ -22,7 +22,8 @@ class LoadingEventState extends LoadedUserState {
 class LoadedUserState extends UserState {
   final UserModel user;
   final List<EventModel> eventList;
-  LoadedUserState(this.user, this.eventList);
+  final bool eventLoading;
+  LoadedUserState(this.user, this.eventList,{this.eventLoading = false});
 
   factory LoadedUserState.getNextRepositories(
       {UserModel userModel, UserModel currentUserModel,List<EventModel> eventList}) {
