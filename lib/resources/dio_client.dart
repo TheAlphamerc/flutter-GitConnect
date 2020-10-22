@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_github_connect/exceptions/exceptions.dart';
+import '../exceptions/exceptions.dart';
 
 class DioClient {
   final Dio _dio;

@@ -1,5 +1,5 @@
-import 'package:flutter_github_connect/bloc/people/people_model.dart';
-import 'package:flutter_github_connect/resources/grapgqlApi/graphql_query_api.dart';
+import '../bloc/people/people_model.dart';
+import 'grapgqlApi/graphql_query_api.dart';
 import 'package:graphql/client.dart';
 
 GraphQLClient _client(token) {

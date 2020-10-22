@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_github_connect/bloc/User/User_model.dart';
-import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+import 'User_model.dart';
+import 'model/event_model.dart';
 
 import 'package:flutter_github_connect/model/pul_request.dart';
 
