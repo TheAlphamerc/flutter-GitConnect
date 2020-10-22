@@ -24,10 +24,11 @@ class GBottomNavigationBar extends StatelessWidget {
           unselectedLabelStyle: TextStyle(
             color: theme.iconTheme.color,
             fontWeight: FontWeight.normal,
-            fontSize:14,
+            fontSize: 14,
           ),
           unselectedItemColor: theme.iconTheme.color,
           onTap: (index) {
+            // ignore: close_sinks
             final NavigationBloc bloc =
                 BlocProvider.of<NavigationBloc>(context);
             bloc.add(IndexSelected(index));
@@ -38,11 +39,20 @@ class GBottomNavigationBar extends StatelessWidget {
           currentIndex: pageindex,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(GIcons.home_24), title: Text("Home")),
+                // ignore: deprecated_member_use
+                icon: Icon(GIcons.home_24),
+                // ignore: deprecated_member_use
+                title: Text("Home")),
             BottomNavigationBarItem(
-                icon: Icon(GIcons.bell_24), title: Text("Notification")),
+                // ignore: deprecated_member_use
+                icon: Icon(GIcons.bell_24),
+                // ignore: deprecated_member_use
+                title: Text("Notification")),
             BottomNavigationBarItem(
-                icon: Icon(Icons.search), title: Text("Search")),
+                // ignore: deprecated_member_use
+                icon: Icon(Icons.search),
+                // ignore: deprecated_member_use
+                title: Text("Search")),
           ],
         );
       },

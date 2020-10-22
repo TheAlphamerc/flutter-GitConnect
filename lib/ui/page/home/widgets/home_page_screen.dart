@@ -80,6 +80,7 @@ class HomePageScreenBody extends StatelessWidget {
     ).ripple(onPressed);
   }
 
+  // ignore: unused_element
   Widget _pinnedItems(BuildContext context) {
     final list = model?.itemShowcase?.items?.nodes;
     return model.itemShowcase == null
@@ -126,7 +127,8 @@ class HomePageScreenBody extends StatelessWidget {
         children: <Widget>[
           _getUtilRos(context, GIcons.issue_opened_24, "Issues",
               color: GColors.green, onPressed: () {
-            Navigator.push(context, IssuesPage.route(model.login,count:model.issues.totalCount));
+            Navigator.push(context,
+                IssuesPage.route(model.login, count: model.issues.totalCount));
           }),
           Divider(height: 0, indent: 50),
           _getUtilRos(context, GIcons.git_pull_request_16, "Pull Request",
@@ -142,11 +144,11 @@ class HomePageScreenBody extends StatelessWidget {
             Navigator.push(
               context,
               RepositoryListScreen.getPageRoute(
-                list: [],
-                controller: controller,
-                userBloc: bloc,
-                peopleBloc: null,
-                login: model.login),
+                  list: [],
+                  controller: controller,
+                  userBloc: bloc,
+                  peopleBloc: null,
+                  login: model.login),
             );
           }),
           Divider(height: 0, indent: 50),
@@ -181,8 +183,11 @@ class HomePageScreenBody extends StatelessWidget {
               SizedBox(height: 16),
               _myWorkSection(context),
               SizedBox(height: 30),
-             
-              FavouriteReposWidget(controller: controller, login: model.login,),
+
+              FavouriteReposWidget(
+                controller: controller,
+                login: model.login,
+              ),
               SizedBox(height: 30),
               Text(
                 "Recent",

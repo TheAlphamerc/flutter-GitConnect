@@ -33,6 +33,7 @@ releaseClient() {
 
 Future<QueryResult> getRepositoryDetail({String owner, String name}) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.repositoryDetail,
       variables: <String, dynamic>{
         'owner': owner,
@@ -45,6 +46,7 @@ Future<QueryResult> getRepositoryDetail({String owner, String name}) async {
 Future<QueryResult> getNextRepositoriesList(
     {String login, String endCursor}) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.repository,
       variables: <String, dynamic>{
         'login': login,
@@ -58,6 +60,7 @@ Future<QueryResult> getUser(
   String login,
 ) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.user,
       variables: <String, dynamic>{
         'login': login,
@@ -69,6 +72,7 @@ Future<QueryResult> getUser(
 Future<QueryResult> searchQueryAsync(
     String query, String type, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.search,
       variables: <String, dynamic>{
         'query': query,
@@ -81,71 +85,117 @@ Future<QueryResult> searchQueryAsync(
 
 Future<QueryResult> getIssues(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.issues,
       variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoIssues(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoIssues(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.repoIssues,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoWatchers(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoWatchers(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repoWatchers ,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      // ignore: deprecated_member_use
+      document: Apis.repoWatchers,
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoStargazres(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoStargazres(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.stargazers ,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      // ignore: deprecated_member_use
+      document: Apis.stargazers,
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoForks(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoForks(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.forks ,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      // ignore: deprecated_member_use
+      document: Apis.forks,
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
 Future<QueryResult> getAuthUserName() async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.userName, fetchPolicy: FetchPolicy.cacheAndNetwork);
+      // ignore: deprecated_member_use
+      document: Apis.userName,
+      fetchPolicy: FetchPolicy.cacheAndNetwork);
   return await _innerClient.query(_options);
 }
 
 Future<QueryResult> getUserPullRequest(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.pullRequests,
       variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getRepoPullRequest(String owner,String name, String endCursor) async {
+Future<QueryResult> getRepoPullRequest(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.repoPullRequests,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoCommits(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoCommits(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.commits,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
 Future<QueryResult> getUserGistList(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: Apis.gist,
       variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
@@ -155,11 +205,9 @@ Future<QueryResult> getUserGistList(String login, String endCursor) async {
 Future<QueryResult> getFollowerList(String login,
     {PeopleType type, String endCursor}) async {
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: type == PeopleType.Follower ? Apis.followers : Apis.following,
-      variables: <String, dynamic>{
-        'login': login,
-        "endCursor": endCursor
-      },
+      variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
@@ -179,13 +227,14 @@ Future<QueryResult> getFollowerList(String login,
 Future<QueryResult> getTrendUser(String location, {String cursor}) async {
   var variables = cursor == null
       ? <String, dynamic>{
-          'location': "location:${location} sort:followers",
+          'location': "location:$location sort:followers",
         }
       : <String, dynamic>{
-          'location': "location:${location} sort:followers",
+          'location': "location:$location sort:followers",
           'after': cursor,
         };
   final QueryOptions _options = QueryOptions(
+      // ignore: deprecated_member_use
       document: cursor == null ? readTrendUser : readTrendUserByCursor,
       variables: variables,
       fetchPolicy: FetchPolicy.noCache);

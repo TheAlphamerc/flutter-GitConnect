@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_github_connect/bloc/User/index.dart';
-import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
+//import 'package:flutter_github_connect/bloc/User/model/gist_model.dart';
 import 'package:flutter_github_connect/model/page_info_model.dart';
 
 class CommitsResponseModel {
@@ -165,17 +165,16 @@ class Edge {
 }
 
 class Node {
-  Node({
-    this.messageHeadline,
-    this.oid,
-    this.message,
-    this.additions,
-    this.deletions,
-    this.messageBody,
-    this.committedDate,
-    this.author,
-    this.url
-  });
+  Node(
+      {this.messageHeadline,
+      this.oid,
+      this.message,
+      this.additions,
+      this.deletions,
+      this.messageBody,
+      this.committedDate,
+      this.author,
+      this.url});
 
   final String messageHeadline;
   final String oid;

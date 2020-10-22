@@ -33,6 +33,7 @@ class _User {
   final String login;
   final UserPullRequests pullRequests;
 
+  // ignore: unused_element
   factory _User.fromRawJson(String str) => _User.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
@@ -51,11 +52,7 @@ class _User {
 }
 
 class UserPullRequests {
-  UserPullRequests({
-    this.nodes,
-    this.totalCount,
-    this.pageInfo
-  });
+  UserPullRequests({this.nodes, this.totalCount, this.pageInfo});
 
   final List<Node> nodes;
   final int totalCount;
@@ -67,38 +64,36 @@ class UserPullRequests {
 
   factory UserPullRequests.fromJson(Map<String, dynamic> json) =>
       UserPullRequests(
-        nodes: json["nodes"] == null
-            ? null
-            : List<Node>.from(json["nodes"].map((x) => Node.fromJson(x))),
-        totalCount: json["totalCount"] == null ? null : json["totalCount"],
-        pageInfo:PageInfo.fromJson(json["pageInfo"])
-      );
+          nodes: json["nodes"] == null
+              ? null
+              : List<Node>.from(json["nodes"].map((x) => Node.fromJson(x))),
+          totalCount: json["totalCount"] == null ? null : json["totalCount"],
+          pageInfo: PageInfo.fromJson(json["pageInfo"]));
 
   Map<String, dynamic> toJson() => {
         "nodes": nodes == null
             ? null
             : List<dynamic>.from(nodes.map((x) => x.toJson())),
         "totalCount": totalCount == null ? null : totalCount,
-        "pageInfo":pageInfo == null ? null : pageInfo.toJson()
+        "pageInfo": pageInfo == null ? null : pageInfo.toJson()
       };
 }
 
 class Node {
-  Node({
-    this.closed,
-    this.title,
-    this.author,
-    this.repository,
-    this.viewerDidAuthor,
-    this.state,
-    this.closedAt,
-    this.createdAt,
-    this.deletions,
-    this.files,
-    this.number,
-    this.url,
-    this.type
-  });
+  Node(
+      {this.closed,
+      this.title,
+      this.author,
+      this.repository,
+      this.viewerDidAuthor,
+      this.state,
+      this.closedAt,
+      this.createdAt,
+      this.deletions,
+      this.files,
+      this.number,
+      this.url,
+      this.type});
   final String url;
   final bool closed;
   final String title;
@@ -111,6 +106,7 @@ class Node {
   final int deletions;
   final _Files files;
   final int number;
+
   /// Type is used for identify type of search pull request
   final String type;
 
@@ -119,27 +115,24 @@ class Node {
   String toRawJson() => json.encode(toJson());
 
   factory Node.fromJson(Map<String, dynamic> json) => Node(
-        type: json["__typename"] == null ? null : json["__typename"],
-        url: json["url"] == null ? null : json["url"],
-        closed: json["closed"] == null ? null : json["closed"],
-        title: json["title"] == null ? null : json["title"],
-        author:
-            json["author"] == null ? null : _Author.fromJson(json["author"]),
-        repository: json["repository"] == null
-            ? null
-            : _Repository.fromJson(json["repository"]),
-        viewerDidAuthor:
-            json["viewerDidAuthor"] == null ? null : json["viewerDidAuthor"],
-        state: json["state"] == null ? null : stateValues.map[json["state"]],
-        closedAt:
-            json["closedAt"] == null ? null : DateTime.parse(json["closedAt"]),
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        deletions: json["deletions"] == null ? null : json["deletions"],
-        files: json["files"] == null ? null : _Files.fromJson(json["files"]),
-        number: json["number"] == null ? null : json["number"]
-      );
+      type: json["__typename"] == null ? null : json["__typename"],
+      url: json["url"] == null ? null : json["url"],
+      closed: json["closed"] == null ? null : json["closed"],
+      title: json["title"] == null ? null : json["title"],
+      author: json["author"] == null ? null : _Author.fromJson(json["author"]),
+      repository: json["repository"] == null
+          ? null
+          : _Repository.fromJson(json["repository"]),
+      viewerDidAuthor:
+          json["viewerDidAuthor"] == null ? null : json["viewerDidAuthor"],
+      state: json["state"] == null ? null : stateValues.map[json["state"]],
+      closedAt:
+          json["closedAt"] == null ? null : DateTime.parse(json["closedAt"]),
+      createdAt:
+          json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+      deletions: json["deletions"] == null ? null : json["deletions"],
+      files: json["files"] == null ? null : _Files.fromJson(json["files"]),
+      number: json["number"] == null ? null : json["number"]);
 
   Map<String, dynamic> toJson() => {
         "__typename": type == null ? null : type,
@@ -156,13 +149,17 @@ class Node {
         "files": files == null ? null : files.toJson(),
         "number": number == null ? null : number,
       };
-  String getPullRequestState(){
+  String getPullRequestState() {
     switch (state) {
-      case PullRequestState.OPEN: return "open";
-      case PullRequestState.CLOSED: return "closed";
-      case PullRequestState.MERGED: return "merged";
-        
-      default: return "Unknown";
+      case PullRequestState.OPEN:
+        return "open";
+      case PullRequestState.CLOSED:
+        return "closed";
+      case PullRequestState.MERGED:
+        return "merged";
+
+      default:
+        return "Unknown";
     }
   }
 }
@@ -178,6 +175,7 @@ class _Author {
   final String avatarUrl;
   final String url;
 
+  // ignore: unused_element
   factory _Author.fromRawJson(String str) => _Author.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
@@ -202,6 +200,7 @@ class _Files {
 
   final int totalCount;
 
+  // ignore: unused_element
   factory _Files.fromRawJson(String str) => _Files.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
@@ -222,6 +221,7 @@ class _Repository {
 
   final String nameWithOwner;
 
+  // ignore: unused_element
   factory _Repository.fromRawJson(String str) =>
       _Repository.fromJson(json.decode(str));
 

@@ -25,7 +25,8 @@ class RepoDetailScreen extends StatelessWidget {
     this.model,
   }) : super(key: key);
   final RepositoryModel model;
-  Widget _iconWithText(context, IconData icon, String text, {Color iconColor, Function onPressed}) {
+  Widget _iconWithText(context, IconData icon, String text,
+      {Color iconColor, Function onPressed}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -40,20 +41,19 @@ class RepoDetailScreen extends StatelessWidget {
           )
         ],
       ),
-    ).ripple((){
-      if(onPressed != null){
+    ).ripple(() {
+      if (onPressed != null) {
         onPressed();
-      }
-      else{
+      } else {
         Underdevelopment.displaySnackbar(context,
-          msg: "Detail feature is under development");
+            msg: "Detail feature is under development");
       }
-      
     });
   }
 
   Widget _getUtilRos(context, String text,
       {Function onPressed,
+      // ignore: unused_element
       Color color,
       IconData icon = GIcons.chevron_right_24,
       String value = ""}) {
@@ -77,8 +77,11 @@ class RepoDetailScreen extends StatelessWidget {
           ),
         if (icon == null) SizedBox(width: 16, height: 50)
       ],
-    ).ripple(onPressed ?? (){Underdevelopment.displaySnackbar(context,
-          msg: "Detail feature is under development");});
+    ).ripple(onPressed ??
+        () {
+          Underdevelopment.displaySnackbar(context,
+              msg: "Detail feature is under development");
+        });
   }
 
   @override
@@ -121,23 +124,26 @@ class RepoDetailScreen extends StatelessWidget {
                 SizedBox(height: 8),
                 Row(
                   children: <Widget>[
-                    _iconWithText(
-                      context,
-                      GIcons.star_fill_24,
-                      "${model.stargazers.totalCount} Stars",
-                      onPressed:(){
-                        Navigator.push(context, RepoStargezersPageProvider.getPageRoute(owner:model.owner.login, name:model.name, count: model.stargazers.totalCount));
-                       }
-                    ),
+                    _iconWithText(context, GIcons.star_fill_24,
+                        "${model.stargazers.totalCount} Stars", onPressed: () {
+                      Navigator.push(
+                          context,
+                          RepoStargezersPageProvider.getPageRoute(
+                              owner: model.owner.login,
+                              name: model.name,
+                              count: model.stargazers.totalCount));
+                    }),
                     SizedBox(width: 20),
                     _iconWithText(
-                      context,
-                      GIcons.git_fork_24,
-                      "${model.forkCount} Forks",
-                      onPressed:(){
-                        Navigator.push(context, RepoForksPageProvider.getPageRoute(owner:model.owner.login, name:model.name, count:model.forkCount));
-                       }
-                    ),
+                        context, GIcons.git_fork_24, "${model.forkCount} Forks",
+                        onPressed: () {
+                      Navigator.push(
+                          context,
+                          RepoForksPageProvider.getPageRoute(
+                              owner: model.owner.login,
+                              name: model.name,
+                              count: model.forkCount));
+                    }),
                   ],
                 ),
                 SizedBox(height: 8),
@@ -150,42 +156,49 @@ class RepoDetailScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Divider(height: 1),
-                _getUtilRos(
-                  context,
-                  "Issues",
-                  value: "${model.issues.totalCount}",
-                  onPressed:(){
-                    Navigator.push(context, RepoIssuesPage.getPageRoute(owner:model.owner.login, name:model.name, count:model.issues.totalCount));
-                  }
-                ),
-                _getUtilRos(
-                  context,
-                  "Watchers",
-                  value: "${model.watchers.totalCount}",
-                  onPressed:(){
-                    Navigator.push(context, RepoWatchersPageProvider.getPageRoute(context, owner:model.owner.login, name:model.name, count:model.watchers.totalCount));
-                  }
-                ),
-                _getUtilRos(
-                  context,
-                  "Pull Request",
-                  value: "${model.pullRequests.totalCount}",
-                  onPressed:(){
-                    Navigator.push(context, RepoPullRequestPageProvider.getPageRoute(context, owner:model.owner.login, name:model.name, count:model.pullRequests.totalCount));
-                  }
-                ),
+                _getUtilRos(context, "Issues",
+                    value: "${model.issues.totalCount}", onPressed: () {
+                  Navigator.push(
+                      context,
+                      RepoIssuesPage.getPageRoute(
+                          owner: model.owner.login,
+                          name: model.name,
+                          count: model.issues.totalCount));
+                }),
+                _getUtilRos(context, "Watchers",
+                    value: "${model.watchers.totalCount}", onPressed: () {
+                  Navigator.push(
+                      context,
+                      RepoWatchersPageProvider.getPageRoute(context,
+                          owner: model.owner.login,
+                          name: model.name,
+                          count: model.watchers.totalCount));
+                }),
+                _getUtilRos(context, "Pull Request",
+                    value: "${model.pullRequests.totalCount}", onPressed: () {
+                  Navigator.push(
+                      context,
+                      RepoPullRequestPageProvider.getPageRoute(context,
+                          owner: model.owner.login,
+                          name: model.name,
+                          count: model.pullRequests.totalCount));
+                }),
                 _getUtilRos(context, "Language",
                     value: "${model?.primaryLanguage?.name ?? "N/A"}",
                     icon: null),
                 _getUtilRos(context, "Default Branch",
                     value: model.defaultBranchRef?.name ?? "N/A", icon: null),
-                _getUtilRos(context, "Commits", icon: null,
-                  onPressed:(){
-                    Navigator.push(context, CommitPageProvider.getPageRoute(owner:model.owner.login, name:model.name,));
-                   }
-                ),
-                _getUtilRos(context, "Browse Code", icon: null, onPressed: (){
-                  Utility.launchURL(context,"https://github.com/${model.owner.login}/${model.name}");
+                _getUtilRos(context, "Commits", icon: null, onPressed: () {
+                  Navigator.push(
+                      context,
+                      CommitPageProvider.getPageRoute(
+                        owner: model.owner.login,
+                        name: model.name,
+                      ));
+                }),
+                _getUtilRos(context, "Browse Code", icon: null, onPressed: () {
+                  Utility.launchURL(context,
+                      "https://github.com/${model.owner.login}/${model.name}");
                   // Utility.launchTo("https://github.com/${model.owner.login}/${model.name}");
                 }),
               ],
@@ -197,8 +210,10 @@ class RepoDetailScreen extends StatelessWidget {
               if (state is LoadReadmeState)
                 return GCard(
                   radius: 0,
-                  color: isDarkMode ? null : Theme.of(context).colorScheme.surface,
-                  padding: EdgeInsets.symmetric(horizontal: 4) + EdgeInsets.only(top:8),
+                  color:
+                      isDarkMode ? null : Theme.of(context).colorScheme.surface,
+                  padding: EdgeInsets.symmetric(horizontal: 4) +
+                      EdgeInsets.only(top: 8),
                   child: Center(
                     child: MarkdownViewer(
                       markdownData: state.readme,
@@ -212,10 +227,11 @@ class RepoDetailScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 30,
                 child: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child:GLoader(stroke: 1,)
-                ),
+                    height: 20,
+                    width: 20,
+                    child: GLoader(
+                      stroke: 1,
+                    )),
               );
             },
           ),

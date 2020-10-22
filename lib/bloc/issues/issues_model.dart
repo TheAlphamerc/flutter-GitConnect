@@ -1,5 +1,5 @@
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
-import 'package:flutter_github_connect/bloc/notification/notification_model.dart';
+
 import 'package:flutter_github_connect/bloc/search/model/search_userModel.dart';
 import 'package:flutter_github_connect/model/page_info_model.dart';
 
@@ -63,7 +63,7 @@ class Issues {
   int totalCount;
   List<IssuesModel> list;
   PageInfo pageInfo;
-  Issues({this.totalCount, this.list,this.pageInfo});
+  Issues({this.totalCount, this.list, this.pageInfo});
 
   Issues.fromJson(Map<String, dynamic> json) {
     totalCount = json['totalCount'];
@@ -117,7 +117,7 @@ class IssuesModel {
       this.type});
 
   IssuesModel.fromJson(Map<String, dynamic> json) {
-    url= json['url'];
+    url = json['url'];
     title = json['title'];
     createdAt = json['createdAt'];
     state = json['state'];
@@ -182,12 +182,12 @@ class Author {
     data['name'] = this.name;
     return data;
   }
-   UserModel toUserModel() {
+
+  UserModel toUserModel() {
     return UserModel(
-      login: this.login,
-      avatarUrl: this.avatarUrl,
-      name: this.name,
-      url: this.url
-    );
+        login: this.login,
+        avatarUrl: this.avatarUrl,
+        name: this.name,
+        url: this.url);
   }
 }

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/bloc/issues/issues_model.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
-import 'package:flutter_github_connect/ui/page/common/under_development.dart';
+
 import 'package:flutter_github_connect/ui/page/user/User_page.dart';
-import 'package:flutter_github_connect/ui/page/user/User_screen.dart';
+
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 import 'package:flutter_github_connect/ui/widgets/user_image.dart';
 
 class IssueListPage extends StatelessWidget {
-  const IssueListPage({Key key, this.list, this.hideAppBar, this.controller}) : super(key: key);
+  const IssueListPage({Key key, this.list, this.hideAppBar, this.controller})
+      : super(key: key);
   final List<IssuesModel> list;
   final bool hideAppBar;
   final ScrollController controller;
@@ -53,7 +54,8 @@ class IssueListPage extends StatelessWidget {
                     SizedBox(height: 8),
                     if (model.labels != null && model.labels.nodes.isNotEmpty)
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                         decoration: BoxDecoration(
                             color: getColor(model.state).withAlpha(200),
                             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -92,7 +94,9 @@ class IssueListPage extends StatelessWidget {
           return Wrap(children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
                 color: Theme.of(context).colorScheme.surface,
               ),
               alignment: Alignment.bottomCenter,
@@ -106,7 +110,9 @@ class IssueListPage extends StatelessWidget {
                     child: Container(
                         height: 5,
                         width: 90,
-                        decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(20))),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(20))),
                   ),
                   SizedBox(height: 20),
                   GCard(
@@ -124,10 +130,11 @@ class IssueListPage extends StatelessWidget {
                               width: MediaQuery.of(context).size.width - 153,
                               child: Text(
                                 model.repository.name,
-                                style: Theme.of(context).textTheme.button.copyWith(
-                                      color: GColors.blue,
-                                      decoration: TextDecoration.underline,
-                                    ),
+                                style:
+                                    Theme.of(context).textTheme.button.copyWith(
+                                          color: GColors.blue,
+                                          decoration: TextDecoration.underline,
+                                        ),
                               ),
                             ).ripple(() {
                               Utility.launchTo(model.repository.url);
@@ -171,7 +178,11 @@ class IssueListPage extends StatelessWidget {
                   GCard(
                     padding: EdgeInsets.symmetric(horizontal: 26, vertical: 12),
                     child: Center(
-                      child: Text("Issue created by", style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 14)),
+                      child: Text("Issue created by",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              .copyWith(fontSize: 14)),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -192,13 +203,18 @@ class IssueListPage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: 10),
-                            Text("${model.author.login ?? ""}", style: Theme.of(context).textTheme.headline6),
+                            Text("${model.author.login ?? ""}",
+                                style: Theme.of(context).textTheme.headline6),
                           ],
                         )
                       ],
                     ),
                   ).ripple(() {
-                    if (model.author.login != null) Navigator.push(context, UserPage.getPageRoute(context, login: model.author.login));
+                    if (model.author.login != null)
+                      Navigator.push(
+                          context,
+                          UserPage.getPageRoute(context,
+                              login: model.author.login));
                   }),
                 ],
               ),
@@ -242,14 +258,16 @@ class IssueListPage extends StatelessWidget {
               title: Title(
                 title: "People",
                 color: Colors.black,
-                child: Text("People", style: Theme.of(context).textTheme.headline6),
+                child: Text("People",
+                    style: Theme.of(context).textTheme.headline6),
               ),
             ),
       body: ListView.separated(
         physics: BouncingScrollPhysics(),
         controller: controller ?? ScrollController(),
         itemCount: list.length,
-        separatorBuilder: (BuildContext context, int index) => Divider(height: 0),
+        separatorBuilder: (BuildContext context, int index) =>
+            Divider(height: 0),
         itemBuilder: (BuildContext context, int index) {
           return _issueTile(context, list[index]);
         },

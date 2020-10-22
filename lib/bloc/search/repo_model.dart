@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_github_connect/bloc/User/User_model.dart';
-import 'package:flutter_github_connect/bloc/User/model/event_model.dart';
+
 import 'package:flutter_github_connect/model/page_info_model.dart';
-import 'package:flutter_github_connect/model/pul_request.dart';
 
 class RepositoryModel2 {
   RepositoryModel2({
@@ -245,8 +244,11 @@ class RepositoryModel2 {
         size: json["size"] == null ? null : json["size"],
         stargazersCount:
             json["stargazers_count"] == null ? null : json["stargazers_count"],
-        watchersCount: json["watchers_count"] == null ? null : json["watchers_count"],
-        primaryLanguage: json["primaryLanguage"] == null ? null : PrimaryLanguage.fromJson(json["primaryLanguage"]),
+        watchersCount:
+            json["watchers_count"] == null ? null : json["watchers_count"],
+        primaryLanguage: json["primaryLanguage"] == null
+            ? null
+            : PrimaryLanguage.fromJson(json["primaryLanguage"]),
         hasIssues: json["has_issues"] == null ? null : json["has_issues"],
         hasProjects: json["has_projects"] == null ? null : json["has_projects"],
         hasDownloads:
@@ -263,7 +265,9 @@ class RepositoryModel2 {
         license: json["license"],
         forks: json["forks"] == null ? null : json["forks"],
         openIssues: json["open_issues"] == null ? null : json["open_issues"],
-        watchers: json["watchers"] == null ? null : Watchers.fromJson(json["watchers"]),
+        watchers: json["watchers"] == null
+            ? null
+            : Watchers.fromJson(json["watchers"]),
         defaultBranch:
             json["default_branch"] == null ? null : json["default_branch"],
         permissions: json["permissions"] == null
@@ -476,55 +480,62 @@ class Permissions {
 }
 
 class PrimaryLanguage {
-    PrimaryLanguage({
-        this.name,
-        this.color,
-    });
+  PrimaryLanguage({
+    this.name,
+    this.color,
+  });
 
-    final String name;
-    final String color;
+  final String name;
+  final String color;
 
-    factory PrimaryLanguage.fromRawJson(String str) => PrimaryLanguage.fromJson(json.decode(str));
+  factory PrimaryLanguage.fromRawJson(String str) =>
+      PrimaryLanguage.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory PrimaryLanguage.fromJson(Map<String, dynamic> json) => PrimaryLanguage(
+  factory PrimaryLanguage.fromJson(Map<String, dynamic> json) =>
+      PrimaryLanguage(
         name: json["name"] == null ? null : json["name"],
         color: json["color"] == null ? null : json["color"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "name": name == null ? null : name,
         "color": color == null ? null : color,
-    };
+      };
 }
 
 class Watchers {
-    Watchers({
-        this.totalCount,
-        this.pageInfo,
-        this.userList
-    });
+  Watchers({this.totalCount, this.pageInfo, this.userList});
 
-    final int totalCount;
-    PageInfo pageInfo;
-    final List<UserModel> userList;
-    factory Watchers.fromRawJson(String str) => Watchers.fromJson(json.decode(str));
+  final int totalCount;
+  PageInfo pageInfo;
+  final List<UserModel> userList;
+  factory Watchers.fromRawJson(String str) =>
+      Watchers.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory Watchers.fromJson(Map<String, dynamic> json) => Watchers(
+  factory Watchers.fromJson(Map<String, dynamic> json) => Watchers(
         totalCount: json["totalCount"] == null ? null : json["totalCount"],
-        pageInfo: json["pageInfo"] == null ? null : PageInfo.fromJson(json["pageInfo"]),
-        userList: json["nodes"] == null ? null : List<UserModel>.from(json["nodes"].map((x) => UserModel.fromJson(x))),
-    );
+        pageInfo: json["pageInfo"] == null
+            ? null
+            : PageInfo.fromJson(json["pageInfo"]),
+        userList: json["nodes"] == null
+            ? null
+            : List<UserModel>.from(
+                json["nodes"].map((x) => UserModel.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "totalCount": totalCount == null ? null : totalCount,
         "pageInfo": pageInfo == null ? null : pageInfo.toJson(),
-        "user": userList == null ? null : List<dynamic>.from(userList.map((x) => x.toJson())),
-    };
+        "user": userList == null
+            ? null
+            : List<dynamic>.from(userList.map((x) => x.toJson())),
+      };
 }
+
 enum GithubSearchType {
   People,
   Issue,
@@ -538,14 +549,14 @@ extension TypeOfSearch on GithubSearchType {
         GithubSearchType.Issue: "ISSUE",
         GithubSearchType.ORganisation: "USER",
         GithubSearchType.PullRequest: "ISSUE",
-        GithubSearchType.Repository : "REPOSITORY",
+        GithubSearchType.Repository: "REPOSITORY",
         GithubSearchType.People: "USER",
       }[this];
   String asSmallString() => {
         GithubSearchType.Issue: "Issues",
         GithubSearchType.ORganisation: "Organisation",
         GithubSearchType.PullRequest: "Pull request",
-        GithubSearchType.Repository : "Repository",
+        GithubSearchType.Repository: "Repository",
         GithubSearchType.People: "People",
       }[this];
 

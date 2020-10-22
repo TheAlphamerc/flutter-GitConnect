@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/auth/index.dart';
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/helper/git_config.dart';
-import 'package:flutter_github_connect/ui/theme/colors.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

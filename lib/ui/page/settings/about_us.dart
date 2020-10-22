@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_github_connect/helper/GIcons.dart';
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/helper/utility.dart';
-import 'package:flutter_github_connect/ui/theme/custom_theme.dart';
+
 import 'package:flutter_github_connect/ui/theme/export_theme.dart';
-import 'package:flutter_github_connect/ui/page/common/under_development.dart';
+
 import 'package:flutter_github_connect/ui/widgets/g_app_bar_title.dart';
 import 'package:flutter_github_connect/ui/widgets/g_card.dart';
 

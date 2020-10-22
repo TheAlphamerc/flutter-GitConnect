@@ -50,6 +50,7 @@ class Data {
       };
 }
 
+// ignore: must_be_immutable
 class UserModel extends Equatable {
   UserModel(
       {this.name,
@@ -293,7 +294,6 @@ class UserModel extends Equatable {
       };
 
   @override
-  // TODO: implement props
   List<Object> get props => [name, url];
 }
 
@@ -379,7 +379,7 @@ class RepositoriesNode extends Equatable {
 
   factory RepositoriesNode.fromJson(Map<String, dynamic> json) =>
       RepositoriesNode(
-        url:json["url"] == null ? null : json["url"],
+        url: json["url"] == null ? null : json["url"],
         name: json["name"] == null ? null : json["name"],
         description: json["description"] == null ? null : json["description"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
@@ -401,12 +401,13 @@ class RepositoriesNode extends Equatable {
   Map<String, dynamic> toDbJson() => {
         "name": name == null ? null : name,
         "owner": owner == null ? null : json.encode(owner.toJson()),
-  };
+      };
   factory RepositoriesNode.fromDbJson(Map<String, dynamic> parsedJson) =>
       RepositoriesNode(
         name: parsedJson["name"] == null ? null : parsedJson["name"],
-        owner: parsedJson["owner"] == null ? null : Owner.fromJson(json.decode(parsedJson["owner"])),
-       
+        owner: parsedJson["owner"] == null
+            ? null
+            : Owner.fromJson(json.decode(parsedJson["owner"])),
       );
 
   @override

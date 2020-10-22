@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_github_connect/exceptions/exceptions.dart';
 import 'package:flutter_github_connect/helper/config.dart';
 import 'package:flutter_github_connect/resources/graphql_client.dart';
 import 'package:flutter_github_connect/resources/service/auth_service.dart';
@@ -12,20 +10,19 @@ class AuthServiceImpl implements AuthService {
   final SessionService _sessionService;
   AuthServiceImpl(this._dioClient, this._sessionService);
   @override
-  Future<String> getAcessToken(String code) async{
-     try {
-      var response = await _dioClient.post( null, completeUrl:Config.accessTken+code);
-      
-        return response.data as String;
-      
+  Future<String> getAcessToken(String code) async {
+    try {
+      var response =
+          await _dioClient.post(null, completeUrl: Config.accessTken + code);
+
+      return response.data as String;
     } catch (error) {
       throw error;
     }
   }
 
   @override
-  Future<String> getUserName(String code) async{
-   
+  Future<String> getUserName(String code) async {
     try {
       var accesstoken = await _sessionService.loadSession();
       initClient(accesstoken);

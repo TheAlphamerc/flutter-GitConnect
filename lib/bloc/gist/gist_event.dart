@@ -4,10 +4,11 @@ abstract class GistEvent extends Equatable {
   @override
   List<Object> get props => [];
 
-  Stream<GistState> loadGiistDetail({GistState currentState, GistBloc bloc}){}
+  // ignore: missing_return
+  Stream<GistState> loadGiistDetail({GistState currentState, GistBloc bloc}) {}
 
-  final GistRepository _gistRepository = GistRepository(apiGatway: GetIt.instance<ApiGateway>());
-  
+  final GistRepository _gistRepository =
+      GistRepository(apiGatway: GetIt.instance<ApiGateway>());
 }
 
 class LoadGistDetailEvent extends GistEvent {
@@ -15,7 +16,8 @@ class LoadGistDetailEvent extends GistEvent {
 
   LoadGistDetailEvent(this.id) : assert(id != null);
   @override
-  Stream<GistState> loadGiistDetail({GistState currentState, GistBloc bloc}) async* {
+  Stream<GistState> loadGiistDetail(
+      {GistState currentState, GistBloc bloc}) async* {
     try {
       if (currentState is LoadedGistDetailState) {
         return;
@@ -31,21 +33,22 @@ class LoadGistDetailEvent extends GistEvent {
 }
 
 class OnGistLoad extends GistEvent {
-  OnGistLoad(this.login, {this.count,this.isLoadNextGist = false});
+  OnGistLoad(this.login, {this.count, this.isLoadNextGist = false});
 
   final bool isLoadNextGist;
   final String login;
   final int count;
   @override
-  Stream<GistState> getGist(
-      {GistState currentState, GistBloc bloc}) async* {
+  // ignore: override_on_non_overriding_member
+  Stream<GistState> getGist({GistState currentState, GistBloc bloc}) async* {
     if (currentState is LoadedGitState) {
       return;
     }
     try {
       // yield LoadingUserState();
 
-      final gistModel = count == 0 ? null : await _gistRepository.fetchGistList(login: login);
+      final gistModel =
+          count == 0 ? null : await _gistRepository.fetchGistList(login: login);
 
       yield LoadedGitState(gist: gistModel);
     } catch (_, stackTrace) {
@@ -54,7 +57,8 @@ class OnGistLoad extends GistEvent {
     }
   }
 
-  Stream<GistState> getNextGist( {GistState currentState, GistBloc bloc}) async* {
+  Stream<GistState> getNextGist(
+      {GistState currentState, GistBloc bloc}) async* {
     try {
       final state = currentState as LoadedGitState;
       if (!state.gist.pageInfo.hasNextPage) {
@@ -62,7 +66,7 @@ class OnGistLoad extends GistEvent {
         return;
       }
       yield LoadingNextGistState(gist: state.gist);
-      
+
       print(state.gist.pageInfo.endCursor);
       final gistModel = await _gistRepository.fetchGistList(
           login: login, endCursor: state.gist.pageInfo.endCursor);
@@ -71,8 +75,7 @@ class OnGistLoad extends GistEvent {
         gistModel: gistModel,
       );
     } catch (_, stackTrace) {
-      log('$_',
-          name: 'OnGistLoadt', error: _, stackTrace: stackTrace);
+      log('$_', name: 'OnGistLoadt', error: _, stackTrace: stackTrace);
       final state = currentState as LoadedGitState;
       yield ErrorNextGistState(
         errorMessage: _?.toString(),
