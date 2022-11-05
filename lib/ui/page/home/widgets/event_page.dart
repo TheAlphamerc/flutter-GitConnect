@@ -41,8 +41,8 @@ class EventsPage extends StatelessWidget {
         List<EventModel> eventList;
         if (state is LoadedUserState) {
           eventList = state.eventList;
-          if(state.eventLoading){
-            return GCLoader();  
+          if (state.eventLoading) {
+            return GCLoader();
           }
         } else if (state is LoadingEventState) {
           return GCLoader();
@@ -62,7 +62,8 @@ class PeopleEventsPage extends StatefulWidget {
   @override
   _PeopleEventsPageState createState() => _PeopleEventsPageState();
 
-  static MaterialPageRoute getPageRoute({String login, people.PeopleBloc bloc}) {
+  static MaterialPageRoute getPageRoute(
+      {String login, people.PeopleBloc bloc}) {
     return MaterialPageRoute(
       builder: (context) {
         return PeopleEventsPage(
@@ -98,9 +99,10 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(title: GAppBarTitle(login: widget.login, title: "Activities")),
+      appBar:
+          AppBar(title: GAppBarTitle(login: widget.login, title: "Activities")),
       body: BlocBuilder<people.PeopleBloc, people.PeopleState>(
-        cubit: widget.bloc,
+        bloc: widget.bloc,
         builder: (context, state) {
           List<EventModel> eventList;
           if (state is people.LoadingPeopleActivityStates) {
@@ -125,13 +127,17 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
                           );
                         return GCLoader();
                       }),
-                  if (state is people.LoadingNextPeopleActivityStates) GCLoader()
+                  if (state is people.LoadingNextPeopleActivityStates)
+                    GCLoader()
                 ],
               ),
             );
           if (!(eventList != null && eventList.isNotEmpty))
             return NoDataPage(
-                title: "Activities", image: GImages.octocat4, description: "No recent activity detected", icon: GIcons.github);
+                title: "Activities",
+                image: GImages.octocat4,
+                description: "No recent activity detected",
+                icon: GIcons.github);
           return GCLoader();
         },
       ),
@@ -140,7 +146,9 @@ class _PeopleEventsPageState extends State<PeopleEventsPage> {
 }
 
 class EventPageBody extends StatelessWidget {
-  const EventPageBody({Key key, this.eventList, this.login, this.loggedInUserName}) : super(key: key);
+  const EventPageBody(
+      {Key key, this.eventList, this.login, this.loggedInUserName})
+      : super(key: key);
 
   final List<EventModel> eventList;
   final String login;
@@ -198,7 +206,8 @@ class EventPageBody extends StatelessWidget {
                     width: MediaQuery.of(context).size.width - widthOffset,
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      Utility.getPassedTime(model.createdAt.toString()) + " ago",
+                      Utility.getPassedTime(model.createdAt.toString()) +
+                          " ago",
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ),
@@ -250,7 +259,9 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: isMyEvent(model.actor.login) ? "You created a commit" : "Created a new commit",
+                  subtitle: isMyEvent(model.actor.login)
+                      ? "You created a commit"
+                      : "Created a new commit",
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -267,7 +278,8 @@ class EventPageBody extends StatelessWidget {
         ).vP16);
   }
 
-  Widget _pullRequestTile(context, EventModel model, {bool isCommented = false}) {
+  Widget _pullRequestTile(context, EventModel model,
+      {bool isCommented = false}) {
     return GCard(
         color: Theme.of(context).colorScheme.surface,
         child: Row(
@@ -306,14 +318,17 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: isMyEvent(model.actor.login) && isCommented ? "You created a pull request" : "Created a pull request",
+                  subtitle: isMyEvent(model.actor.login) && isCommented
+                      ? "You created a pull request"
+                      : "Created a pull request",
                 ),
                 if (model.createdAt != null)
                   Container(
                     width: MediaQuery.of(context).size.width - widthOffset,
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      Utility.getPassedTime(model.createdAt.toString()) + " ago",
+                      Utility.getPassedTime(model.createdAt.toString()) +
+                          " ago",
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                   )
@@ -364,7 +379,9 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle: isMyEvent(model.actor.login) ? "You created a ${model.payload.refType}" : "Created a ${model.payload.refType}",
+                  subtitle: isMyEvent(model.actor.login)
+                      ? "You created a ${model.payload.refType}"
+                      : "Created a ${model.payload.refType}",
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -411,8 +428,9 @@ class EventPageBody extends StatelessWidget {
                 UserAvatar(
                   imagePath: model.actor.avatarUrl,
                   height: 18,
-                  subtitle:
-                      isMyEvent(model.actor.login) ? "You created a ${model.payload.refType}" : "${model.payload.action} watching repo",
+                  subtitle: isMyEvent(model.actor.login)
+                      ? "You created a ${model.payload.refType}"
+                      : "${model.payload.action} watching repo",
                 ),
                 SizedBox(height: 8),
                 Container(
@@ -435,7 +453,8 @@ class EventPageBody extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Text("No recent activity detected at your github account yet.",
-          textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText2),
     );
   }
 
@@ -520,7 +539,8 @@ class EventPageBody extends StatelessWidget {
                             context,
                             model,
                           ),
-                          if (eventList.last != model) Divider(height: 1, indent: 50),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
                         ],
                       );
                     } else if (model.type == UserEventType.ISSUES_EVENT) {
@@ -528,15 +548,18 @@ class EventPageBody extends StatelessWidget {
                         children: <Widget>[
                           // Text(model.type.toString()),
                           _issueTile(context, model),
-                          if (eventList.last != model) Divider(height: 1, indent: 50),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
                         ],
                       );
-                    } else if (model.type == UserEventType.ISSUE_COMMENT_EVENT) {
+                    } else if (model.type ==
+                        UserEventType.ISSUE_COMMENT_EVENT) {
                       return Column(
                         children: <Widget>[
                           // Text(model.type.toString()),
                           _issueTile(context, model, isCommented: true),
-                          if (eventList.last != model) Divider(height: 1, indent: 50),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
                         ],
                       );
                     } else if (model.type == UserEventType.PULL_REQUEST_EVENT) {
@@ -544,7 +567,8 @@ class EventPageBody extends StatelessWidget {
                         children: <Widget>[
                           // Text(model.type.toString()),
                           _pullRequestTile(context, model, isCommented: true),
-                          if (eventList.last != model) Divider(height: 1, indent: 50),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
                         ],
                       );
                     } else if (model.type == UserEventType.CREATE_EVENT) {
@@ -552,14 +576,16 @@ class EventPageBody extends StatelessWidget {
                         children: <Widget>[
                           // Text(model.type.toString()),
                           _createRepoEventTile(context, model),
-                          if (eventList.last != model) Divider(height: 1, indent: 50),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
                         ],
                       );
                     } else if (model.type == UserEventType.WATCH_EVENT) {
                       return Column(
                         children: <Widget>[
                           _watchRepoEventTile(context, model),
-                          if (eventList.last != model) Divider(height: 1, indent: 50),
+                          if (eventList.last != model)
+                            Divider(height: 1, indent: 50),
                         ],
                       );
                     } else {

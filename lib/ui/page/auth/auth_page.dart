@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_connect/bloc/auth/index.dart';
+import 'package:flutter_github_connect/helper/config.dart';
+import 'package:flutter_github_connect/helper/git_config.dart';
+import 'package:flutter_github_connect/ui/page/auth/in_app_webview.dart';
 import 'package:flutter_github_connect/ui/page/auth/web_view.dart';
 import 'package:flutter_github_connect/ui/page/common/dashboard_page.dart';
 
@@ -36,7 +39,7 @@ class AuthPage extends StatelessWidget {
             AuthState currentState,
           ) {
             if (currentState is LoadingWebViewState) {
-              return WebViewPage();
+              return InAppBrowserExampleScreen();
             } else if (currentState is ErrorAuthState) {
               return GErrorContainer(
                 description: currentState.errorMessage,

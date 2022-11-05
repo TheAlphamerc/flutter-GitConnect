@@ -19,16 +19,12 @@ class Underdevelopment extends StatelessWidget {
     );
   }
 
-  static void displaySnackbar(BuildContext context,{ String msg = "Feature is under development", GlobalKey<ScaffoldState> key}) {
+  static void displaySnackbar(BuildContext context,
+      {String msg = "Feature is under development"}) {
     final snackBar = SnackBar(content: Text(msg));
-    if(key != null && key.currentState != null){
-      key.currentState.hideCurrentSnackBar();
-      key.currentState.showSnackBar(snackBar);
-    }
-    else{
-       Scaffold.of(context).hideCurrentSnackBar();
-       Scaffold.of(context).showSnackBar(snackBar);
-    }
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

@@ -12,7 +12,6 @@ class AuthRepository {
   Future<bool> getAcessToken(String code) async {
     String token = await authService.getAcessToken(code);
     if (token != null) {
-      token = token.split("&scope")[0].split("=")[1];
       await sessionService.saveSession(token);
       String username = await authService.getUserName(code);
       sessionService.setUserName(username);

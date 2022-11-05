@@ -10,19 +10,27 @@ import 'package:flutter_github_connect/ui/widgets/g_error_container.dart';
 import 'package:flutter_github_connect/ui/widgets/g_loader.dart';
 
 class ActorPage extends StatefulWidget {
-  static MaterialPageRoute getPageRoute(String login, PeopleType type,{int count}) {
+  static MaterialPageRoute getPageRoute(String login, PeopleType type,
+      {int count}) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
           create: (BuildContext context) =>
-              PeopleBloc()..add(LoadFollowEvent(login, type,count:count)),
-          child: ActorPage(type: type, login: login,),
+              PeopleBloc()..add(LoadFollowEvent(login, type, count: count)),
+          child: ActorPage(
+            type: type,
+            login: login,
+          ),
         );
       },
     );
   }
 
-  const ActorPage({Key key, @required this.type, this.login,}) : super(key: key);
+  const ActorPage({
+    Key key,
+    @required this.type,
+    this.login,
+  }) : super(key: key);
   final PeopleType type;
   final String login;
 
@@ -53,7 +61,7 @@ class _ActorPageState extends State<ActorPage> {
       appBar: AppBar(
         elevation: 2,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title:GAppBarTitle(login: widget.login, title: widget.type.asString()),
+        title: GAppBarTitle(login: widget.login, title: widget.type.asString()),
       ),
       body: BlocBuilder<PeopleBloc, PeopleState>(
         builder: (
@@ -84,7 +92,7 @@ class PeoplePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PeopleBloc, PeopleState>(
-      cubit: peopleBloc,
+      bloc: peopleBloc,
       builder: (
         BuildContext context,
         PeopleState currentState,

@@ -13,18 +13,19 @@ class RepoStargezersPageProvider extends StatefulWidget {
   final String name;
   final String owner;
 
-  const RepoStargezersPageProvider({Key key, this.name,this.owner}) : super(key: key);
-  static MaterialPageRoute getPageRoute(
-    {String name,
+  const RepoStargezersPageProvider({Key key, this.name, this.owner})
+      : super(key: key);
+  static MaterialPageRoute getPageRoute({
+    String name,
     String owner,
     int count,
   }) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
-          create: (BuildContext context) =>
-              PeopleBloc()..add(LoadStargezersEvent(name:name,owner:owner,count:count)),
-          child: RepoStargezersPageProvider(name: name, owner:owner),
+          create: (BuildContext context) => PeopleBloc()
+            ..add(LoadStargezersEvent(name: name, owner: owner, count: count)),
+          child: RepoStargezersPageProvider(name: name, owner: owner),
         );
       },
     );
@@ -35,7 +36,8 @@ class RepoStargezersPageProvider extends StatefulWidget {
       _RepoStargezersPageProviderState();
 }
 
-class _RepoStargezersPageProviderState extends State<RepoStargezersPageProvider> {
+class _RepoStargezersPageProviderState
+    extends State<RepoStargezersPageProvider> {
   ScrollController _controller;
   void initState() {
     _controller = ScrollController()..addListener(listener);
@@ -45,26 +47,25 @@ class _RepoStargezersPageProviderState extends State<RepoStargezersPageProvider>
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
       print(widget.name);
-      BlocProvider.of<PeopleBloc>(context)
-          .add(LoadStargezersEvent(name:widget.name,owner:widget.owner,isLoadNextStartgers:true));
+      BlocProvider.of<PeopleBloc>(context).add(LoadStargezersEvent(
+          name: widget.name, owner: widget.owner, isLoadNextStartgers: true));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return RepoStargazersPage(
-      controller: _controller,
-      login: widget.name,
-      name:widget.name,
-      owner:widget.owner,
-      bloc:BlocProvider.of<PeopleBloc>(context)
-    );
+        controller: _controller,
+        login: widget.name,
+        name: widget.name,
+        owner: widget.owner,
+        bloc: BlocProvider.of<PeopleBloc>(context));
   }
 }
 
-
 class RepoStargazersPage extends StatelessWidget {
-  const RepoStargazersPage({Key key, this.bloc, this.owner,this.name,this.login, this.controller})
+  const RepoStargazersPage(
+      {Key key, this.bloc, this.owner, this.name, this.login, this.controller})
       : super(key: key);
   final PeopleBloc bloc;
   final String name;
@@ -79,7 +80,7 @@ class RepoStargazersPage extends StatelessWidget {
       body: Container(
         color: Theme.of(context).colorScheme.surface,
         child: BlocBuilder<PeopleBloc, PeopleState>(
-          cubit: bloc,
+          bloc: bloc,
           builder: (
             BuildContext context,
             PeopleState currentState,
@@ -88,7 +89,7 @@ class RepoStargazersPage extends StatelessWidget {
               return GErrorContainer(
                 description: currentState.errorMessage,
                 onPressed: () {
-                  bloc..add(LoadStargezersEvent(name:name,owner:owner));
+                  bloc..add(LoadStargezersEvent(name: name, owner: owner));
                 },
               );
             }
@@ -101,8 +102,7 @@ class RepoStargazersPage extends StatelessWidget {
               return NoDataPage(
                 title: "",
                 image: GImages.octocat1,
-                description:
-                    "Nothing is here to see\nCome back later!!",
+                description: "Nothing is here to see\nCome back later!!",
                 icon: GIcons.star_fill_24,
               );
             }
@@ -118,5 +118,3 @@ class RepoStargazersPage extends StatelessWidget {
     );
   }
 }
-
-

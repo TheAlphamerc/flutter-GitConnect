@@ -15,7 +15,10 @@ import 'package:get_it/get_it.dart';
 class SettingsPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   SettingsPage({Key key}) : super(key: key);
-  Widget _getUtilRos(context, String text, {Function onPressed, IconData icon = GIcons.chevron_right_24, String selectedText = ""}) {
+  Widget _getUtilRos(context, String text,
+      {Function onPressed,
+      IconData icon = GIcons.chevron_right_24,
+      String selectedText = ""}) {
     return Row(
       children: <Widget>[
         SizedBox(width: 16, height: 50),
@@ -38,7 +41,7 @@ class SettingsPage extends StatelessWidget {
       ],
     ).ripple(onPressed ??
         () {
-          Underdevelopment.displaySnackbar(context, key: scaffoldKey);
+          Underdevelopment.displaySnackbar(context);
         });
   }
 
@@ -49,19 +52,23 @@ class SettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _getUtilRos(context, "About us", onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => AboutUsPage()));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => AboutUsPage()));
           }),
           Divider(height: 0),
-          _getUtilRos(context, "Share App", selectedText: "  ",onPressed: (){
+          _getUtilRos(context, "Share App", selectedText: "  ", onPressed: () {
             Utility.share(Config.appLink);
           }),
           Divider(height: 0),
-          _getUtilRos(context, "Appearence", selectedText: CustomTheme.instanceOf(context).isDarkMode ? "Dark Mode" : "Light Mode",
-              onPressed: () {
+          _getUtilRos(context, "Appearence",
+              selectedText: CustomTheme.instanceOf(context).isDarkMode
+                  ? "Dark Mode"
+                  : "Light Mode", onPressed: () {
             _changeTheme(context, CustomTheme.instanceOf(context).toggle);
           }),
           Divider(height: 0),
-          _getUtilRos(context, "Push Notifications", selectedText: "Direct mention"),
+          _getUtilRos(context, "Push Notifications",
+              selectedText: "Direct mention"),
         ],
       ),
     );
@@ -73,7 +80,8 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getUtilRos(context, "Share Feedback", icon: GIcons.pencil_24, onPressed: () {
+          _getUtilRos(context, "Share Feedback", icon: GIcons.pencil_24,
+              onPressed: () {
             final Uri _emailLaunchUri = Uri(
               scheme: 'mailto',
               path: 'sonu.sharma045@gmail.com',

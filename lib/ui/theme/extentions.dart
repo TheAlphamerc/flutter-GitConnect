@@ -68,7 +68,7 @@ extension CornerRadius on Widget {
         borderRadius: BorderRadius.all(Radius.circular(1000)),
         child: this,
       );
-  ClipRRect  cornerRadius(double value) => ClipRRect(
+  ClipRRect cornerRadius(double value) => ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(value)),
         child: this,
       );
@@ -86,8 +86,8 @@ extension OnPressed on Widget {
             right: 0,
             top: 0,
             bottom: 0,
-            child: FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            child: TextButton(
+                // shape: RoundedRectangleBorder(borderRadius: borderRadius),
                 onPressed: () {
                   if (onPressed != null) {
                     onPressed();
@@ -117,11 +117,12 @@ extension ExAlignment on Widget {
         alignment: Alignment.bottomLeft,
       );
 }
-extension StringHelper on String{
-  String takeOnly(int value){
-    if(this != null && this.length >=value){
-      return this.substring(0,value);
-    }else{
+
+extension StringHelper on String {
+  String takeOnly(int value) {
+    if (this != null && this.length >= value) {
+      return this.substring(0, value);
+    } else {
       return this;
     }
   }

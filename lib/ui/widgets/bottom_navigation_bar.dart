@@ -24,7 +24,7 @@ class GBottomNavigationBar extends StatelessWidget {
           unselectedLabelStyle: TextStyle(
             color: theme.iconTheme.color,
             fontWeight: FontWeight.normal,
-            fontSize:14,
+            fontSize: 14,
           ),
           unselectedItemColor: theme.iconTheme.color,
           onTap: (index) {
@@ -37,12 +37,10 @@ class GBottomNavigationBar extends StatelessWidget {
           selectedItemColor: GColors.blue,
           currentIndex: pageindex,
           items: [
+            BottomNavigationBarItem(icon: Icon(GIcons.home_24), label: "Home"),
             BottomNavigationBarItem(
-                icon: Icon(GIcons.home_24), title: Text("Home")),
-            BottomNavigationBarItem(
-                icon: Icon(GIcons.bell_24), title: Text("Notification")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.search), title: Text("Search")),
+                icon: Icon(GIcons.bell_24), label: "Notification"),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
           ],
         );
       },

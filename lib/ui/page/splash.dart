@@ -31,9 +31,10 @@ class _SplashPageState extends State<SplashPage> {
     final getIt = GetIt.instance;
     final prefs = getIt<SharedPrefrenceHelper>();
     final accessToken = await prefs.getAccessToken();
-    if (accessToken != null) {
+    if (accessToken == null) {
       print("***************** Auto Login ***********************");
-      Navigator.of(context).pushAndRemoveUntil(DashBoardPage.getPageRoute(), (_) => false);
+      Navigator.of(context)
+          .pushAndRemoveUntil(DashBoardPage.getPageRoute(), (_) => false);
     } else {
       Navigator.push(context, WelcomePage.getPageRoute(context));
     }
@@ -54,7 +55,8 @@ class _SplashPageState extends State<SplashPage> {
             alignment: Alignment.center,
             children: [
               Icon(GIcons.github, size: 120),
-              CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(GColors.blue)),
+              CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(GColors.blue)),
             ],
           ),
         ),

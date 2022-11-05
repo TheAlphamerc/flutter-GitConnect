@@ -63,7 +63,7 @@ class Utility {
     try {
       await custom.launch(
         url,
-        option: new custom.CustomTabsOption(
+        customTabsOption: new custom.CustomTabsOption(
           toolbarColor: Theme.of(context).primaryColor,
           enableDefaultShare: true,
           enableUrlBarHiding: true,

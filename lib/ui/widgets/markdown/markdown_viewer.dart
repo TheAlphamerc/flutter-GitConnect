@@ -22,8 +22,8 @@ class MarkdownViewer extends StatelessWidget {
     String mdDataCode = markdownData;
     try {
       Iterable<Match> tags = exp.allMatches(markdownData);
-            var anchorList = anchor.allMatches(markdownData);
-      if(anchorList != null && anchorList.length > 0){
+      var anchorList = anchor.allMatches(markdownData);
+      if (anchorList != null && anchorList.length > 0) {
         for (Match m in anchorList) {
           String imageMatch = m.group(0);
           if (imageMatch != null && !imageMatch.contains(".svg")) {
@@ -32,13 +32,15 @@ class MarkdownViewer extends StatelessWidget {
               String src = match
                   .replaceAll(new RegExp(r'!\[.*\]\(.*'), "")
                   .replaceAll(")", "");
-                  final Match imgtag = RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*>').firstMatch(src);
+              final Match imgtag =
+                  RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*>').firstMatch(src);
 
-                  if(imgtag != null){
-                   final Match link = RegExp(r'<a[^>]* href=\"([^\"]*)\"[^>]*>').firstMatch(src);
-                   src = link.group(0).split("\"")[1];
-                    match = imgtag.group(0);
-                  }
+              if (imgtag != null) {
+                final Match link =
+                    RegExp(r'<a[^>]* href=\"([^\"]*)\"[^>]*>').firstMatch(src);
+                src = link.group(0).split("\"")[1];
+                match = imgtag.group(0);
+              }
               //  String actionMatch = "$match$src";
               // match = actionMatch;
               // print(src);
@@ -150,12 +152,13 @@ class MarkdownViewer extends StatelessWidget {
       child: SingleChildScrollView(
         child: new MarkdownBody(
           styleSheet: _getStyleSheet(context),
-          syntaxHighlighter: new GHighlighter(isDarkMode : CustomTheme.instanceOf(context).isDarkMode),
+          syntaxHighlighter: new GHighlighter(
+              isDarkMode: CustomTheme.instanceOf(context).isDarkMode),
           imageBuilder: (uri, text, val) => _getImageBuilder(uri),
           data: _getMarkDownData(markdownData),
-          onTapLink: (String source) {
+          onTapLink: (String text, String href, String title) {
             // launch(source, statusBarBrightness: Theme.of(context).brightness,enableJavaScript: true);
-            Utility.launchURL(context,source);
+            Utility.launchURL(context, href);
           },
         ),
       ),
@@ -183,7 +186,7 @@ class GHighlighter extends SyntaxHighlighter {
   TextSpan format(String source) {
     String showSource = source.replaceAll("&lt;", "<");
     showSource = showSource.replaceAll("&gt;", ">");
-    return new DartSyntaxHighlighter(null,isDarkMode).format(showSource);
+    return new DartSyntaxHighlighter(null, isDarkMode).format(showSource);
   }
 }
 

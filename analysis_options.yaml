@@ -1,0 +1,14 @@
+# include: package:very_good_analysis/analysis_options.yaml
+
+# analyzer:
+#   exclude:
+#     - "lib/**.freezed.dart"
+#     - "lib/**.g.dart"
+#     - "lib/ui/widget/form/validator.dart"
+#     - "lib/ui/theme/color/light_colors.dart"
+#     - "zefyr/"
+#     - "lib/generated_plugin_registrant.dart"
+
+# linter:
+#   rules:
+#     - library_private_types_in_public_api: false

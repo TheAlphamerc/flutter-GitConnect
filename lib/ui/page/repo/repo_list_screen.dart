@@ -143,18 +143,22 @@ class RepositoryListScreen extends StatelessWidget {
     return Scaffold(
       appBar: isFromUserRepositoryListPage
           ? null
-          : AppBar(title: GAppBarTitle(login: login, title: "Repositories"),),
+          : AppBar(
+              title: GAppBarTitle(login: login, title: "Repositories"),
+            ),
       body: !(list != null && list.isNotEmpty) && isFromUserRepositoryListPage
           ? NoDataPage(
-                title: "No repo Found",
-                image: GImages.octocat11,
-                description:isFromUserRepositoryListPage ? null : "$login haven't created any repo yet",
-                icon: GIcons.github_1,
-              )
+              title: "No repo Found",
+              image: GImages.octocat11,
+              description: isFromUserRepositoryListPage
+                  ? null
+                  : "$login haven't created any repo yet",
+              icon: GIcons.github_1,
+            )
           : !isFromUserRepositoryListPage
               ? peopleBloc != null
                   ? BlocBuilder<PeopleBloc, people.PeopleState>(
-                      cubit: peopleBloc,
+                      bloc: peopleBloc,
                       buildWhen: (old, newState) {
                         return (old != newState);
                       },
@@ -171,7 +175,7 @@ class RepositoryListScreen extends StatelessWidget {
                       },
                     )
                   : BlocBuilder<UserBloc, UserState>(
-                      cubit: userBloc,
+                      bloc: userBloc,
                       buildWhen: (old, newState) {
                         return (old != newState);
                       },

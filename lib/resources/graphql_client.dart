@@ -3,9 +3,7 @@ import 'package:flutter_github_connect/resources/grapgqlApi/graphql_query_api.da
 import 'package:graphql/client.dart';
 
 GraphQLClient _client(token) {
-  final HttpLink _httpLink = HttpLink(
-    uri: 'https://api.github.com/graphql',
-  );
+  final HttpLink _httpLink = HttpLink('https://api.github.com/graphql');
 
   final AuthLink _authLink = AuthLink(
     getToken: () => 'token $token',
@@ -14,9 +12,9 @@ GraphQLClient _client(token) {
   final Link _link = _authLink.concat(_httpLink);
 
   return GraphQLClient(
-    cache: OptimisticCache(
-      dataIdFromObject: typenameDataIdFromObject,
-    ),
+    cache: GraphQLCache(
+        // dataIdFromObject: typenameDataIdFromObject,
+        ),
     link: _link,
   );
 }
@@ -33,7 +31,7 @@ releaseClient() {
 
 Future<QueryResult> getRepositoryDetail({String owner, String name}) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repositoryDetail,
+      document: gql(Apis.repositoryDetail),
       variables: <String, dynamic>{
         'owner': owner,
         'name': name,
@@ -45,7 +43,7 @@ Future<QueryResult> getRepositoryDetail({String owner, String name}) async {
 Future<QueryResult> getNextRepositoriesList(
     {String login, String endCursor}) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repository,
+      document: gql(Apis.repository),
       variables: <String, dynamic>{
         'login': login,
         'endCursor': endCursor,
@@ -58,7 +56,7 @@ Future<QueryResult> getUser(
   String login,
 ) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.user,
+      document: gql(Apis.user),
       variables: <String, dynamic>{
         'login': login,
       },
@@ -69,7 +67,7 @@ Future<QueryResult> getUser(
 Future<QueryResult> searchQueryAsync(
     String query, String type, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.search,
+      document: gql(Apis.search),
       variables: <String, dynamic>{
         'query': query,
         "type": type,
@@ -81,72 +79,107 @@ Future<QueryResult> searchQueryAsync(
 
 Future<QueryResult> getIssues(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.issues,
+      document: gql(Apis.issues),
       variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoIssues(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoIssues(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repoIssues,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      document: gql(Apis.repoIssues),
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoWatchers(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoWatchers(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repoWatchers ,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      document: gql(Apis.repoWatchers),
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoStargazres(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoStargazres(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.stargazers ,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      document: gql(Apis.stargazers),
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoForks(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoForks(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.forks ,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      document: gql(Apis.forks),
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
 Future<QueryResult> getAuthUserName() async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.userName, fetchPolicy: FetchPolicy.cacheAndNetwork);
+      document: gql(Apis.userName), fetchPolicy: FetchPolicy.cacheAndNetwork);
   return await _innerClient.query(_options);
 }
 
 Future<QueryResult> getUserPullRequest(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.pullRequests,
+      document: gql(Apis.pullRequests),
       variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
-Future<QueryResult> getRepoPullRequest(String owner,String name, String endCursor) async {
+Future<QueryResult> getRepoPullRequest(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.repoPullRequests,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      document: gql(Apis.repoPullRequests),
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
-Future<QueryResult> getRepoCommits(String owner,String name, String endCursor) async {
+
+Future<QueryResult> getRepoCommits(
+    String owner, String name, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.commits,
-      variables: <String, dynamic>{'owner': owner,"name":name, "endCursor": endCursor},
+      document: gql(Apis.commits),
+      variables: <String, dynamic>{
+        'owner': owner,
+        "name": name,
+        "endCursor": endCursor
+      },
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
 
 Future<QueryResult> getUserGistList(String login, String endCursor) async {
   final QueryOptions _options = QueryOptions(
-      document: Apis.gist,
+      document: gql(Apis.gist),
       variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
@@ -155,11 +188,9 @@ Future<QueryResult> getUserGistList(String login, String endCursor) async {
 Future<QueryResult> getFollowerList(String login,
     {PeopleType type, String endCursor}) async {
   final QueryOptions _options = QueryOptions(
-      document: type == PeopleType.Follower ? Apis.followers : Apis.following,
-      variables: <String, dynamic>{
-        'login': login,
-        "endCursor": endCursor
-      },
+      document:
+          gql(type == PeopleType.Follower ? Apis.followers : Apis.following),
+      variables: <String, dynamic>{'login': login, "endCursor": endCursor},
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);
 }
@@ -168,7 +199,7 @@ Future<QueryResult> getFollowerList(String login,
 //   String login,
 // ) async {
 //   final QueryOptions _options = QueryOptions(
-//       document: Apis.following,
+//       document: gql(Apis.following),
 //       variables: <String, dynamic>{
 //         'login': login,
 //       },
@@ -186,7 +217,7 @@ Future<QueryResult> getTrendUser(String location, {String cursor}) async {
           'after': cursor,
         };
   final QueryOptions _options = QueryOptions(
-      document: cursor == null ? readTrendUser : readTrendUserByCursor,
+      document: gql(cursor == null ? readTrendUser : readTrendUserByCursor),
       variables: variables,
       fetchPolicy: FetchPolicy.noCache);
   return await _innerClient.query(_options);

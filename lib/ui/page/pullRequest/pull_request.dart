@@ -15,17 +15,14 @@ class PullRequestPageProvider extends StatefulWidget {
   final String login;
 
   const PullRequestPageProvider({Key key, this.login}) : super(key: key);
-  static MaterialPageRoute getPageRoute(
-    BuildContext context, {
-    String login,
-    int count
-  }) {
+  static MaterialPageRoute getPageRoute(BuildContext context,
+      {String login, int count}) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PullrequestBloc>(
           create: (BuildContext context) =>
-              PullrequestBloc()..add(OnPullRequestLoad(login,count:count)),
-          child: PullRequestPageProvider(login:login),
+              PullrequestBloc()..add(OnPullRequestLoad(login, count: count)),
+          child: PullRequestPageProvider(login: login),
         );
       },
     );
@@ -83,13 +80,13 @@ class PullRequestPage extends StatelessWidget {
   final ScrollController controller;
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(title: GAppBarTitle(login: login, title: "Pull Request")),
       body: Container(
         color: Theme.of(context).colorScheme.surface,
         child: BlocBuilder<PullrequestBloc, PullrequestState>(
-          cubit: bloc,
+          bloc: bloc,
           builder: (
             BuildContext context,
             PullrequestState currentState,
@@ -112,8 +109,7 @@ class PullRequestPage extends StatelessWidget {
               return NoDataPage(
                 title: "",
                 image: GImages.octocat8,
-                description:
-                    "No pull request created yet",
+                description: "No pull request created yet",
                 icon: GIcons.git_pull_request_24,
               );
             }
@@ -130,24 +126,22 @@ class PullRequestPage extends StatelessWidget {
   }
 }
 
-
 class RepoPullRequestPageProvider extends StatefulWidget {
   final String name;
   final String owner;
   final int count;
-  const RepoPullRequestPageProvider({Key key, this.name,this.owner,this.count}) : super(key: key);
-  static MaterialPageRoute getPageRoute(
-    BuildContext context, {
-    String name,
-    String owner,
-    int count
-  }) {
+  const RepoPullRequestPageProvider(
+      {Key key, this.name, this.owner, this.count})
+      : super(key: key);
+  static MaterialPageRoute getPageRoute(BuildContext context,
+      {String name, String owner, int count}) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PullrequestBloc>(
-          create: (BuildContext context) =>
-              PullrequestBloc()..add(LoadRepoPullRequests(name:name,owner:owner,count:count)),
-          child: RepoPullRequestPageProvider(name: name, owner:owner,count:count),
+          create: (BuildContext context) => PullrequestBloc()
+            ..add(LoadRepoPullRequests(name: name, owner: owner, count: count)),
+          child: RepoPullRequestPageProvider(
+              name: name, owner: owner, count: count),
         );
       },
     );
@@ -158,7 +152,8 @@ class RepoPullRequestPageProvider extends StatefulWidget {
       _RepoPullRequestPageProviderState();
 }
 
-class _RepoPullRequestPageProviderState extends State<RepoPullRequestPageProvider> {
+class _RepoPullRequestPageProviderState
+    extends State<RepoPullRequestPageProvider> {
   ScrollController _controller;
   void initState() {
     _controller = ScrollController()..addListener(listener);
@@ -168,25 +163,24 @@ class _RepoPullRequestPageProviderState extends State<RepoPullRequestPageProvide
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
       print(widget.name);
-      BlocProvider.of<PullrequestBloc>(context)
-          .add(LoadRepoPullRequests(name:widget.name,owner:widget.owner,isNextRepoPull:true));
+      BlocProvider.of<PullrequestBloc>(context).add(LoadRepoPullRequests(
+          name: widget.name, owner: widget.owner, isNextRepoPull: true));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return RepoPullRequestPage(
-      controller: _controller,
-      login: widget.name,
-      name:widget.name,
-      owner:widget.owner
-    );
+        controller: _controller,
+        login: widget.name,
+        name: widget.name,
+        owner: widget.owner);
   }
 }
 
-
 class RepoPullRequestPage extends StatelessWidget {
-  const RepoPullRequestPage({Key key, this.bloc, this.owner,this.name,this.login, this.controller})
+  const RepoPullRequestPage(
+      {Key key, this.bloc, this.owner, this.name, this.login, this.controller})
       : super(key: key);
   final PullrequestBloc bloc;
   final String name;
@@ -201,7 +195,7 @@ class RepoPullRequestPage extends StatelessWidget {
       body: Container(
         color: Theme.of(context).colorScheme.surface,
         child: BlocBuilder<PullrequestBloc, PullrequestState>(
-          cubit: bloc,
+          bloc: bloc,
           builder: (
             BuildContext context,
             PullrequestState currentState,
@@ -210,7 +204,7 @@ class RepoPullRequestPage extends StatelessWidget {
               return GErrorContainer(
                 description: currentState.errorMessage,
                 onPressed: () {
-                  bloc..add(LoadRepoPullRequests(name:name,owner:owner));
+                  bloc..add(LoadRepoPullRequests(name: name, owner: owner));
                 },
               );
             }
@@ -224,8 +218,7 @@ class RepoPullRequestPage extends StatelessWidget {
               return NoDataPage(
                 title: "",
                 image: GImages.octocat10,
-                description:
-                    "No pull request created yet",
+                description: "No pull request created yet",
                 icon: GIcons.git_pull_request_24,
               );
             }

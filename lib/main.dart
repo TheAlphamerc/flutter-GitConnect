@@ -11,9 +11,7 @@ import 'ui/theme/export_theme.dart';
 void main() {
   Bloc.observer = AppBlocDelegate();
   setUpDependency();
-  final app = GitApp(
-    home: SplashPage(),
-  );
+  final app = GitApp(home: SplashPage());
   runApp(
     CustomTheme(
       initialThemeKey: ThemeType.DARK,

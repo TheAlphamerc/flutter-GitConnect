@@ -12,7 +12,8 @@ class RepoWatchersPageProvider extends StatefulWidget {
   final String name;
   final String owner;
 
-  const RepoWatchersPageProvider({Key key, this.name,this.owner}) : super(key: key);
+  const RepoWatchersPageProvider({Key key, this.name, this.owner})
+      : super(key: key);
   static MaterialPageRoute getPageRoute(
     BuildContext context, {
     String name,
@@ -22,9 +23,9 @@ class RepoWatchersPageProvider extends StatefulWidget {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider<PeopleBloc>(
-          create: (BuildContext context) =>
-              PeopleBloc()..add(LoadWatchersEvent(name:name,owner:owner,count:count)),
-          child: RepoWatchersPageProvider(name: name, owner:owner),
+          create: (BuildContext context) => PeopleBloc()
+            ..add(LoadWatchersEvent(name: name, owner: owner, count: count)),
+          child: RepoWatchersPageProvider(name: name, owner: owner),
         );
       },
     );
@@ -45,26 +46,25 @@ class _RepoWatchersPageProviderState extends State<RepoWatchersPageProvider> {
   void listener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
       print(widget.name);
-      BlocProvider.of<PeopleBloc>(context)
-          .add(LoadWatchersEvent(name:widget.name,owner:widget.owner,isLoadNextWatchers:true));
+      BlocProvider.of<PeopleBloc>(context).add(LoadWatchersEvent(
+          name: widget.name, owner: widget.owner, isLoadNextWatchers: true));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return RepoWatchersPage(
-      controller: _controller,
-      login: widget.name,
-      name:widget.name,
-      owner:widget.owner,
-      bloc:BlocProvider.of<PeopleBloc>(context)
-    );
+        controller: _controller,
+        login: widget.name,
+        name: widget.name,
+        owner: widget.owner,
+        bloc: BlocProvider.of<PeopleBloc>(context));
   }
 }
 
-
 class RepoWatchersPage extends StatelessWidget {
-  const RepoWatchersPage({Key key, this.bloc, this.owner,this.name,this.login, this.controller})
+  const RepoWatchersPage(
+      {Key key, this.bloc, this.owner, this.name, this.login, this.controller})
       : super(key: key);
   final PeopleBloc bloc;
   final String name;
@@ -79,7 +79,7 @@ class RepoWatchersPage extends StatelessWidget {
       body: Container(
         color: Theme.of(context).colorScheme.surface,
         child: BlocBuilder<PeopleBloc, PeopleState>(
-          cubit: bloc,
+          bloc: bloc,
           builder: (
             BuildContext context,
             PeopleState currentState,
@@ -88,12 +88,12 @@ class RepoWatchersPage extends StatelessWidget {
               return GErrorContainer(
                 description: currentState.errorMessage,
                 onPressed: () {
-                  bloc..add(LoadWatchersEvent(name:name,owner:owner));
+                  bloc..add(LoadWatchersEvent(name: name, owner: owner));
                 },
               );
             }
             if (currentState is LoadedWatcherState) {
-              if (currentState.watchers!= null &&
+              if (currentState.watchers != null &&
                   currentState.watchers.totalCount > 0)
                 return WatchersScreen(
                   watchersList: currentState.watchers.userList,
@@ -118,5 +118,3 @@ class RepoWatchersPage extends StatelessWidget {
     );
   }
 }
-
-

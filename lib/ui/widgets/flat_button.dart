@@ -22,14 +22,14 @@ class GFlatButton extends StatelessWidget {
       child: ValueListenableBuilder<bool>(
         valueListenable: isLoading ?? ValueNotifier(false),
         builder: (context, loading, child) {
-          return FlatButton(
-            disabledColor: GColors.disableButtonColor,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            color: !isColored ? null : Theme.of(context).cardColor,
-            splashColor: Theme.of(context).colorScheme.background,
-            textColor: GColors.onPrimary,
+          return TextButton(
+            // disabledColor: GColors.disableButtonColor,
+            // padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            // shape:
+            //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            // color: !isColored ? null : Theme.of(context).cardColor,
+            // splashColor: Theme.of(context).colorScheme.background,
+            // textColor: GColors.onPrimary,
             onPressed: loading ? null : onPressed,
             child: loading
                 ? SizedBox(
@@ -45,10 +45,7 @@ class GFlatButton extends StatelessWidget {
                 : child,
           );
         },
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.button
-        ),
+        child: Text(label, style: Theme.of(context).textTheme.button),
       ),
     );
   }
